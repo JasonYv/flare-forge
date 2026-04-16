@@ -1,0 +1,80 @@
+---
+/**
+ * Cover image component for article lists & detail pages.
+ *
+ * Outputs a <picture> with a pre-converted WebP sibling (same stem, .webp extension)
+ * and a PNG/JPG fallback. Assumes WebP was uploaded alongside the original via the
+ * publish script.
+ *
+ * For SVG / GIF / WebP originals: falls back to plain <img> (no picture wrapper).
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  /** Display aspect ratio class, e.g. "aspect-[16/9]" */
+  class?: string;
+  /** Intrinsic width used for the <img> width attribute (prevents CLS) */
+  width?: number;
+  /** Intrinsic height used for the <img> height attribute (prevents CLS) */
+  height?: number;
+  /** Responsive widths to emit in srcset */
+  widths?: number[];
+  /** Sizes attribute (media query → width), e.g. "(max-width: 768px) 100vw, 800px" */
+  sizes?: string;
+  /** Loading strategy (default "lazy") */
+  loading?: 'lazy' | 'eager';
+  /** Fetch priority (use "high" for LCP images) */
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  width,
+  height,
+  widths = [400, 800, 1200],
+  sizes = '(max-width: 768px) 100vw, 800px',
+  loading = 'lazy',
+  fetchpriority,
+} = Astro.props;
+
+const hasConvertibleExt = /\.(png|jpe?g)$/i.test(src);
+const webpSrc = src.replace(/\.[^.]+$/, '.webp');
+
+function toSrcset(base: string): string {
+  return widths.map((w) => `${base}?w=${w}&q=80 ${w}w`).join(', ');
+}
+
+const fallbackSrc = `${src}?w=${widths[widths.length - 1]}&q=80`;
+---
+
+{hasConvertibleExt ? (
+  <picture>
+    <source type="image/webp" srcset={toSrcset(webpSrc)} sizes={sizes} />
+    <img
+      src={fallbackSrc}
+      srcset={toSrcset(src)}
+      sizes={sizes}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+      class={className}
+    />
+  </picture>
+) : (
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    decoding="async"
+    class={className}
+  />
+)}

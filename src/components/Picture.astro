@@ -1,0 +1,118 @@
+---
+/**
+ * SEO-optimized <picture> component for R2 images.
+ *
+ * Works on ALL Cloudflare plans:
+ *  - WebP: points to pre-converted .webp file in R2 (stored at upload time)
+ *  - AVIF: uses ?f=avif (requires Pro+ Image Resizing; gracefully ignored on Free)
+ *  - Fallback: original format with responsive ?w= widths
+ *  - Explicit width & height to prevent CLS
+ *  - Native lazy loading + async decoding
+ *
+ * Usage:
+ *   <Picture src="/images/valve.jpg" alt="Ball valve DN100" width={800} height={600} />
+ *   <Picture src="/images/pump.png" alt="Centrifugal pump" sizes={[400, 800, 1200]} />
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  sizes?: number[];
+  quality?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes: customSizes,
+  quality = 80,
+  class: className = '',
+  loading = 'lazy',
+  fetchpriority,
+} = Astro.props;
+
+const sizeList = customSizes ?? (width ? [width, width * 2] : [400, 800, 1200]);
+
+/**
+ * Replace the file extension to get the WebP sibling URL.
+ * Upload API stores both `/images/xxx.jpg` and `/images/xxx.webp`.
+ */
+function webpSrc(original: string): string {
+  return original.replace(/\.[^.]+$/, '.webp');
+}
+
+/** Build URL with query params for resize hints */
+function imgUrl(base: string, w: number, format?: string): string {
+  const params = [`w=${w}`, `q=${quality}`];
+  if (format) params.push(`f=${format}`);
+  return `${base}?${params.join('&')}`;
+}
+
+function buildSrcset(base: string, format?: string): string {
+  return sizeList.map((w) => `${imgUrl(base, w, format)} ${w}w`).join(', ');
+}
+
+const sizesAttr = width
+  ? `(max-width: ${width}px) 100vw, ${width}px`
+  : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+
+const isSvg = src.endsWith('.svg');
+const isGif = src.endsWith('.gif');
+const isWebp = src.endsWith('.webp');
+const skipTransform = isSvg || isGif;
+---
+
+{skipTransform ? (
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading={loading}
+    decoding="async"
+  />
+) : isWebp ? (
+  <!-- Already WebP — just add responsive srcset -->
+  <img
+    src={imgUrl(src, sizeList[0])}
+    srcset={buildSrcset(src)}
+    sizes={sizesAttr}
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchpriority}
+  />
+) : (
+  <picture>
+    <!-- WebP: pre-converted file in R2 (Free plan compatible) -->
+    <source
+      type="image/webp"
+      srcset={buildSrcset(webpSrc(src))}
+      sizes={sizesAttr}
+    />
+    <!-- Fallback: original format -->
+    <img
+      src={imgUrl(src, sizeList[0])}
+      srcset={buildSrcset(src)}
+      sizes={sizesAttr}
+      alt={alt}
+      width={width}
+      height={height}
+      class={className}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+    />
+  </picture>
+)}

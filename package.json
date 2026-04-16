@@ -1,0 +1,39 @@
+{
+  "name": "flare-forge",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "B2B Manufacturing Export Website - Astro + Cloudflare",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && npx wrangler deploy",
+    "publish": "node scripts/publish.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^13.1.9",
+    "@astrojs/sitemap": "^3.7.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.6",
+    "drizzle-orm": "^0.45.2",
+    "marked": "^18.0.0",
+    "tailwindcss": "^4.2.2",
+    "xss": "^1.0.15"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10",
+    "sharp": "^0.34.5",
+    "wrangler": "^4.82.2"
+  },
+  "overrides": {
+    "vite": "^7"
+  }
+}

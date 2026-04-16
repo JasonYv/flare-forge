@@ -1,0 +1,137 @@
+---
+/**
+ * Single news article page — SSR, fetches content from D1 by slug.
+ */
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDb } from '../../db';
+import { articles } from '../../db/schema';
+import { eq } from 'drizzle-orm';
+import { siteConfig } from '../../config';
+import { renderMarkdown } from '../../lib/markdown';
+import CoverImage from '../../components/CoverImage.astro';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/news');
+}
+
+const db = getDb(env.DB);
+const article = await db
+  .select()
+  .from(articles)
+  .where(eq(articles.slug, slug))
+  .get();
+
+if (!article) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+const publishDate = article.publishedAt ?? article.createdAt;
+const renderedContent = renderMarkdown(article.content);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.title,
+  description: article.summary,
+  image: article.coverImage ? `${siteConfig.url}${article.coverImage}` : undefined,
+  datePublished: publishDate,
+  dateModified: article.updatedAt,
+  author: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteConfig.url}/images/logo.png`,
+    },
+  },
+};
+---
+
+<BaseLayout
+  title={article.title}
+  description={article.summary}
+  ogImage={article.coverImage ?? undefined}
+  jsonLd={jsonLd}
+>
+  <!-- Breadcrumb -->
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/news" itemprop="item" class="hover:text-primary"><span itemprop="name">News</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name" class="text-neutral-800 font-medium">{article.title}</span>
+          <meta itemprop="position" content="3" />
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <article class="py-12 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex items-center gap-3 text-sm text-neutral-500 mb-4">
+          <time datetime={publishDate}>
+            {new Date(publishDate).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+          {article.category && (
+            <>
+              <span class="text-neutral-300">|</span>
+              <span class="text-primary font-medium capitalize">{article.category}</span>
+            </>
+          )}
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight">
+          {article.title}
+        </h1>
+        {article.summary && (
+          <p class="mt-4 text-lg text-neutral-600">{article.summary}</p>
+        )}
+      </header>
+
+      <!-- Cover Image (LCP candidate — eager load, high priority) -->
+      {article.coverImage && (
+        <CoverImage
+          src={article.coverImage}
+          alt={article.title}
+          width={1200}
+          height={675}
+          widths={[800, 1200, 1600]}
+          loading="eager"
+          fetchpriority="high"
+          class="w-full rounded-xl mb-8 aspect-[16/9] object-cover"
+        />
+      )}
+
+      <!-- Content (Markdown → sanitized HTML) -->
+      <div class="prose prose-lg max-w-none prose-headings:text-neutral-900 prose-a:text-primary prose-img:rounded-lg" set:html={renderedContent} />
+
+      <!-- Back link -->
+      <div class="mt-12 pt-8 border-t border-neutral-200">
+        <a href="/news" class="text-primary font-medium hover:underline">&larr; Back to News</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

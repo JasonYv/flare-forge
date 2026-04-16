@@ -1,0 +1,121 @@
+---
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en' } = Astro.props as { locale?: Locale };
+---
+
+<form id="inquiry-form" class="space-y-6" novalidate>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">
+        {t('contact.name', locale)} *
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+      />
+    </div>
+    <div>
+      <label for="email" class="block text-sm font-medium text-neutral-700 mb-1">
+        {t('contact.email', locale)} *
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+      />
+    </div>
+  </div>
+
+  <div>
+    <label for="company" class="block text-sm font-medium text-neutral-700 mb-1">
+      {t('contact.company', locale)}
+    </label>
+    <input
+      type="text"
+      id="company"
+      name="company"
+      class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+    />
+  </div>
+
+  <div>
+    <label for="message" class="block text-sm font-medium text-neutral-700 mb-1">
+      {t('contact.message', locale)} *
+    </label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      required
+      class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition resize-y"
+    ></textarea>
+  </div>
+
+  <div id="form-status" class="hidden text-sm font-medium"></div>
+
+  <button
+    id="submit-btn"
+    type="submit"
+    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+  >
+    <svg id="submit-spinner" class="hidden w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+    </svg>
+    <span id="submit-text">{t('contact.submit', locale)}</span>
+  </button>
+</form>
+
+<script>
+  const form = document.getElementById('inquiry-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const spinner = document.getElementById('submit-spinner');
+  const submitText = document.getElementById('submit-text');
+
+  function setLoading(loading: boolean) {
+    if (submitBtn) submitBtn.disabled = loading;
+    spinner?.classList.toggle('hidden', !loading);
+    if (submitText) submitText.textContent = loading ? 'Sending...' : 'Send Inquiry';
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    setLoading(true);
+    status!.className = 'hidden';
+
+    try {
+      const res = await fetch(`/api/inquiry?t=${Date.now()}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        status!.textContent = 'Thank you! We will reply within 24 hours.';
+        status!.className = 'text-sm font-medium text-green-600 bg-green-50 border border-green-200 rounded-lg p-3';
+        form.reset();
+      } else {
+        const err = await res.json();
+        status!.textContent = err.error || 'Something went wrong. Please try again.';
+        status!.className = 'text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg p-3';
+      }
+    } catch {
+      status!.textContent = 'Network error. Please try again.';
+      status!.className = 'text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg p-3';
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>

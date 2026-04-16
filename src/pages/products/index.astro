@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+import { t, getLocaleFromUrl } from '../../i18n';
+
+const locale = getLocaleFromUrl(Astro.url);
+
+// Placeholder product categories — replace with D1 data in production
+const categories = [
+  { name: 'Industrial Valves', slug: 'industrial-valves', count: 24 },
+  { name: 'Pipe Fittings', slug: 'pipe-fittings', count: 36 },
+  { name: 'Pumps & Motors', slug: 'pumps-motors', count: 18 },
+  { name: 'Fasteners', slug: 'fasteners', count: 42 },
+  { name: 'Steel Structures', slug: 'steel-structures', count: 15 },
+  { name: 'Custom Components', slug: 'custom-components', count: 8 },
+];
+---
+
+<BaseLayout
+  title="Products"
+  description="Browse our complete catalog of industrial equipment and components. ISO certified quality with competitive pricing for global B2B clients."
+>
+  <!-- Breadcrumb -->
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name" class="text-neutral-800 font-medium">Products</span>
+          <meta itemprop="position" content="2" />
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold mb-4 text-neutral-900">{t('products.title', locale)}</h1>
+      <p class="text-lg text-neutral-600 mb-12 max-w-2xl">
+        Explore our comprehensive range of industrial products. All items meet international quality standards and are available for OEM/ODM customization.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {categories.map((cat) => (
+          <a
+            href={`/products/${cat.slug}`}
+            class="group block bg-white rounded-xl border border-neutral-200 p-6 hover:shadow-lg hover:border-primary/30 transition-all"
+          >
+            <div class="aspect-[3/2] bg-neutral-100 rounded-lg mb-4 flex items-center justify-center text-neutral-400 group-hover:bg-primary/5 transition-colors">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <h2 class="text-lg font-semibold text-neutral-900 group-hover:text-primary transition-colors">
+              {cat.name}
+            </h2>
+            <p class="text-sm text-neutral-500 mt-1">{cat.count} products</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

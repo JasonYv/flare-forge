@@ -1,0 +1,98 @@
+---
+import { siteConfig } from '../config';
+import { t, type Locale } from '../i18n';
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-neutral-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 font-bold text-xl text-primary">
+        <span>{siteConfig.name}</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        {siteConfig.nav.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm font-medium text-neutral-700 hover:text-primary transition-colors"
+          >
+            {t(`nav.${item.label.toLowerCase()}`, locale)}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA + Language -->
+      <div class="flex items-center gap-4">
+        <!-- Language Switcher -->
+        <select
+          id="lang-switcher"
+          class="text-sm border border-neutral-200 rounded px-2 py-1 bg-white"
+          aria-label="Language"
+        >
+          <option value="en" selected={locale === 'en'}>EN</option>
+          <option value="zh" selected={locale === 'zh'}>中文</option>
+          <option value="es" selected={locale === 'es'}>ES</option>
+        </select>
+
+        <!-- Quote CTA -->
+        <a
+          href="/contact"
+          class="hidden sm:inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          {t('hero.cta', locale)}
+        </a>
+
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="md:hidden p-2 text-neutral-700"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobile-menu" class="hidden md:hidden pb-4" aria-label="Mobile navigation">
+      {siteConfig.nav.map((item) => (
+        <a
+          href={item.href}
+          class="block py-2 text-sm font-medium text-neutral-700 hover:text-primary"
+        >
+          {t(`nav.${item.label.toLowerCase()}`, locale)}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!expanded));
+    menu?.classList.toggle('hidden');
+  });
+
+  const switcher = document.getElementById('lang-switcher') as HTMLSelectElement | null;
+  switcher?.addEventListener('change', () => {
+    const lang = switcher.value;
+    const path = window.location.pathname;
+    const cleanPath = path.replace(/^\/(zh|es)/, '');
+    window.location.href = lang === 'en' ? cleanPath || '/' : `/${lang}${cleanPath || '/'}`;
+  });
+</script>

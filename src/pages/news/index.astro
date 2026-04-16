@@ -1,0 +1,87 @@
+---
+/**
+ * News listing page — SSR to always show latest articles from D1.
+ */
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDb } from '../../db';
+import { articles } from '../../db/schema';
+import { desc } from 'drizzle-orm';
+import { t, getLocaleFromUrl } from '../../i18n';
+import CoverImage from '../../components/CoverImage.astro';
+
+const locale = getLocaleFromUrl(Astro.url);
+
+let newsList: (typeof articles.$inferSelect)[] = [];
+
+try {
+  const db = getDb(env.DB);
+  newsList = await db
+    .select()
+    .from(articles)
+    .orderBy(desc(articles.createdAt))
+    .limit(20);
+} catch {
+  // D1 not available — show empty state
+}
+---
+
+<BaseLayout title="News" description="Latest news, industry insights, and company updates from FlareForge Manufacturing.">
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-primary">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">News</li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold mb-12 text-neutral-900">{t('news.title', locale)}</h1>
+
+      {newsList.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {newsList.map((article) => (
+            <article class="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow">
+              {article.coverImage && (
+                <CoverImage
+                  src={article.coverImage}
+                  alt={article.title}
+                  width={400}
+                  height={225}
+                  widths={[400, 800]}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                  class="w-full aspect-[16/9] object-cover"
+                />
+              )}
+              <div class="p-6">
+                <time class="text-xs text-neutral-500" datetime={article.publishedAt ?? article.createdAt}>
+                  {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+                <h2 class="text-lg font-semibold mt-2 mb-2 group-hover:text-primary transition-colors">
+                  <a href={`/news/${article.slug}`}>{article.title}</a>
+                </h2>
+                <p class="text-sm text-neutral-600 line-clamp-3">{article.summary}</p>
+                <a href={`/news/${article.slug}`} class="inline-block mt-4 text-sm text-primary font-medium hover:underline">
+                  {t('news.read_more', locale)} &rarr;
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16 text-neutral-500">
+          <p class="text-lg">No articles published yet. Check back soon!</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

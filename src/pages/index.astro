@@ -1,0 +1,202 @@
+---
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import CoverImage from '../components/CoverImage.astro';
+import { siteConfig } from '../config';
+import { t, getLocaleFromUrl } from '../i18n';
+import { getDb } from '../db';
+import { articles } from '../db/schema';
+import { desc } from 'drizzle-orm';
+import type { Article } from '../db/schema';
+
+const locale = getLocaleFromUrl(Astro.url);
+
+// Fetch top 3 latest articles at build time (static prerender)
+let latestArticles: Article[] = [];
+try {
+  const db = getDb(env.DB);
+  latestArticles = await db
+    .select()
+    .from(articles)
+    .orderBy(desc(articles.createdAt))
+    .limit(3);
+} catch {
+  // D1 not available during local build — use empty list
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description: siteConfig.seo.defaultDescription,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteConfig.url}/products?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<BaseLayout title="Home" jsonLd={jsonLd}>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-primary-dark to-primary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+          {t('hero.title', locale)}
+        </h1>
+        <p class="text-lg sm:text-xl text-blue-100 mb-8">
+          {t('hero.subtitle', locale)}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="/contact"
+            class="inline-flex items-center px-6 py-3 bg-secondary text-neutral-900 font-semibold rounded-lg hover:bg-secondary-light transition-colors"
+          >
+            {t('hero.cta', locale)}
+          </a>
+          <a
+            href="/products"
+            class="inline-flex items-center px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+          >
+            {t('hero.cta_secondary', locale)}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Why Choose Us -->
+  <section class="py-16 lg:py-24 bg-neutral-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12 text-neutral-900">Why Choose Us</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">ISO 9001 Certified</h3>
+          <p class="text-neutral-600 text-sm">Rigorous quality management system ensuring consistent product excellence across every production batch.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Global Export</h3>
+          <p class="text-neutral-600 text-sm">Products exported to 50+ countries. Experienced in international logistics, customs documentation, and compliance.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Custom OEM/ODM</h3>
+          <p class="text-neutral-600 text-sm">Full customization capabilities from design to delivery. Flexible MOQ and rapid prototyping services.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Preview -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-12">
+        <h2 class="text-3xl font-bold text-neutral-900">{t('products.title', locale)}</h2>
+        <a href="/products" class="text-primary font-medium hover:underline">
+          {t('products.view_all', locale)} &rarr;
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[1, 2, 3].map((i) => (
+          <article class="group bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400">
+              <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                Product Category {i}
+              </h3>
+              <p class="text-sm text-neutral-600 mb-4">
+                High-quality industrial component with precision engineering and durable materials.
+              </p>
+              <a href="/products" class="text-sm text-primary font-medium hover:underline">
+                Learn More &rarr;
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest News -->
+  {latestArticles.length > 0 && (
+    <section class="py-16 lg:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-12">
+          <h2 class="text-3xl font-bold text-neutral-900">{t('news.title', locale)}</h2>
+          <a href="/news" class="text-primary font-medium hover:underline">
+            {t('news.read_more', locale)} &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {latestArticles.map((post) => (
+            <article class="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow">
+              {post.coverImage ? (
+                <CoverImage
+                  src={post.coverImage}
+                  alt={post.title}
+                  width={400}
+                  height={225}
+                  widths={[400, 800]}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                  class="w-full aspect-[16/9] object-cover"
+                />
+              ) : (
+                <div class="w-full aspect-[16/9] bg-neutral-100 flex items-center justify-center text-neutral-300">
+                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                  </svg>
+                </div>
+              )}
+              <div class="p-6">
+                <time class="text-xs text-neutral-500" datetime={post.publishedAt ?? post.createdAt}>
+                  {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </time>
+                <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-primary transition-colors">
+                  <a href={`/news/${post.slug}`}>{post.title}</a>
+                </h3>
+                <p class="text-sm text-neutral-600 line-clamp-2">{post.summary}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA / Inquiry Section -->
+  <section class="py-16 lg:py-24 bg-neutral-50" id="inquiry">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4 text-neutral-900">{t('contact.title', locale)}</h2>
+      <p class="text-center text-neutral-600 mb-8">
+        Ready to discuss your project? Send us an inquiry and our team will get back to you within 24 hours.
+      </p>
+      <InquiryForm locale={locale} />
+    </div>
+  </section>
+</BaseLayout>

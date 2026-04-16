@@ -1,0 +1,107 @@
+---
+import { siteConfig } from '../config';
+import { getLocaleFromUrl, t } from '../i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+}
+
+const locale = getLocaleFromUrl(Astro.url);
+const {
+  title,
+  description = siteConfig.seo.defaultDescription,
+  ogImage = siteConfig.seo.defaultOgImage,
+  canonicalUrl = Astro.url.href,
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const fullTitle = siteConfig.seo.titleTemplate.replace('%s', title);
+const ogImageUrl = new URL(ogImage, siteConfig.url).href;
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/images/logo.png`,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: siteConfig.contact.phone,
+    contactType: 'sales',
+    availableLanguage: ['English', 'Chinese', 'Spanish'],
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteConfig.contact.address,
+  },
+};
+---
+
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={locale} />
+    <meta property="og:site_name" content={siteConfig.name} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- i18n alternates -->
+    {siteConfig.locales.map((loc) => (
+      <link
+        rel="alternate"
+        hreflang={loc}
+        href={`${siteConfig.url}${loc === 'en' ? '' : `/${loc}`}${Astro.url.pathname}`}
+      />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${siteConfig.url}${Astro.url.pathname}`} />
+
+    <!-- Theme color -->
+    <meta name="theme-color" content={siteConfig.theme.primary} />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? organizationJsonLd)} />
+
+    <!-- Global Styles -->
+    <style>
+      @import '../styles/global.css';
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-neutral-800 antialiased">
+    <Header locale={locale} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
