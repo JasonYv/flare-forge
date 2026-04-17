@@ -31,7 +31,7 @@
   "devDependencies": {
     "drizzle-kit": "^0.31.10",
     "sharp": "^0.34.5",
-    "wrangler": "^4.82.2"
+    "wrangler": "^4.83.0"
   },
   "overrides": {
     "vite": "^7"
