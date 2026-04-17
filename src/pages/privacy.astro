@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+---
+
+<BaseLayout title="Privacy Policy" description="How we collect, use, and protect your personal information.">
+  <article class="py-16 lg:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg max-w-none">
+      <h1>Privacy Policy</h1>
+      <p><em>Last updated: April 2026</em></p>
+
+      <h2>Information We Collect</h2>
+      <p>When you submit an inquiry through our contact form, we collect:</p>
+      <ul>
+        <li>Your name and email address</li>
+        <li>Company name (optional)</li>
+        <li>Your message content</li>
+      </ul>
+      <p>We do <strong>not</strong> use cookies, tracking pixels, or third-party analytics scripts.</p>
+
+      <h2>How We Use Your Information</h2>
+      <p>Your contact information is used solely to:</p>
+      <ul>
+        <li>Respond to your inquiry</li>
+        <li>Provide product information or quotations you requested</li>
+        <li>Follow up on business discussions you initiated</li>
+      </ul>
+      <p>We will never sell, rent, or share your personal data with third parties for marketing purposes.</p>
+
+      <h2>Data Storage</h2>
+      <p>Your inquiry data is stored in Cloudflare D1, a serverless database operated by Cloudflare, Inc. Data is processed at the edge location nearest to you and replicated for reliability.</p>
+
+      <h2>Data Retention</h2>
+      <p>We retain inquiry data for up to 24 months after your last interaction. You may request deletion of your data at any time by emailing <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
+
+      <h2>Your Rights</h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Request a copy of your personal data</li>
+        <li>Request correction of inaccurate data</li>
+        <li>Request deletion of your data</li>
+        <li>Withdraw consent at any time</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>For privacy-related questions, contact us at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
+    </div>
+  </article>
+</BaseLayout>

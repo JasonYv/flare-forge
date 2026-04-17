@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+import { t, getLocaleFromUrl } from '../i18n';
+
+const locale = getLocaleFromUrl(Astro.url);
+---
+
+<BaseLayout title="About Us" description="Learn about our manufacturing capabilities, certifications, and team. 15+ years of experience serving global B2B clients.">
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name" class="text-neutral-800 font-medium">{t('nav.about', locale)}</span>
+          <meta itemprop="position" content="2" />
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="py-16 lg:py-24 bg-gradient-to-b from-neutral-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl font-bold text-neutral-900 mb-6">{t('nav.about', locale)}</h1>
+        <p class="text-xl text-neutral-600 leading-relaxed">
+          {siteConfig.name} is a leading manufacturer and exporter of industrial equipment, serving B2B clients across 50+ countries since 2010.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-12 bg-primary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <p class="text-4xl font-bold">15+</p>
+          <p class="text-blue-200 text-sm mt-1">Years Experience</p>
+        </div>
+        <div>
+          <p class="text-4xl font-bold">50+</p>
+          <p class="text-blue-200 text-sm mt-1">Countries Served</p>
+        </div>
+        <div>
+          <p class="text-4xl font-bold">500+</p>
+          <p class="text-blue-200 text-sm mt-1">Active Clients</p>
+        </div>
+        <div>
+          <p class="text-4xl font-bold">99.9%</p>
+          <p class="text-blue-200 text-sm mt-1">Quality Rate</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Strengths -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-neutral-900 mb-12 text-center">Our Core Strengths</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-xl font-semibold text-neutral-900 mb-3">Manufacturing Excellence</h3>
+          <p class="text-neutral-600 leading-relaxed">
+            Our state-of-the-art facility spans 20,000m² and is equipped with CNC machining centers, automated assembly lines, and AI-powered quality inspection systems. We maintain ISO 9001, ISO 14001, and CE certifications.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-neutral-900 mb-3">Custom OEM/ODM</h3>
+          <p class="text-neutral-600 leading-relaxed">
+            From concept to delivery, our engineering team works with you to develop custom solutions. We offer rapid prototyping, flexible MOQ, and full production scaling — all under one roof.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-neutral-900 mb-3">Global Logistics</h3>
+          <p class="text-neutral-600 leading-relaxed">
+            Experienced in international trade documentation, customs clearance, and shipping coordination. We handle FOB, CIF, and DDP terms with competitive freight rates through our logistics partnerships.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-neutral-900 mb-3">After-Sales Support</h3>
+          <p class="text-neutral-600 leading-relaxed">
+            Dedicated account managers for every client. 24-hour response time on technical inquiries, and a comprehensive warranty program backed by our quality commitment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-neutral-50">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-neutral-900 mb-4">Ready to Partner With Us?</h2>
+      <p class="text-neutral-600 mb-8">Schedule a factory tour or request a product catalog.</p>
+      <a href="/contact" class="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors">
+        Get in Touch
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+---
+
+<BaseLayout title="Terms of Service" description="Terms and conditions governing your use of our website and services.">
+  <article class="py-16 lg:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-lg max-w-none">
+      <h1>Terms of Service</h1>
+      <p><em>Last updated: April 2026</em></p>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using this website (<strong>{siteConfig.name}</strong>), you agree to comply with these Terms of Service. If you do not agree, please do not use this site.</p>
+
+      <h2>2. Product Information</h2>
+      <p>Product descriptions, specifications, and images on this website are for reference only. Actual products may vary. We reserve the right to modify product specifications without prior notice.</p>
+
+      <h2>3. Inquiries and Quotations</h2>
+      <p>Submitting an inquiry through our website does not constitute a binding order. Quotations provided are valid for 30 days unless otherwise stated. All orders are subject to written confirmation and our standard sales terms.</p>
+
+      <h2>4. Intellectual Property</h2>
+      <p>All content on this website — including text, images, logos, and design — is the property of {siteConfig.name} and is protected by applicable intellectual property laws. You may not reproduce, distribute, or use our content without written permission.</p>
+
+      <h2>5. Limitation of Liability</h2>
+      <p>This website is provided "as is" without warranty of any kind. {siteConfig.name} is not liable for any direct, indirect, or consequential damages arising from your use of this website or reliance on information contained herein.</p>
+
+      <h2>6. External Links</h2>
+      <p>This website may contain links to third-party websites. We are not responsible for the content or privacy practices of external sites.</p>
+
+      <h2>7. Governing Law</h2>
+      <p>These terms are governed by the laws of the People's Republic of China. Any disputes shall be resolved through arbitration in Shenzhen, China.</p>
+
+      <h2>8. Changes to Terms</h2>
+      <p>We reserve the right to update these terms at any time. Changes will be posted on this page with an updated revision date.</p>
+
+      <h2>9. Contact</h2>
+      <p>For questions about these terms, please contact <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
+    </div>
+  </article>
+</BaseLayout>

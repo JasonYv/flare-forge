@@ -36,7 +36,7 @@ export const siteConfig = {
     titleTemplate: '%s | FlareForge Manufacturing',
     defaultDescription:
       'Leading manufacturer and exporter of industrial equipment. ISO 9001 certified. Custom OEM/ODM solutions for global B2B clients.',
-    defaultOgImage: '/images/og-default.jpg',
+    defaultOgImage: '/images/og-default.png',
   },
 
   /** Theme colors used in meta tags and PWA manifest */

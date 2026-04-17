@@ -1,26 +1,64 @@
 ---
+/**
+ * Product catalog page — SSR, reads from D1 with placeholder fallback.
+ */
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { siteConfig } from '../../config';
+import CoverImage from '../../components/CoverImage.astro';
+import { getDb } from '../../db';
+import { products } from '../../db/schema';
 import { t, getLocaleFromUrl } from '../../i18n';
 
 const locale = getLocaleFromUrl(Astro.url);
 
-// Placeholder product categories — replace with D1 data in production
-const categories = [
-  { name: 'Industrial Valves', slug: 'industrial-valves', count: 24 },
-  { name: 'Pipe Fittings', slug: 'pipe-fittings', count: 36 },
-  { name: 'Pumps & Motors', slug: 'pumps-motors', count: 18 },
-  { name: 'Fasteners', slug: 'fasteners', count: 42 },
-  { name: 'Steel Structures', slug: 'steel-structures', count: 15 },
-  { name: 'Custom Components', slug: 'custom-components', count: 8 },
-];
+// Fetch products from D1, grouped by category
+type CategoryCard = { name: string; slug: string; image?: string; count: number };
+let categories: CategoryCard[] = [];
+
+try {
+  const db = getDb(env.DB);
+  const allProducts = await db.select().from(products);
+
+  if (allProducts.length > 0) {
+    // Group by category, show first product image per group
+    const groupMap = new Map<string, { slugs: Set<string>; image?: string }>();
+    for (const p of allProducts) {
+      if (!groupMap.has(p.category)) {
+        const imgs = p.images ? JSON.parse(p.images) as string[] : [];
+        groupMap.set(p.category, { slugs: new Set(), image: imgs[0] });
+      }
+      groupMap.get(p.category)!.slugs.add(p.slug);
+    }
+    categories = [...groupMap.entries()].map(([cat, { slugs, image }]) => ({
+      name: cat,
+      slug: cat.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      image,
+      count: slugs.size,
+    }));
+  }
+} catch {
+  // D1 not available
+}
+
+// Placeholder fallback when DB is empty
+if (categories.length === 0) {
+  categories = [
+    { name: 'Industrial Valves', slug: 'industrial-valves', count: 0 },
+    { name: 'Pipe Fittings', slug: 'pipe-fittings', count: 0 },
+    { name: 'Pumps & Motors', slug: 'pumps-motors', count: 0 },
+    { name: 'Fasteners', slug: 'fasteners', count: 0 },
+    { name: 'Steel Structures', slug: 'steel-structures', count: 0 },
+    { name: 'Custom Components', slug: 'custom-components', count: 0 },
+  ];
+}
 ---
 
 <BaseLayout
   title="Products"
   description="Browse our complete catalog of industrial equipment and components. ISO certified quality with competitive pricing for global B2B clients."
 >
-  <!-- Breadcrumb -->
   <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
       <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -50,15 +88,28 @@ const categories = [
             href={`/products/${cat.slug}`}
             class="group block bg-white rounded-xl border border-neutral-200 p-6 hover:shadow-lg hover:border-primary/30 transition-all"
           >
-            <div class="aspect-[3/2] bg-neutral-100 rounded-lg mb-4 flex items-center justify-center text-neutral-400 group-hover:bg-primary/5 transition-colors">
-              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
+            {cat.image ? (
+              <CoverImage
+                src={cat.image}
+                alt={cat.name}
+                width={400}
+                height={267}
+                widths={[400, 800]}
+                class="aspect-[3/2] rounded-lg mb-4 object-cover w-full"
+              />
+            ) : (
+              <div class="aspect-[3/2] bg-neutral-100 rounded-lg mb-4 flex items-center justify-center text-neutral-400 group-hover:bg-primary/5 transition-colors">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+            )}
             <h2 class="text-lg font-semibold text-neutral-900 group-hover:text-primary transition-colors">
               {cat.name}
             </h2>
-            <p class="text-sm text-neutral-500 mt-1">{cat.count} products</p>
+            {cat.count > 0 && (
+              <p class="text-sm text-neutral-500 mt-1">{cat.count} products</p>
+            )}
           </a>
         ))}
       </div>

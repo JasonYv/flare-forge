@@ -1,0 +1,168 @@
+---
+/**
+ * Product category detail page — SSR, fetches from D1.
+ */
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CoverImage from '../../components/CoverImage.astro';
+import { getDb } from '../../db';
+import { products } from '../../db/schema';
+import { eq } from 'drizzle-orm';
+import { siteConfig } from '../../config';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/products');
+}
+
+const db = getDb(env.DB);
+const product = await db
+  .select()
+  .from(products)
+  .where(eq(products.slug, slug))
+  .get();
+
+if (!product) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+const images = product.images ? JSON.parse(product.images) as string[] : [];
+const specs = product.specifications ? JSON.parse(product.specifications) as Record<string, string> : {};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.description,
+  image: images[0] ? `${siteConfig.url}${images[0]}` : undefined,
+  brand: {
+    '@type': 'Brand',
+    name: siteConfig.name,
+  },
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+    seller: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+    },
+  },
+};
+---
+
+<BaseLayout
+  title={product.name}
+  description={product.description}
+  ogImage={images[0]}
+  jsonLd={jsonLd}
+>
+  <!-- Breadcrumb -->
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/products" itemprop="item" class="hover:text-primary"><span itemprop="name">Products</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <li class="text-neutral-300">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name" class="text-neutral-800 font-medium">{product.name}</span>
+          <meta itemprop="position" content="3" />
+        </li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="py-12 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Images -->
+        <div>
+          {images.length > 0 ? (
+            <div class="space-y-4">
+              <CoverImage
+                src={images[0]}
+                alt={product.name}
+                width={800}
+                height={600}
+                widths={[400, 800, 1200]}
+                loading="eager"
+                fetchpriority="high"
+                class="w-full rounded-xl aspect-[4/3] object-cover"
+              />
+              {images.length > 1 && (
+                <div class="grid grid-cols-3 gap-3">
+                  {images.slice(1, 4).map((img) => (
+                    <CoverImage
+                      src={img}
+                      alt={product.name}
+                      width={300}
+                      height={225}
+                      widths={[300]}
+                      class="w-full rounded-lg aspect-[4/3] object-cover"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div class="w-full aspect-[4/3] bg-neutral-100 rounded-xl flex items-center justify-center text-neutral-300">
+              <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <!-- Info -->
+        <div>
+          <span class="text-sm text-primary font-medium uppercase tracking-wider">{product.category}</span>
+          <h1 class="text-3xl font-bold text-neutral-900 mt-2 mb-4">{product.name}</h1>
+          <p class="text-lg text-neutral-600 leading-relaxed mb-6">{product.description}</p>
+
+          {product.minOrderQty && (
+            <p class="text-sm text-neutral-500 mb-6">
+              Minimum Order: <strong class="text-neutral-900">{product.minOrderQty} units</strong>
+            </p>
+          )}
+
+          <!-- Specs Table -->
+          {Object.keys(specs).length > 0 && (
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-neutral-900 mb-3">Specifications</h2>
+              <table class="w-full text-sm">
+                <tbody>
+                  {Object.entries(specs).map(([key, val]) => (
+                    <tr class="border-b border-neutral-100">
+                      <td class="py-2 pr-4 text-neutral-500 font-medium">{key}</td>
+                      <td class="py-2 text-neutral-900">{val}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <!-- CTA -->
+          <div class="flex flex-wrap gap-4">
+            <a href="/contact" class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors">
+              Request a Quote
+            </a>
+            <a href="/products" class="px-6 py-3 border border-neutral-300 text-neutral-700 font-medium rounded-lg hover:bg-neutral-50 transition-colors">
+              All Products
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
