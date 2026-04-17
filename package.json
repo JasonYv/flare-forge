@@ -24,7 +24,7 @@
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.6",
     "drizzle-orm": "^0.45.2",
-    "marked": "^18.0.0",
+    "marked": "^18.0.1",
     "tailwindcss": "^4.2.2",
     "xss": "^1.0.15"
   },
