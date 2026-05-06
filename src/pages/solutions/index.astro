@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const industries = [
+  {
+    slug: 'trucking-fleet',
+    name: 'Trucking & Fleet',
+    eyebrow: 'Heavy-Duty / Commercial',
+    description: 'OEM-validated calcium-calcium platforms for long-haul trucks, construction, agricultural and mining equipment. 105Ah to 200Ah.',
+    icon: 'local_shipping',
+    image: '/images/hero/hero-mf.webp',
+    keyMetric: '500+ cycles · 1250A CCA',
+  },
+  {
+    slug: 'solar-off-grid',
+    name: 'Solar Off-Grid',
+    eyebrow: 'Energy Storage',
+    description: 'VRLA gel deep-cycle batteries for African, Southeast Asian, and Latin American off-grid solar markets. Tropical-climate optimized.',
+    icon: 'wb_sunny',
+    image: '/images/hero/hero-solar.webp',
+    keyMetric: '1200 cycles · 12-yr design life',
+  },
+  {
+    slug: 'marine',
+    name: 'Marine',
+    eyebrow: 'Specialty / Classed Vessels',
+    description: 'CCS Type-Approved marine batteries for commercial fishing, yachts, workboats, and inland waterway transport. IACS mutual recognition.',
+    icon: 'directions_boat',
+    image: '/images/hero/hero-marine.webp',
+    keyMetric: 'CCS approved · 1200A CCA',
+  },
+  {
+    slug: 'telecom',
+    name: 'Telecom Tower',
+    eyebrow: 'Solar-Hybrid Backup',
+    description: 'For solar-hybrid remote BTS sites in Africa, SE Asia, LatAm. Pair with existing solar/diesel infrastructure for off-grid tower power.',
+    icon: 'cell_tower',
+    image: '/images/hero/hero-solar.webp',
+    keyMetric: 'PSoC tolerance · 24h+ autonomy',
+  },
+  {
+    slug: 'ups-data-center',
+    name: 'UPS & Data Center',
+    eyebrow: 'Hybrid Backup',
+    description: 'Edge / micro-data-center backup with daily cycling. Solar-hybrid emergency power for industrial and command-post applications.',
+    icon: 'storage',
+    image: '/images/hero/hero-equipment.webp',
+    keyMetric: '8–48h autonomy · gel chemistry',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AltusVolt Application Solutions',
+  description: 'Industry-specific battery solutions for trucking, solar off-grid, marine, telecom, and UPS applications.',
+  url: `${siteConfig.url}/solutions`,
+};
+---
+
+<BaseLayout
+  title="Application Solutions — Industry-Specific Battery Engineering"
+  description="AltusVolt application solutions for trucking & fleet, solar off-grid, marine, telecom tower, and UPS / data center backup. Industry-specific battery engineering with recommended models per application."
+  jsonLd={jsonLd}
+>
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Applications</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[400px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-factory.webp" alt="Industrial battery applications" class="w-full h-full object-cover opacity-85" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-6 md:px-10 py-16">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Applications
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Battery Engineering by Industry
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          The same lead-acid chemistry, engineered very differently for the duty cycles of long-haul trucking vs. off-grid solar vs. classed marine vessels. Pick your industry and we'll point you at the right product line.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-2xl mx-auto px-6 md:px-10">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {industries.map((ind) => (
+          <a href={`/solutions/${ind.slug}`} class="group relative overflow-hidden rounded-sm bg-brand-dark min-h-[380px] flex flex-col justify-end p-8">
+            <img src={ind.image} alt={ind.name} class="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-105 transition-all duration-700" loading="lazy" width="800" height="600" />
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/95 via-brand-dark/10 to-transparent"></div>
+            <div class="relative z-10">
+              <p class="text-brand-gold text-xs font-mono uppercase tracking-widest mb-3">{ind.eyebrow}</p>
+              <h2 class="text-white text-2xl md:text-3xl font-bold mb-3">{ind.name}</h2>
+              <p class="text-[#bbc7df] text-sm leading-relaxed mb-4">{ind.description}</p>
+              <p class="text-brand-gold/80 text-xs font-mono mb-4 border-t border-white/10 pt-3">{ind.keyMetric}</p>
+              <span class="inline-flex items-center gap-2 text-brand-gold text-xs font-bold uppercase tracking-widest group-hover:gap-3 transition-all">
+                Read Industry Brief
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">Don't see your application?</h2>
+      <p class="text-neutral-700 mb-8">
+        We also serve agriculture, construction, light industrial, and special-equipment markets. Tell us your application and we'll point you at the right product line — or flag if it's outside Lingyun's manufacturing focus.
+      </p>
+      <a href="/contact" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition">
+        Contact Engineering
+      </a>
+    </div>
+  </section>
+</BaseLayout>

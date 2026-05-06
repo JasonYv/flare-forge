@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const faqs = [
+  {
+    q: 'What battery standard does the Australian aftermarket use?',
+    a: 'Both. JIS dominates 4WD, marine, and Japanese-import passenger (Toyota, Mazda, Nissan, Subaru, Hilux/Land Cruiser/Patrol). DIN/EN dominates European-imported vehicles (BMW, Audi, VW, Mercedes) and AGM start-stop. BCI shows up on US-imported vehicles and some heavy commercial. Most Australian distributors stock all three.',
+  },
+  {
+    q: 'What MOQ is required to import batteries to Australia?',
+    a: 'Standard one 40HQ container — approximately 480-720 units depending on SKU mix. Mixed-SKU containers permitted (NS40 + 55D23 + 95D31 + N70Z + DIN56638 typical for an Australian generalist distributor).',
+  },
+  {
+    q: 'How long is shipping from China to Sydney/Melbourne/Brisbane?',
+    a: 'Typical sea freight 25-30 days port-to-port for major Chinese ports (Shanghai, Ningbo, Shenzhen) to Sydney/Melbourne/Brisbane. Add 5-7 days for documentation, customs, and inland delivery. Air freight available for emergency replacement at premium pricing.',
+  },
+  {
+    q: 'Are AltusVolt batteries certified for Australian sale?',
+    a: 'Yes. IATF 16949 manufacturing certification is recognised globally. Marine batteries carry CCS certification accepted under AMSA standards. 24-month limited warranty meets Australian Consumer Law expectations. Proper UN 2794 / UN 2800 hazmat documentation accompanies every shipment.',
+  },
+  {
+    q: 'Can I get exclusive territory rights for Australia?',
+    a: 'For distributors committing to 5+ containers/year with marketing investment commitments, we can structure exclusive state-level or national territory arrangements. Discuss requirements during your distributor application.',
+  },
+  {
+    q: 'What payment terms are common for Australian importers?',
+    a: 'First-time buyers: 30% T/T deposit, 70% against B/L copy. Established accounts (12+ months track record): 30/70 with extended terms or L/C at sight. Larger volume customers may qualify for 60-day open account with credit insurance.',
+  },
+  {
+    q: 'Do you offer private-label batteries for Australian retailers?',
+    a: 'Yes. From 2,000-unit MOQ per SKU we offer custom case color, top label, terminal cover, and packaging. Lead time 45-60 days first run for artwork proof and pre-production sample, then 30 days repeat orders.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Battery Supplier Australia — Wholesale AGM, JIS, DIN Batteries',
+  description: 'AltusVolt is a battery supplier for Australian distributors. JIS, DIN, BCI cross-coverage, AGM start-stop, 4WD heat-tolerant calcium, marine CCS-certified. 25-30 day shipping to Sydney/Melbourne/Brisbane.',
+  url: `${siteConfig.url}/markets/australia/`,
+  mainEntity: {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Battery Supplier Australia — Wholesale Batteries for AU Distributors"
+  description="Wholesale battery supplier for Australian distributors. JIS, DIN, BCI cross-coverage. 4WD heat-tolerant calcium, AGM start-stop, marine CCS. 25-30 day shipping to Sydney/Melbourne/Brisbane."
+  jsonLd={jsonLd}
+>
+
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/resources/" class="hover:text-steel">Markets</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Australia</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[560px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-marine.webp" alt="Battery supplier Australia" class="w-full h-full object-cover opacity-55" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Market guide · Australia
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Battery supplier <span class="text-brand-gold">for Australian distributors.</span>
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          Australia is JIS-and-DIN territory with a strong 4WD and marine sector, brutal Outback heat, and a sophisticated aftermarket. AltusVolt exports across all three standards — produced by manufacturing partner Lingyun with heat-tolerant calcium grids, marine CCS certification, and 25-30 day shipping to Sydney, Melbourne, and Brisbane.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Australian standards mix</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">JIS, DIN, BCI — all three matter here.</h2>
+          <p class="text-neutral-700 leading-relaxed mb-4">
+            Australia's car parc reflects its import history: <strong>Japanese imports dominate the volume aftermarket</strong> (Toyota, Mazda, Nissan, Subaru, Mitsubishi), pulling JIS sizing through the system. <strong>European imports drive premium AGM start-stop</strong> in DIN/EN footprints. <strong>American 4WD and heavy commercial</strong> brings BCI groups into the mix.
+          </p>
+          <p class="text-neutral-700 leading-relaxed mb-4">
+            Most Australian distributors stock all three standards. AltusVolt sources across the full range from a single audited Lingyun platform — no need to source from three suppliers.
+          </p>
+          <a href="/support/battery-standards/" class="inline-flex items-center gap-2 text-steel font-bold text-sm uppercase tracking-widest hover:text-brand-gold transition">
+            Cross-reference guide <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+          </a>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-4">Common Australian aftermarket SKUs</p>
+          <ul class="space-y-3 text-sm">
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">NS40 / NS40Z</span><span class="text-neutral-600">JIS small car</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">NS70 / N50Z</span><span class="text-neutral-600">JIS mid-size</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">N70Z / N70ZZ</span><span class="text-neutral-600">4WD, ute starting</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">55D23 / 75D23</span><span class="text-neutral-600">Camry, Hilux, ute</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">95D31 / 115D31</span><span class="text-neutral-600">Land Cruiser, marine</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">DIN 56638 / LN2</span><span class="text-neutral-600">EU-import AGM</span></li>
+            <li class="flex justify-between border-b border-light-steel pb-2"><span class="font-mono font-bold text-brand-dark">DIN 60044 / LN3</span><span class="text-neutral-600">EU SUV AGM</span></li>
+            <li class="flex justify-between"><span class="font-mono font-bold text-brand-dark">N100 / N150</span><span class="text-neutral-600">Heavy commercial</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Australian conditions</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Built for Outback heat and corrugated roads.</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white border-l-4 border-brand-gold p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">device_thermostat</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-3">Heat tolerance</h3>
+          <p class="text-sm text-neutral-700 leading-relaxed">Outback ambient regularly tops 45°C; engine-bay temperatures push past 80°C. Our calcium-calcium grid alloy resists thermal corrosion better than antimony hybrids — service life in hot climates can be 30-40% longer than budget OEM-fit batteries.</p>
+        </div>
+        <div class="bg-white border-l-4 border-brand-gold p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">terrain</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-3">Vibration & off-road</h3>
+          <p class="text-sm text-neutral-700 leading-relaxed">4WD on corrugated tracks, mining haul roads, agricultural duty cycles — all destroy passenger-grade plate construction. Heavy-duty plate-strap welds and triple-anchor hold-down points resist the impacts that crack lighter batteries.</p>
+        </div>
+        <div class="bg-white border-l-4 border-brand-gold p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">sailing</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-3">Marine duty</h3>
+          <p class="text-sm text-neutral-700 leading-relaxed">Recreational and commercial marine across the East Coast and Tasmania. Our marine range is CCS-certified for commercial vessels and AGM-built for trolling and house-bank service. Dual-purpose Group 31 fits cover small fishing boat starting + electronics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Logistics to Australia</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Shipping & lead times.</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-cold-white p-8 border border-light-steel">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">anchor</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Sydney (Port Botany)</h3>
+          <p class="text-sm text-neutral-700 mb-3">From Shanghai/Ningbo: <strong>25-28 days</strong> port-to-port. Major liner services weekly. Largest container terminal in Australia.</p>
+        </div>
+        <div class="bg-cold-white p-8 border border-light-steel">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">anchor</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Melbourne (Port of Melbourne)</h3>
+          <p class="text-sm text-neutral-700 mb-3">From Shanghai/Ningbo: <strong>27-30 days</strong> port-to-port. Australia's busiest port. Direct service from Shenzhen and Qingdao.</p>
+        </div>
+        <div class="bg-cold-white p-8 border border-light-steel">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">anchor</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Brisbane (Port of Brisbane)</h3>
+          <p class="text-sm text-neutral-700 mb-3">From Shanghai/Ningbo: <strong>23-26 days</strong> port-to-port. Gateway for QLD and Northern NSW distributors.</p>
+        </div>
+      </div>
+      <div class="mt-8 bg-cold-white border-l-4 border-brand-gold p-6 text-sm text-neutral-700">
+        <strong class="text-brand-dark">Documentation:</strong> Every shipment includes UN 2794 (flooded) or UN 2800 (AGM/non-spillable) hazmat certificate, MSDS, IATF 16949 quality certificate, country-of-origin certificate, and commercial invoice/packing list. We handle exporter-side paperwork; your customs broker handles AU import clearance.
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">Why AU distributors choose AltusVolt</p>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Six reasons.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { icon: 'verified', title: 'IATF 16949 certified', body: 'Automotive quality system manufacturing. The same line that supplies Shaanxi Auto, Beiben, Foton — full traceability for warranty audits.' },
+          { icon: 'directions_boat', title: 'CCS marine certification', body: 'Commercial-grade marine batteries certified to CCS standard, recognised under AMSA. Suitable for survey-class fishing and charter vessels.' },
+          { icon: 'shield', title: '24-month warranty', body: 'Standard limited warranty meeting Australian Consumer Law expectations. Extended 36-month available for fleet customers.' },
+          { icon: 'inventory', title: 'Mixed-SKU containers', body: 'JIS + DIN + BCI in one container. Reduces complexity for distributors covering varied vehicle parc.' },
+          { icon: 'public', title: 'Dual brand operation', body: 'Lingyun manufactures, AltusVolt exports. English-speaking sales and engineering team — no translation chain on technical questions.' },
+          { icon: 'handshake', title: 'Territory protection', body: 'Exclusive state or national territory available for committed volume distributors with marketing investment plan.' },
+        ].map((p) => (
+          <div class="bg-white/5 border border-white/10 p-6 hover:bg-white/10 transition">
+            <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:36px">{p.icon}</span>
+            <h3 class="text-lg font-bold mb-2">{p.title}</h3>
+            <p class="text-sm text-[#bbc7df] leading-relaxed">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-10">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="group bg-white border border-light-steel p-6 hover:border-steel transition">
+            <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+              <span>{f.q}</span>
+              <span class="material-symbols-outlined text-steel group-open:rotate-180 transition" style="font-size:24px">expand_more</span>
+            </summary>
+            <p class="mt-4 text-neutral-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">Apply for Australian distributor terms.</h2>
+      <p class="text-neutral-700 mb-8">
+        Tell us your state, annual volume, vehicle parc focus, and whether you're seeking exclusive territory — we'll respond with pricing, MOQ, and a sample delivery plan within 24 hours.
+      </p>
+      <a href="/distributor-program/?market=australia" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition">
+        Apply for AU distributor terms
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

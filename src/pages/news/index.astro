@@ -1,77 +1,135 @@
 ---
 /**
- * News listing page — SSR to always show latest articles from D1.
+ * News listing page.
+ *
+ * Strategy:
+ *   - Read seed articles from src/content/news (Astro Content Collection).
+ *   - Optionally augment with D1-backed dynamic articles when DB is available.
+ *   - This guarantees the page is never empty (no thin-content SEO penalty).
  */
 export const prerender = false;
 
-import { env } from 'cloudflare:workers';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getDb } from '../../db';
-import { articles } from '../../db/schema';
-import { desc } from 'drizzle-orm';
-import { t, getLocaleFromUrl } from '../../i18n';
-import CoverImage from '../../components/CoverImage.astro';
+import { siteConfig } from '../../config';
 
-const locale = getLocaleFromUrl(Astro.url);
-
-let newsList: (typeof articles.$inferSelect)[] = [];
-
-try {
-  const db = getDb(env.DB);
-  newsList = await db
-    .select()
-    .from(articles)
-    .orderBy(desc(articles.createdAt))
-    .limit(20);
-} catch {
-  // D1 not available — show empty state
+interface NewsItem {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  coverImage?: string;
+  publishedAt: Date;
+  author?: string;
 }
+
+// 1. Load static seed articles from Content Collection
+const seedEntries = await getCollection('news', ({ data }) => !data.draft);
+const staticArticles: NewsItem[] = seedEntries.map((e) => ({
+  id: e.id,
+  slug: e.id,
+  title: e.data.title,
+  summary: e.data.summary,
+  coverImage: e.data.coverImage,
+  publishedAt: e.data.publishedAt,
+  author: e.data.author,
+}));
+
+// 2. Try to merge with D1 dynamic articles (optional, won't break if DB unavailable)
+let dynamicArticles: NewsItem[] = [];
+try {
+  // @ts-ignore — cloudflare:workers only available in CF runtime
+  const cfWorkers = await import('cloudflare:workers');
+  const env = cfWorkers.env;
+  if (env?.DB) {
+    const { getDb } = await import('../../db');
+    const { articles } = await import('../../db/schema');
+    const { desc } = await import('drizzle-orm');
+    const db = getDb(env.DB);
+    const rows = await db.select().from(articles).orderBy(desc(articles.createdAt)).limit(20);
+    dynamicArticles = rows.map((r) => ({
+      id: `db-${r.id}`,
+      slug: r.slug,
+      title: r.title,
+      summary: r.summary,
+      coverImage: r.coverImage ?? undefined,
+      publishedAt: new Date(r.publishedAt ?? r.createdAt),
+      author: r.author ?? undefined,
+    }));
+  }
+} catch {
+  // D1 unavailable in dev or env not wired — fall back to static only
+}
+
+// Merge & dedupe (D1 takes precedence on slug clash, then sort newest first)
+const allBySlug = new Map<string, NewsItem>();
+for (const a of staticArticles) allBySlug.set(a.slug, a);
+for (const a of dynamicArticles) allBySlug.set(a.slug, a);
+const newsList = [...allBySlug.values()].sort((a, b) => b.publishedAt.valueOf() - a.publishedAt.valueOf());
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AltusVolt News & Industry Insights',
+  description: 'Latest news, industry analysis, and company updates from AltusVolt — lead acid battery manufacturing, technology trends, and export market intelligence.',
+  url: `${siteConfig.url}/news`,
+  isPartOf: { '@type': 'WebSite', name: siteConfig.name, url: siteConfig.url },
+};
 ---
 
-<BaseLayout title="News" description="Latest news, industry insights, and company updates from FlareForge Manufacturing.">
+<BaseLayout
+  title="News & Industry Insights"
+  description="Latest news, industry analysis, and company updates from AltusVolt — lead acid battery manufacturing, technology trends, and export market intelligence."
+  jsonLd={jsonLd}
+>
   <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
       <ol class="flex items-center gap-2 text-sm text-neutral-500">
-        <li><a href="/" class="hover:text-primary">Home</a></li>
+        <li><a href="/" class="hover:text-steel">Home</a></li>
         <li class="text-neutral-300">/</li>
-        <li class="text-neutral-800 font-medium">News</li>
+        <li class="text-neutral-800 font-medium">News & Insights</li>
       </ol>
     </div>
   </nav>
 
   <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold mb-12 text-neutral-900">{t('news.title', locale)}</h1>
+      <div class="max-w-3xl mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Editorial</p>
+        <h1 class="text-4xl md:text-5xl font-semibold text-brand-dark mb-4 tracking-tight">News & Industry Insights</h1>
+        <p class="text-neutral-700 text-lg leading-relaxed">
+          Industry analysis on the global lead-acid battery market, export trade, certifications,
+          and shipping compliance — plus AltusVolt company updates.
+        </p>
+      </div>
 
       {newsList.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsList.map((article) => (
-            <article class="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow">
+            <article class="group bg-white rounded-sm border border-light-steel overflow-hidden hover:shadow-md transition-shadow">
               {article.coverImage && (
-                <CoverImage
-                  src={article.coverImage}
-                  alt={article.title}
-                  width={400}
-                  height={225}
-                  widths={[400, 800]}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-                  class="w-full aspect-[16/9] object-cover"
-                />
+                <a href={`/news/${article.slug}`} class="block aspect-[16/9] bg-cold-white overflow-hidden">
+                  <img
+                    src={article.coverImage}
+                    alt={article.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    width="400"
+                    height="225"
+                    loading="lazy"
+                  />
+                </a>
               )}
               <div class="p-6">
-                <time class="text-xs text-neutral-500" datetime={article.publishedAt ?? article.createdAt}>
-                  {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                <time class="text-xs text-neutral-500 font-mono" datetime={article.publishedAt.toISOString()}>
+                  {article.publishedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </time>
-                <h2 class="text-lg font-semibold mt-2 mb-2 group-hover:text-primary transition-colors">
+                <h2 class="text-lg font-bold mt-2 mb-2 text-brand-dark group-hover:text-steel transition-colors">
                   <a href={`/news/${article.slug}`}>{article.title}</a>
                 </h2>
-                <p class="text-sm text-neutral-600 line-clamp-3">{article.summary}</p>
-                <a href={`/news/${article.slug}`} class="inline-block mt-4 text-sm text-primary font-medium hover:underline">
-                  {t('news.read_more', locale)} &rarr;
+                <p class="text-sm text-neutral-gray line-clamp-3 mb-4">{article.summary}</p>
+                <a href={`/news/${article.slug}`} class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-gold hover:text-brand-dark transition-colors">
+                  Read Article
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
               </div>
             </article>

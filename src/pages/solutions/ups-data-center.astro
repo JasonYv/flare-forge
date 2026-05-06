@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="UPS & Data Center Battery — Solar Hybrid Backup Solutions"
+  description="Hybrid UPS / micro-data-center backup solutions using AltusVolt VRLA gel batteries. For solar-hybrid emergency power systems. High-rate VRLA for traditional UPS not currently in our catalog."
+>
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/solutions" class="hover:text-steel">Applications</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">UPS & Data Center</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full h-[420px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-equipment.webp" alt="Battery backup banks" class="w-full h-full object-cover opacity-85" width="2000" height="1000" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">Industries / UPS & Data Center</p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">Hybrid Backup Power Solutions</h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">For micro-data-centers, edge sites, and solar-hybrid backup applications. Our 6-CNF VRLA gel platform fits hybrid emergency power systems where daily cycling is part of the design — not for traditional float-only telecom UPS.</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Where We Fit</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">Solar-Hybrid Emergency Power</h2>
+          <p class="text-neutral-700 leading-relaxed mb-6">
+            For edge/micro-data-centers, off-grid command posts, hybrid solar + diesel + battery installations, and emerging-market backup power, our 6-CNF VRLA gel batteries deliver the cycling endurance and tropical-climate performance these applications require.
+          </p>
+          <p class="text-neutral-700 leading-relaxed mb-6">
+            For traditional centralized UPS rooms with high-rate float VRLA (large urban data centers, hyperscale facilities), we recommend specialized UPS battery suppliers — that segment is dominated by Tier 1 brands optimized for 5–20 minute high-rate discharge profiles, which is not Lingyun's manufacturing focus.
+          </p>
+          <a href="/products/solar-storage" class="inline-flex items-center gap-2 text-brand-gold hover:text-brand-dark font-bold text-sm uppercase tracking-widest">
+            View Storage Series
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <div class="bg-cold-white p-8 rounded-sm">
+          <h3 class="text-base font-bold text-brand-dark mb-4">Right For</h3>
+          <ul class="space-y-3 text-sm text-neutral-700 mb-6">
+            <li class="flex gap-3"><span class="text-brand-gold">✓</span> Edge / micro-data-center backup with daily cycling</li>
+            <li class="flex gap-3"><span class="text-brand-gold">✓</span> Solar-hybrid command post / emergency response</li>
+            <li class="flex gap-3"><span class="text-brand-gold">✓</span> Industrial site backup with mixed solar + diesel</li>
+            <li class="flex gap-3"><span class="text-brand-gold">✓</span> 8–48 hour autonomy designs</li>
+          </ul>
+          <h3 class="text-base font-bold text-brand-dark mb-4">Not Right For</h3>
+          <ul class="space-y-3 text-sm text-neutral-500">
+            <li class="flex gap-3"><span class="text-neutral-400">✗</span> Traditional centralized UPS rooms (Tier 1 hyperscale data centers)</li>
+            <li class="flex gap-3"><span class="text-neutral-400">✗</span> High-rate 5–20 min float VRLA (specialized UPS suppliers)</li>
+            <li class="flex gap-3"><span class="text-neutral-400">✗</span> Lithium-required ESS projects (LiFePO4 launch Q3 2026)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark py-16">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <h2 class="text-white text-3xl font-bold mb-2">Sizing for hybrid emergency power?</h2>
+        <p class="text-[#bbc7df]">Engineers will design banks for your load profile + autonomy + solar/diesel inputs.</p>
+      </div>
+      <a href="/distributor-program?ref=ups-data-center" class="bg-brand-gold text-brand-dark px-8 py-4 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition shrink-0">
+        Request Quote
+      </a>
+    </div>
+  </section>
+</BaseLayout>

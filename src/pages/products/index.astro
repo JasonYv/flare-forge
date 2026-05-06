@@ -1,117 +1,205 @@
 ---
 /**
- * Product catalog page — SSR, reads from D1 with placeholder fallback.
+ * Products Overview / Catalog hub.
+ * Auto-renders all 8 real categories from siteConfig + product counts from Content Collection.
  */
-export const prerender = false;
-
-import { env } from 'cloudflare:workers';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CoverImage from '../../components/CoverImage.astro';
-import { getDb } from '../../db';
-import { products } from '../../db/schema';
-import { t, getLocaleFromUrl } from '../../i18n';
+import { siteConfig } from '../../config';
 
-const locale = getLocaleFromUrl(Astro.url);
+const allProducts = await getCollection('products', ({ data }) => !data.draft);
 
-// Fetch products from D1, grouped by category
-type CategoryCard = { name: string; slug: string; image?: string; count: number };
-let categories: CategoryCard[] = [];
+/**
+ * Maps category slug → public landing-page URL.
+ * After the URL re-architecture, most categories live at top-level paths.
+ * Maintenance-Free and Conventional are absorbed into roll-up hubs.
+ */
+const categoryUrlBySlug: Record<string, string> = {
+  'agm-start-stop': '/products/agm-batteries/',
+  'efb-start-stop': '/products/efb-batteries/',
+  'maintenance-free': '/products/starter-batteries/',
+  'conventional': '/products/heavy-duty-batteries/',
+  'truck-commercial': '/products/heavy-duty-batteries/',
+  'parking-ac': '/products/parking-ac-batteries/',
+  'solar-storage': '/products/solar-batteries/',
+  'marine': '/products/marine-batteries/',
+  'lithium-starter': '/products/lithium-starter/',
+};
 
-try {
-  const db = getDb(env.DB);
-  const allProducts = await db.select().from(products);
+const categoryImageBySlug: Record<string, string> = {
+  'agm-start-stop': '/images/categories/agm.webp',
+  'efb-start-stop': '/images/categories/efb.webp',
+  'maintenance-free': '/images/categories/starter.webp',
+  'conventional': '/images/categories/heavy-duty.webp',
+  'truck-commercial': '/images/categories/heavy-duty.webp',
+  'parking-ac': '/images/categories/parking-ac.webp',
+  'solar-storage': '/images/categories/solar.webp',
+  'marine': '/images/categories/marine.webp',
+  'lithium-starter': '',
+};
 
-  if (allProducts.length > 0) {
-    // Group by category, show first product image per group
-    const groupMap = new Map<string, { slugs: Set<string>; image?: string }>();
-    for (const p of allProducts) {
-      if (!groupMap.has(p.category)) {
-        const imgs = p.images ? JSON.parse(p.images) as string[] : [];
-        groupMap.set(p.category, { slugs: new Set(), image: imgs[0] });
-      }
-      groupMap.get(p.category)!.slugs.add(p.slug);
-    }
-    categories = [...groupMap.entries()].map(([cat, { slugs, image }]) => ({
-      name: cat,
-      slug: cat.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
-      image,
-      count: slugs.size,
-    }));
-  }
-} catch {
-  // D1 not available
+// Build category cards (series-level only, no SKU/flagship leakage).
+// Dedupe by destination URL so categories that roll up to the same hub
+// (e.g. conventional + truck-commercial → heavy-duty) only render once.
+const seenHrefs = new Set<string>();
+const categoryCards = siteConfig.productCategories
+  .map((cat) => ({
+    ...cat,
+    href: categoryUrlBySlug[cat.slug] ?? `/products/${cat.slug}`,
+    image: categoryImageBySlug[cat.slug] ?? '',
+  }))
+  .filter((c) => {
+    if (seenHrefs.has(c.href)) return false;
+    seenHrefs.add(c.href);
+    return true;
+  });
+
+// Group by parentGroup for layout
+const grouped: Record<string, typeof categoryCards> = {};
+for (const c of categoryCards) {
+  const key = c.parentGroup;
+  (grouped[key] ||= []).push(c);
 }
 
-// Placeholder fallback when DB is empty
-if (categories.length === 0) {
-  categories = [
-    { name: 'Industrial Valves', slug: 'industrial-valves', count: 0 },
-    { name: 'Pipe Fittings', slug: 'pipe-fittings', count: 0 },
-    { name: 'Pumps & Motors', slug: 'pumps-motors', count: 0 },
-    { name: 'Fasteners', slug: 'fasteners', count: 0 },
-    { name: 'Steel Structures', slug: 'steel-structures', count: 0 },
-    { name: 'Custom Components', slug: 'custom-components', count: 0 },
-  ];
-}
+const totalLiveCategories = categoryCards.filter((c) => c.status === 'live').length;
+const totalProducts = allProducts.length;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AltusVolt Battery Catalog',
+  description: `Browse AltusVolt's complete battery range — ${totalProducts} models across ${totalLiveCategories} categories. AGM Start-Stop, EFB, Heavy-Duty Truck, Solar Storage, CCS-certified Marine, and more.`,
+  url: `${siteConfig.url}/products`,
+  isPartOf: { '@type': 'WebSite', name: siteConfig.name, url: siteConfig.url },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: categoryCards.length,
+    itemListElement: categoryCards.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Thing',
+        name: c.name,
+        description: c.description,
+        url: `${siteConfig.url}${c.href}`,
+      },
+    })),
+  },
+};
 ---
 
 <BaseLayout
-  title="Products"
-  description="Browse our complete catalog of industrial equipment and components. ISO certified quality with competitive pricing for global B2B clients."
+  title="Battery Product Catalog — All Series"
+  description={`Browse AltusVolt's full lead-acid battery series — ${totalLiveCategories} live categories. AGM/EFB Start-Stop, Heavy-Duty Truck, Solar Off-Grid, CCS Marine, and Parking AC dual-purpose batteries. Backed by Lingyun manufacturing.`}
+  jsonLd={jsonLd}
 >
   <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
-          <meta itemprop="position" content="1" />
-        </li>
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
         <li class="text-neutral-300">/</li>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span itemprop="name" class="text-neutral-800 font-medium">Products</span>
-          <meta itemprop="position" content="2" />
-        </li>
+        <li class="text-neutral-800 font-medium">Products</li>
       </ol>
     </div>
   </nav>
 
-  <section class="py-16 lg:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold mb-4 text-neutral-900">{t('products.title', locale)}</h1>
-      <p class="text-lg text-neutral-600 mb-12 max-w-2xl">
-        Explore our comprehensive range of industrial products. All items meet international quality standards and are available for OEM/ODM customization.
-      </p>
+  <header class="relative w-full min-h-[400px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-equipment.webp" alt="AltusVolt battery production lines" class="w-full h-full object-cover opacity-85" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-6 md:px-10 py-16">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Catalog · {totalLiveCategories} live series · IATF 16949 manufacturing
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Browse the Full Range
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          Eight categories of lead-acid batteries spanning automotive starting, heavy-duty commercial, energy storage, and marine applications. All manufactured by Lingyun under IATF 16949 + system-level GB national standards.
+        </p>
+      </div>
+    </div>
+  </header>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {categories.map((cat) => (
-          <a
-            href={`/products/${cat.slug}`}
-            class="group block bg-white rounded-xl border border-neutral-200 p-6 hover:shadow-lg hover:border-primary/30 transition-all"
-          >
-            {cat.image ? (
-              <CoverImage
-                src={cat.image}
-                alt={cat.name}
-                width={400}
-                height={267}
-                widths={[400, 800]}
-                class="aspect-[3/2] rounded-lg mb-4 object-cover w-full"
-              />
-            ) : (
-              <div class="aspect-[3/2] bg-neutral-100 rounded-lg mb-4 flex items-center justify-center text-neutral-400 group-hover:bg-primary/5 transition-colors">
-                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+  {Object.entries(grouped).map(([groupName, cats]) => (
+    <section class="bg-white py-16 even:bg-cold-white">
+      <div class="max-w-screen-2xl mx-auto px-6 md:px-10">
+        <div class="mb-10 flex items-baseline justify-between flex-wrap gap-3">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-steel mb-2">Category Group</p>
+            <h2 class="text-2xl md:text-3xl font-semibold text-brand-dark tracking-tight">{groupName}</h2>
+          </div>
+          <span class="text-sm text-neutral-500 font-mono">{cats.length} {cats.length === 1 ? 'series' : 'series'}</span>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cats.map((c) => (
+            <a
+              href={c.href}
+              class={`group relative bg-white border border-light-steel rounded-sm overflow-hidden hover:shadow-lg hover:border-steel transition-all ${c.status === 'coming-soon' ? 'opacity-90' : ''}`}
+            >
+              {c.status === 'coming-soon' && (
+                <div class="absolute top-4 right-4 z-10 bg-brand-gold/10 border border-brand-gold/40 px-2 py-1 rounded">
+                  <span class="text-brand-gold text-[10px] font-bold uppercase tracking-widest">Coming Soon</span>
+                </div>
+              )}
+
+              {c.image ? (
+                <div class="aspect-[16/10] bg-white p-8 flex items-center justify-center overflow-hidden">
+                  <img
+                    src={c.image}
+                    alt={c.name}
+                    class="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    width="800"
+                    height="500"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div class="aspect-[16/10] bg-gradient-to-br from-brand-dark to-steel flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white/40" style="font-size:72px">{c.icon}</span>
+                </div>
+              )}
+
+              <div class="p-6 border-t border-light-steel">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-steel mb-2">
+                  {c.status === 'live' ? 'Series' : 'Launching Soon'}
+                </p>
+                <h3 class="text-lg font-bold text-brand-dark mb-2 group-hover:text-steel transition-colors">{c.name}</h3>
+                <p class="text-sm text-neutral-gray leading-relaxed line-clamp-3">{c.description}</p>
+                <span class="inline-flex items-center gap-1.5 mt-4 text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-dark transition-colors">
+                  View Series
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </span>
               </div>
-            )}
-            <h2 class="text-lg font-semibold text-neutral-900 group-hover:text-primary transition-colors">
-              {cat.name}
-            </h2>
-            {cat.count > 0 && (
-              <p class="text-sm text-neutral-500 mt-1">{cat.count} products</p>
-            )}
-          </a>
-        ))}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- Bottom helper bar -->
+  <section class="bg-brand-dark py-16">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid md:grid-cols-3 gap-6">
+        <a href="/distributor-program" class="bg-brand-dark border border-white/10 hover:border-brand-gold transition-colors p-8 rounded-sm group">
+          <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:32px">request_quote</span>
+          <h3 class="text-white text-lg font-bold mb-2">Request a Quote</h3>
+          <p class="text-[#bbc7df] text-sm leading-relaxed">Multi-product RFQ form. Engineers respond within 24 hours with FOB pricing, MOQ, and lead time.</p>
+        </a>
+        <a href="/oem-private-label/" class="bg-brand-dark border border-white/10 hover:border-brand-gold transition-colors p-8 rounded-sm group">
+          <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:32px">factory</span>
+          <h3 class="text-white text-lg font-bold mb-2">OEM / ODM Programs</h3>
+          <p class="text-[#bbc7df] text-sm leading-relaxed">Private-label from 1 container. Custom case dimensions and tooling at higher MOQ. English-speaking project management.</p>
+        </a>
+        <a href="/resources/knowledge-base" class="bg-brand-dark border border-white/10 hover:border-brand-gold transition-colors p-8 rounded-sm group">
+          <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:32px">menu_book</span>
+          <h3 class="text-white text-lg font-bold mb-2">Knowledge Base</h3>
+          <p class="text-[#bbc7df] text-sm leading-relaxed">Technology comparisons, sizing guides, shipping compliance, and cross-reference tables for purchasing engineers.</p>
+        </a>
       </div>
     </div>
   </section>

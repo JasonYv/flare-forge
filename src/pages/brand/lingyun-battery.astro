@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+const productSystems = [
+  { icon: 'bolt', title: 'AGM Start-Stop', body: 'Absorbent Glass Mat batteries for European and Asian start-stop vehicles, deep-cycle resilience for repeated engine restarts.' },
+  { icon: 'autorenew', title: 'EFB Start-Stop', body: 'Enhanced Flooded Batteries — entry-level start-stop technology with high charge acceptance and improved cycle endurance.' },
+  { icon: 'local_shipping', title: 'Heavy-Duty Truck', body: 'Commercial-vehicle batteries built for vibration, deep discharge and extreme temperatures across long-haul trucking.' },
+  { icon: 'directions_car', title: 'Maintenance-Free', body: 'Calcium-calcium SLI batteries for passenger cars, sealed for the life of the battery — no electrolyte top-up required.' },
+  { icon: 'battery_charging_full', title: 'Conventional Flooded', body: 'Cost-effective flooded SLI for emerging-market aftermarket and basic automotive starting applications.' },
+  { icon: 'ac_unit', title: 'Parking AC', body: 'Auxiliary HVAC batteries for sleeper-cab trucks — deep-cycle dual-purpose chemistry for off-engine cabin cooling.' },
+  { icon: 'sailing', title: 'Marine (CCS)', body: 'CCS Type Approved marine starting and dual-purpose batteries for commercial vessels and recreational craft.' },
+  { icon: 'wb_sunny', title: 'Solar Off-Grid Gel', body: 'Sealed gel deep-cycle batteries for off-grid solar, telecom backup and rural electrification systems.' },
+  { icon: 'science', title: 'Lithium Starter', body: 'LiFePO4 starter batteries — currently in Lingyun development pipeline for selected automotive and marine applications.' },
+];
+
+const industries = [
+  'Automotive aftermarket',
+  'Heavy-duty trucking',
+  'Marine & shipbuilding',
+  'Solar off-grid',
+  'Telecom backup',
+  'Parking / auxiliary HVAC',
+];
+
+const certs = [
+  { title: 'IATF 16949', body: 'Automotive quality management system certification for OE-grade production discipline.' },
+  { title: 'ISO 9001 / 14001 / 45001', body: 'Quality, environmental and occupational health & safety management systems.' },
+  { title: 'CCS Type Approval', body: 'China Classification Society approval for marine starting and dual-purpose batteries.' },
+  { title: 'CE Marking', body: 'European conformity for batteries placed on the EU market.' },
+  { title: 'CNAS-Accredited Lab', body: 'In-house lab accredited by the China National Accreditation Service for Conformity Assessment.' },
+  { title: 'GB/T National Standards', body: 'Full compliance with Chinese national standards for lead-acid battery performance and safety.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Lingyun Battery',
+  alternateName: 'Lingyun',
+  url: 'https://altusvolt.com/brand/lingyun-battery/',
+  foundingDate: '1993',
+  description:
+    'Lingyun Battery is a Chinese IATF 16949-certified battery manufacturer founded 1993 in Baoji, Shaanxi, with 5 million units annual capacity supplying domestic OEMs and global distributors.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Baoji',
+    addressRegion: 'Shaanxi',
+    addressCountry: 'CN',
+  },
+};
+---
+
+<BaseLayout
+  title="Lingyun Battery — The Manufacturer Behind AltusVolt"
+  description="Lingyun Battery is a Chinese IATF 16949 battery manufacturer founded 1993 in Baoji, Shaanxi. 5 million units annual capacity, supplying Shaanxi Auto, Beiben, Foton, Sany and global distributors via AltusVolt."
+  jsonLd={jsonLd}
+>
+  <main class="bg-white text-brand-dark">
+    <!-- Breadcrumb -->
+    <nav class="max-w-screen-xl mx-auto px-6 md:px-10 pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-gray" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2">
+        <li><a href="/" class="hover:text-brand-dark transition-colors">Home</a></li>
+        <li><span class="mx-2 text-light-steel">/</span></li>
+        <li>Brand</li>
+        <li><span class="mx-2 text-light-steel">/</span></li>
+        <li class="text-brand-dark">Lingyun Battery</li>
+      </ol>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative bg-brand-dark text-cold-white overflow-hidden">
+      <img src="/images/hero/hero-equipment.webp" alt="Lingyun battery production line" class="absolute inset-0 w-full h-full object-cover opacity-85" loading="eager" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/60 to-brand-dark/30"></div>
+      <div class="relative max-w-screen-xl mx-auto px-6 md:px-10 py-24 md:py-32">
+        <p class="text-xs font-bold uppercase tracking-[0.3em] text-brand-gold mb-4">The Manufacturer Behind AltusVolt</p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight max-w-4xl">Lingyun Battery — 30 years of precision battery engineering</h1>
+        <p class="mt-6 text-lg md:text-xl text-cold-white/85 max-w-3xl leading-relaxed">
+          Lingyun is the Chinese OEM whose batteries we export under the AltusVolt brand. Founded 1993 in Baoji, Shaanxi — IATF 16949 certified, 5 million units annual capacity, supplying domestic OEMs (Shaanxi Auto, Beiben, Foton, Sany) and global distributors.
+        </p>
+      </div>
+    </section>
+
+    <!-- Brand background -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-4">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Brand background</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">A factory with a 30-year track record in Chinese automotive supply.</h2>
+        </div>
+        <div class="md:col-span-8 space-y-5 text-base md:text-lg text-neutral-gray leading-relaxed">
+          <p>
+            Lingyun Battery was founded in 1993 in Baoji, a heavy-industry city in Shaanxi Province, China — historically one of the country's automotive and rolling-stock manufacturing hubs. Lingyun has grown alongside that ecosystem, supplying OE batteries to Shaanxi Automobile, Beiben Heavy Truck, Foton Daimler and Sany Heavy Industry.
+          </p>
+          <p>
+            Today Lingyun runs 5 million units of annual lead-acid battery capacity across SLI, EFB, AGM, marine, gel and heavy-duty product lines, serving both domestic OE programs and international distributor networks.
+          </p>
+          <p>
+            Lingyun's identity is engineering-led rather than marketing-led: the company invests in production discipline, lab capability and OE-grade quality systems. AltusVolt exists to translate that engineering credibility into language and commercial structure that international buyers recognize.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manufacturing capabilities -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Manufacturing capabilities</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Automated production, controlled raw materials, OE-grade quality gates.</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">precision_manufacturing</span>
+            <h3 class="mt-3 text-lg font-bold">Automated lines</h3>
+            <p class="mt-2 text-sm text-neutral-gray leading-relaxed">Continuous casting, automated plate stacking, COS welding and dry-charge formation under closed-loop process control.</p>
+          </div>
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">science</span>
+            <h3 class="mt-3 text-lg font-bold">Material control</h3>
+            <p class="mt-2 text-sm text-neutral-gray leading-relaxed">99.99% purity lead, certified separator and case suppliers, in-bound testing on every alloy and electrolyte batch.</p>
+          </div>
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">monitoring</span>
+            <h3 class="mt-3 text-lg font-bold">5M units / year</h3>
+            <p class="mt-2 text-sm text-neutral-gray leading-relaxed">Annual capacity sized for both domestic OE programs and consistent overseas container shipments without queue risk.</p>
+          </div>
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">verified</span>
+            <h3 class="mt-3 text-lg font-bold">100% finished test</h3>
+            <p class="mt-2 text-sm text-neutral-gray leading-relaxed">Every battery cycle-tested for CCA, RC and open-circuit voltage before pack-out — IATF 16949 traceability on every unit.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product systems Lingyun manufactures -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Product systems Lingyun manufactures</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Nine families, one factory, full backward integration.</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {productSystems.map((p) => (
+            <div class="bg-cold-white border border-light-steel p-6 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">{p.icon}</span>
+              <h3 class="mt-3 text-lg font-bold">{p.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Industries served -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Industries served</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Where Lingyun batteries already work, every day.</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {industries.map((m) => (
+            <div class="bg-white border border-light-steel px-6 py-5 rounded-sm flex items-center gap-3">
+              <span class="material-symbols-outlined text-steel" style="font-size:24px">factory</span>
+              <span class="font-medium text-brand-dark">{m}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Quality & certifications -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Quality & certifications</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Quality systems and lab capability that overseas buyers can audit.</h2>
+          <p class="mt-4 text-neutral-gray leading-relaxed">Lingyun's quality stack is built around automotive OE expectations — which means the same documentation buyers in Europe, Australia and the Americas already recognize.</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {certs.map((c) => (
+            <div class="bg-cold-white border border-light-steel p-6 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">workspace_premium</span>
+              <h3 class="mt-3 text-lg font-bold">{c.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{c.body}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-10 bg-cold-white border border-light-steel p-6 rounded-sm max-w-3xl">
+          <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark mb-2">In-house lab capability</h3>
+          <p class="text-neutral-gray leading-relaxed text-sm">Lingyun operates a CNAS-accredited lab covering vibration endurance, high/low temperature cycling, deep discharge recovery, water-loss testing and life-cycle simulation. Buyers can request lab reports specific to a SKU as part of distributor or OEM onboarding.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-brand-dark text-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Talk to AltusVolt about Lingyun-made batteries</h2>
+        <p class="mt-4 text-cold-white/80 max-w-2xl mx-auto leading-relaxed">All Lingyun export volume is coordinated through AltusVolt. View Lingyun's certifications or browse the product catalog to start.</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/factory-and-certifications/" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">View Lingyun's Certifications</a>
+          <a href="/products/" class="border border-cold-white/40 text-cold-white font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-cold-white/10 transition-all">Browse the Catalog</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

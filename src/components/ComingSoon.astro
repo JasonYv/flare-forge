@@ -1,0 +1,160 @@
+---
+/**
+ * Generic Coming Soon landing page.
+ * Renders breadcrumb + hero + waitlist email capture + back link.
+ * Used for: Lithium category, Tools, Case Studies pending real content.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+
+interface Props {
+  metaTitle: string;
+  metaDescription: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  expectedTimeline?: string;
+  heroImage?: string;
+  backLink?: { label: string; href: string };
+  breadcrumb?: { label: string; href?: string }[];
+}
+
+const {
+  metaTitle,
+  metaDescription,
+  eyebrow,
+  title,
+  subtitle,
+  description,
+  expectedTimeline,
+  heroImage = '/images/hero/hero-factory.webp',
+  backLink = { label: 'Back to All Products', href: '/products' },
+  breadcrumb = [],
+} = Astro.props as Props;
+---
+
+<BaseLayout title={metaTitle} description={metaDescription} ogImage={heroImage} noindex={true}>
+  {breadcrumb.length > 0 && (
+    <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <ol class="flex items-center gap-2 text-sm text-neutral-500">
+          <li><a href="/" class="hover:text-steel">Home</a></li>
+          {breadcrumb.map((b) => (
+            <>
+              <li class="text-neutral-300">/</li>
+              <li class={b.href ? '' : 'text-neutral-800 font-medium'}>
+                {b.href ? <a href={b.href} class="hover:text-steel">{b.label}</a> : b.label}
+              </li>
+            </>
+          ))}
+        </ol>
+      </div>
+    </nav>
+  )}
+
+  <section class="relative w-full min-h-[640px] flex items-center bg-brand-dark overflow-hidden py-24">
+    <div class="absolute inset-0 z-0">
+      <img src={heroImage} alt="" class="w-full h-full object-cover opacity-80" width="2000" height="1000" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/35 to-brand-dark/10"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          {eyebrow}
+        </p>
+        <div class="inline-flex items-center gap-2 bg-brand-gold/10 border border-brand-gold/30 px-3 py-1 rounded-full mb-6">
+          <span class="w-2 h-2 bg-brand-gold rounded-full animate-pulse"></span>
+          <span class="text-brand-gold text-xs font-bold uppercase tracking-widest">Coming Soon</span>
+        </div>
+
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">{title}</h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed mb-10">{subtitle}</p>
+
+        <div class="bg-white/5 border border-white/10 rounded-sm p-8 mb-10 backdrop-blur-sm">
+          <p class="text-[#d3e3ff] leading-relaxed mb-6">{description}</p>
+          {expectedTimeline && (
+            <p class="text-xs text-brand-gold font-mono uppercase tracking-widest">
+              Expected: {expectedTimeline}
+            </p>
+          )}
+        </div>
+
+        <!-- Email waitlist -->
+        <div class="bg-white p-6 md:p-8 rounded-sm shadow-xl">
+          <h2 class="text-brand-dark text-xl font-bold mb-2">Get notified at launch</h2>
+          <p class="text-neutral-gray text-sm mb-6">Join our waitlist for early access, technical datasheets, and pre-launch pricing.</p>
+
+          <form id="waitlist-form" class="flex flex-col sm:flex-row gap-3">
+            <input type="hidden" name="topic" value={title} />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="your@company.com"
+              class="flex-1 bg-cold-white border-b-2 border-transparent focus:border-brand-gold px-4 py-3 text-brand-dark placeholder-neutral-gray outline-none transition-colors rounded-sm"
+            />
+            <button
+              type="submit"
+              id="waitlist-submit"
+              class="bg-brand-gold text-brand-dark font-bold text-sm tracking-widest uppercase px-6 py-3 rounded-sm hover:brightness-110 transition shrink-0 disabled:opacity-60"
+            >
+              Join Waitlist
+            </button>
+          </form>
+
+          <p id="waitlist-status" class="hidden mt-4 text-sm font-medium"></p>
+
+          <p class="text-xs text-neutral-500 mt-4">
+            Or email us directly at <a href={`mailto:${siteConfig.contact.email}`} class="text-steel font-bold hover:underline">{siteConfig.contact.email}</a>
+          </p>
+        </div>
+
+        <a href={backLink.href} class="mt-8 inline-flex items-center gap-2 text-[#bbc7df] hover:text-brand-gold transition-colors text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          {backLink.label}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('waitlist-form') as HTMLFormElement | null;
+    const status = document.getElementById('waitlist-status');
+    const submit = document.getElementById('waitlist-submit') as HTMLButtonElement | null;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      if (submit) submit.disabled = true;
+      if (status) status.className = 'hidden';
+
+      try {
+        const res = await fetch(`/api/waitlist?t=${Date.now()}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: data.email, topic: data.topic }),
+        });
+        if (status) {
+          if (res.ok) {
+            status.textContent = `Thanks — we'll email you when this launches.`;
+            status.className = 'mt-4 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded p-3';
+            form.reset();
+          } else {
+            const err = await res.json().catch(() => ({}));
+            status.textContent = (err && err.error) || 'Something went wrong. Please email us directly.';
+            status.className = 'mt-4 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded p-3';
+          }
+        }
+      } catch {
+        if (status) {
+          status.textContent = 'Network error. Please email sales@altusvolt.com directly.';
+          status.className = 'mt-4 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded p-3';
+        }
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+  </script>
+</BaseLayout>

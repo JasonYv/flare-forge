@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const faqs = [
+  {
+    q: 'What CCA does a Class 8 truck need?',
+    a: 'A 12-15L diesel typically draws 700-900A for 1-2 seconds at start. Specify a battery with 30%+ CCA headroom — 1,000-1,200 CCA total, often achieved by paralleling two 600-800 CCA Group 31 or N150 units. Cold-climate operation (below -10°C) requires another 20% margin.',
+  },
+  {
+    q: 'How long should a heavy-duty truck battery last?',
+    a: 'Long-haul OTR: 3-4 years on calcium-calcium maintenance-free, 4-5 years on premium AGM dual-purpose. Construction and mining: 18-30 months due to vibration and deep-discharge cycling. Sleeper-cab fleets with hotel loads: 24-36 months unless dual-battery isolators are installed.',
+  },
+  {
+    q: 'Why do truck batteries fail faster than car batteries?',
+    a: 'Three reasons: (1) sustained engine-compartment heat of 80-110°C ages plates 2× faster, (2) continuous vibration from heavy-duty driveline destroys plate-to-strap welds in passenger-grade construction, (3) overnight hotel loads (TV, fridge, A/C) repeatedly deep-discharge the battery, which SLI starting batteries are not designed for.',
+  },
+  {
+    q: 'Should I run flooded, AGM, or EFB in a heavy truck?',
+    a: 'For pure starting service: calcium-calcium flooded or maintenance-free is most cost-effective. For sleeper-cab dual-purpose (starting + overnight loads): heavy-duty AGM. EFB is rare in true heavy-duty — it is positioned as an entry-level start-stop chemistry for passenger vehicles.',
+  },
+  {
+    q: 'What is the difference between starter and auxiliary batteries on a sleeper truck?',
+    a: 'Modern sleeper trucks often run a dual-battery architecture: a starting battery (high CCA, calcium SLI) for engine cranking, isolated from an auxiliary deep-cycle battery (AGM or gel) that powers hotel loads overnight. This protects the starting battery from deep discharge.',
+  },
+  {
+    q: 'Are AltusVolt heavy-duty batteries OEM-validated?',
+    a: 'Yes. The 6-QW Yongfei\'er calcium-calcium platform is first-fit qualified by Shaanxi Auto Group, Beiben Heavy Truck, Foton Auman, Sany Heavy Industry, Liugong, and CIMC — six of China\'s largest commercial vehicle and equipment makers.',
+  },
+  {
+    q: 'What MOQ for heavy-duty truck battery export?',
+    a: 'Standard export MOQ is one 40HQ container — approximately 480 units of N150 or 360 units of N200 depending on packing density. Mixed-SKU containers available for distributors with broader range needs.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Heavy Duty Truck Battery — OEM-Grade Power for Class 6-8 Fleets',
+  description: 'Heavy-duty truck battery selection guide: CCA requirements, vibration and heat resistance, sleeper-cab dual-purpose, OEM-validated AltusVolt platforms in 105-200Ah.',
+  url: `${siteConfig.url}/applications/heavy-duty-truck-battery/`,
+  mainEntity: {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Heavy Duty Truck Battery — Class 6-8 Commercial Vehicle Power"
+  description="Heavy-duty truck batteries from AltusVolt — calcium-calcium 105Ah/150Ah/200Ah platforms validated by Shaanxi Auto, Beiben, Foton, Sany. Built for vibration, heat, and sleeper-cab dual-purpose."
+  jsonLd={jsonLd}
+>
+
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/solutions/" class="hover:text-steel">Applications</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Heavy-Duty Truck Battery</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[560px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-mf.webp" alt="Heavy duty truck battery" class="w-full h-full object-cover opacity-65" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Heavy-duty applications
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Heavy duty truck batteries <span class="text-brand-gold">that earn their living.</span>
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          Class 6-8 trucks face vibration, heat, deep discharge, and long idle. Passenger-car batteries die in months. Our 6-QW calcium-calcium platform is OEM-validated by Shaanxi Auto, Beiben, Foton, Sany, Liugong, and CIMC — and engineered specifically for commercial vehicle duty cycles.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Why heavy-duty is different</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Five failure modes that kill passenger-grade batteries.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { icon: 'vibration', title: 'Continuous vibration', body: 'Driveline pounding at frequencies that destroy passenger plate bonds. Heavy-duty plate-to-strap welds and triple-anchor hold-down required.' },
+          { icon: 'thermostat', title: 'Engine-bay heat', body: 'Sustained 80-110°C ages batteries 2× faster. Calcium-calcium grid alloy resists thermal corrosion better than antimony or hybrid.' },
+          { icon: 'bolt', title: 'High cranking current', body: '12-15L diesels pull 700-900A for 1-2 seconds. CCA must exceed cranking load by 30%+ for cold-weather reliability.' },
+          { icon: 'bedtime', title: 'Sleeper-cab loads', body: '30-50A overnight from TV, fridge, microwave, A/C. Reserve capacity over 200 minutes is mandatory to avoid morning no-start.' },
+          { icon: 'schedule', title: 'Long idle periods', body: 'Weekend layovers, weather delays, regulatory rest. Deep self-discharge resistance and parasitic-load tolerance critical.' },
+          { icon: 'engineering', title: 'OEM specification gaps', body: '"Heavy duty" branding without OEM validation is a marketing claim. AltusVolt 6-QW is first-fit qualified — not relabelled passenger stock.' },
+        ].map((p) => (
+          <div class="bg-cold-white border-l-4 border-steel p-6">
+            <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">{p.icon}</span>
+            <h3 class="text-lg font-bold text-brand-dark mb-2">{p.title}</h3>
+            <p class="text-sm text-neutral-700 leading-relaxed">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">OEM-validated platforms</p>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Recommended models.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { sku: '6-QW-105', cap: '105 Ah', cca: '850 CCA', use: 'Light heavy-duty, Class 6-7' },
+          { sku: '6-QW-150', cap: '150 Ah', cca: '1,000 CCA', use: 'Long-haul Class 8, sleeper cab' },
+          { sku: '6-QW-200', cap: '200 Ah', cca: '1,250 CCA', use: 'Heavy-haul, mining, off-road' },
+          { sku: 'N150', cap: '150 Ah', cca: '1,000 CCA', use: 'JIS Asian commercial fitment' },
+          { sku: 'N200', cap: '200 Ah', cca: '1,250 CCA', use: 'JIS heavy-haul, agricultural' },
+          { sku: '6-QTF-105', cap: '105 Ah AGM', cca: '950 CCA', use: 'Sleeper dual-purpose, parking-AC' },
+        ].map((p) => (
+          <a href={`/products/${p.sku.toLowerCase()}/`} class="block bg-white/5 hover:bg-white/10 border border-white/10 p-6 transition">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-xl font-bold text-brand-gold font-mono">{p.sku}</h3>
+              <span class="material-symbols-outlined text-white/40" style="font-size:20px">arrow_outward</span>
+            </div>
+            <div class="flex gap-3 text-xs font-mono text-[#bbc7df] mb-3">
+              <span>{p.cap}</span><span>·</span><span>{p.cca}</span>
+            </div>
+            <p class="text-sm text-[#bbc7df]">{p.use}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">First-fit OEM validation</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Trusted by China's largest commercial vehicle makers.</h2>
+        <p class="text-neutral-600 mt-3 max-w-2xl mx-auto">Lingyun's 6-QW calcium-calcium platform ships from the factory floor as first-fit OEM batteries. The same audit-grade product is what AltusVolt exports.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {['Shaanxi Auto Group', 'Beiben Heavy Truck', 'Foton Auman', 'Sany Heavy Industry', 'Liugong', 'CIMC'].map((oem) => (
+          <div class="bg-white border border-light-steel p-5 text-center">
+            <span class="material-symbols-outlined text-steel mb-2 block" style="font-size:28px">verified</span>
+            <p class="text-xs font-bold text-brand-dark uppercase tracking-wider">{oem}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Cycle life expectations</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Long-haul vs city delivery.</h2>
+      </div>
+      <div class="overflow-x-auto bg-cold-white border border-light-steel">
+        <table class="w-full text-sm">
+          <thead class="bg-brand-dark text-white">
+            <tr>
+              <th class="px-4 py-3 text-left">Duty cycle</th>
+              <th class="px-4 py-3 text-left">Daily starts</th>
+              <th class="px-4 py-3 text-left">Hotel load</th>
+              <th class="px-4 py-3 text-left">Expected life</th>
+              <th class="px-4 py-3 text-left">Recommended chemistry</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-light-steel">
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Long-haul OTR</td><td class="px-4 py-3">2-4</td><td class="px-4 py-3">High (sleeper)</td><td class="px-4 py-3">3-5 years</td><td class="px-4 py-3">AGM dual-purpose or split system</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Regional / city delivery</td><td class="px-4 py-3">8-15</td><td class="px-4 py-3">Low</td><td class="px-4 py-3">2-4 years</td><td class="px-4 py-3">Calcium-calcium MF</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Construction</td><td class="px-4 py-3">3-5</td><td class="px-4 py-3">Moderate</td><td class="px-4 py-3">18-30 months</td><td class="px-4 py-3">Heavy-duty 6-QW with extra hold-down</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Mining / off-road</td><td class="px-4 py-3">2-4</td><td class="px-4 py-3">High (auxiliaries)</td><td class="px-4 py-3">12-24 months</td><td class="px-4 py-3">N200 heavy-duty + isolated AGM aux</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Agricultural</td><td class="px-4 py-3">1-2 (seasonal)</td><td class="px-4 py-3">Low</td><td class="px-4 py-3">4-6 years</td><td class="px-4 py-3">N150 / N200 calcium</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-10">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="group bg-white border border-light-steel p-6 hover:border-steel transition">
+            <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+              <span>{f.q}</span>
+              <span class="material-symbols-outlined text-steel group-open:rotate-180 transition" style="font-size:24px">expand_more</span>
+            </summary>
+            <p class="mt-4 text-neutral-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">Sourcing for a fleet or distributor network?</h2>
+      <p class="text-[#bbc7df] mb-8">
+        Tell us your annual volume, vehicle mix, and target market — we'll respond with OEM-grade pricing, certified hazmat documentation, and lead times within 24 hours.
+      </p>
+      <a href="/distributor-program/" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition">
+        Request distributor quote
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>
