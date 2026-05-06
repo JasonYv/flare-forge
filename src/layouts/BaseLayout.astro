@@ -92,8 +92,10 @@ const organizationJsonLd = {
     <!-- Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? organizationJsonLd)} />
 
-    <!-- Global Styles -->
-    <style>
+    <!-- Global Styles — `is:global` is required so Tailwind's preflight and
+         project utilities apply to slotted page content. Without it, Astro
+         scopes the <style> block to this component and pages render unstyled. -->
+    <style is:global>
       @import '../styles/global.css';
     </style>
   </head>
