@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+const whatWeDo = [
+  {
+    icon: 'public',
+    title: 'Global Sales Coordination',
+    body: 'A single overseas point of contact for Lingyun Battery, with multi-language support across English, Spanish, Arabic, French and Chinese. We translate technical specs, manage RFQs, and own the timezone gap so distributors do not have to.',
+  },
+  {
+    icon: 'handshake',
+    title: 'Distributor Onboarding',
+    body: 'Territory programs, onboarding kits, marketing collateral, datasheets, and pricing tiers — built specifically for importers and aftermarket chains who want a credible Chinese OEM partnership.',
+  },
+  {
+    icon: 'engineering',
+    title: 'OEM Project Management',
+    body: 'Spec coordination between buyer and Lingyun engineering, sample tracking, drawing approvals, tooling milestones and production scheduling. We hold the project plan so deadlines stick.',
+  },
+  {
+    icon: 'local_shipping',
+    title: 'Export & Logistics',
+    body: 'UN2794 / UN2800 dangerous-goods documentation, IMDG declarations, MSDS packs, FOB / CIF / DAP terms, container loading plans, and origin-certificate handling for customs in 60+ countries.',
+  },
+];
+
+const whyAltusVolt = [
+  'Faster English-language response — replies within 24 hours from a sales team trained on Lingyun specs.',
+  'Familiar with overseas standards (BCI, DIN, JIS, EN) and the certifications expected by your local market.',
+  'Pre-vetted product matching — we already know which Lingyun lines fit which markets and climates.',
+  'Distributor support that the factory itself does not focus on — co-marketing, training, market reviews.',
+  'Shorter procurement loop for non-Mandarin buyers — fewer translation cycles, fewer misunderstood specs.',
+];
+
+const markets = [
+  'Australia & New Zealand',
+  'Southeast Asia',
+  'Middle East & GCC',
+  'North & Sub-Saharan Africa',
+  'Latin America',
+  'Eastern Europe & CIS',
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'AltusVolt',
+  url: 'https://altusvolt.com/about-altusvolt/',
+  description:
+    'AltusVolt is the Global Export Partner for Lingyun Battery, coordinating overseas sales, distributor onboarding, OEM project management and export logistics.',
+  parentOrganization: {
+    '@type': 'Organization',
+    name: 'Lingyun Battery',
+    foundingDate: '1993',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Baoji',
+      addressRegion: 'Shaanxi',
+      addressCountry: 'CN',
+    },
+  },
+};
+---
+
+<BaseLayout
+  title="About AltusVolt — Global Export Partner for Lingyun Battery"
+  description="AltusVolt is the overseas sales partner for Lingyun Battery, a Chinese IATF 16949 manufacturer founded 1993. We coordinate distributor onboarding, OEM projects and export logistics for buyers in 60+ countries."
+  jsonLd={jsonLd}
+>
+  <main class="bg-white text-brand-dark">
+    <!-- Breadcrumb -->
+    <nav class="max-w-screen-xl mx-auto px-6 md:px-10 pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-gray" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2">
+        <li><a href="/" class="hover:text-brand-dark transition-colors">Home</a></li>
+        <li><span class="mx-2 text-light-steel">/</span></li>
+        <li class="text-brand-dark">About AltusVolt</li>
+      </ol>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative bg-brand-dark text-cold-white overflow-hidden">
+      <img src="/images/hero/hero-factory.webp" alt="Lingyun Battery factory" class="absolute inset-0 w-full h-full object-cover opacity-85" loading="eager" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/60 to-brand-dark/30"></div>
+      <div class="relative max-w-screen-xl mx-auto px-6 md:px-10 py-24 md:py-32">
+        <p class="text-xs font-bold uppercase tracking-[0.3em] text-brand-gold mb-4">About AltusVolt</p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight max-w-3xl">The export partner for Lingyun Battery, worldwide</h1>
+        <p class="mt-6 text-lg md:text-xl text-cold-white/85 max-w-3xl leading-relaxed">
+          We coordinate overseas sales, distributor onboarding, OEM project management, and export logistics for Lingyun Battery — bringing 30+ years of Chinese precision battery manufacturing to distributors and importers in 60+ countries.
+        </p>
+      </div>
+    </section>
+
+    <!-- Who is AltusVolt -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 grid md:grid-cols-12 gap-10">
+        <div class="md:col-span-4">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Who we are</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">An export brand built around a single, trusted manufacturer.</h2>
+        </div>
+        <div class="md:col-span-8 space-y-5 text-base md:text-lg text-neutral-gray leading-relaxed">
+          <p>
+            AltusVolt is the overseas operating brand for Lingyun Battery, headquartered in Baoji, Shaanxi, China. In China, the manufacturer trades as Lingyun. Internationally, we represent Lingyun's catalog and capacity under the AltusVolt name, with a sales and engineering team focused exclusively on cross-border buyers.
+          </p>
+          <p>
+            We exist to make sourcing Lingyun batteries effortless for international distributors, importers and OEM project teams. That means English-first communication, locally relevant product matching, transparent MOQ and lead-time disclosure, and an export documentation workflow that survives the customs process in markets like Australia, the GCC, Southeast Asia and Latin America.
+          </p>
+          <p>
+            We are not a factory. AltusVolt does not manufacture batteries. Lingyun does — across IATF 16949-certified production lines with 5 million units of annual capacity. Our job is to make Lingyun's manufacturing depth accessible, predictable and easy to work with from outside China.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What we do -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">What we do</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Four functions, one continuous workflow.</h2>
+          <p class="mt-4 text-neutral-gray leading-relaxed">From first inquiry to repeat container, AltusVolt owns the overseas-side of the partnership so Lingyun can focus on what they do best — building batteries.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          {whatWeDo.map((item) => (
+            <div class="bg-white border border-light-steel p-8 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">{item.icon}</span>
+              <h3 class="mt-4 text-xl font-bold text-brand-dark">{item.title}</h3>
+              <p class="mt-3 text-neutral-gray leading-relaxed">{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Why AltusVolt instead of direct-to-factory -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-5">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Why AltusVolt</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Why work through AltusVolt instead of direct-to-factory?</h2>
+          <p class="mt-4 text-neutral-gray leading-relaxed">
+            Direct-to-factory sourcing in China works — until it doesn't. Time-zone gaps, language friction, market-spec confusion and missing export paperwork can stall a container for weeks. We exist to remove that friction.
+          </p>
+        </div>
+        <div class="lg:col-span-7">
+          <ul class="space-y-4">
+            {whyAltusVolt.map((item) => (
+              <li class="flex gap-4 bg-cold-white border border-light-steel p-5 rounded-sm">
+                <span class="material-symbols-outlined text-brand-gold shrink-0" style="font-size:24px">check_circle</span>
+                <span class="text-neutral-gray leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Markets we serve -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Markets we serve</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Active in regions where Lingyun is not yet directly represented.</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {markets.map((m) => (
+            <div class="bg-white border border-light-steel px-6 py-5 rounded-sm flex items-center gap-3">
+              <span class="material-symbols-outlined text-steel" style="font-size:24px">location_on</span>
+              <span class="font-medium text-brand-dark">{m}</span>
+            </div>
+          ))}
+        </div>
+        <p class="mt-8 text-sm text-neutral-gray max-w-3xl">Don't see your market? Lingyun's catalog ships to 60+ countries. AltusVolt actively recruits distributors in markets where current coverage is thin — talk to our export team to discuss territory availability.</p>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-brand-dark text-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Ready to bring Lingyun batteries to your market?</h2>
+        <p class="mt-4 text-cold-white/80 max-w-2xl mx-auto leading-relaxed">Whether you are an importer scouting a new battery line, or an OEM with a custom-spec project, AltusVolt is the entry point.</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/distributor-program/" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">Become a Distributor</a>
+          <a href="/contact/" class="border border-cold-white/40 text-cold-white font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-cold-white/10 transition-all">Talk to Our Export Team</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

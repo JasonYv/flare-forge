@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+
+const certs = [
+  {
+    name: 'IATF 16949:2016',
+    category: 'Automotive Quality',
+    description: 'Automotive quality management system for design and manufacture of starting lead-acid batteries. Required by global automotive OEMs.',
+    image: '/images/certifications/通过IATF16949质量管理体系认证.webp',
+    alt: 'IATF 16949 Certificate',
+  },
+  {
+    name: 'ISO 9001',
+    category: 'Quality Management',
+    description: 'Internationally recognized quality management system ensuring consistent product quality and continuous improvement.',
+    image: '/images/certifications/通过ISO9001质量管理体系认证.webp',
+    alt: 'ISO 9001 Certificate',
+  },
+  {
+    name: 'ISO 14001',
+    category: 'Environmental',
+    description: 'Environmental management system demonstrating sustainable manufacturing, lead recycling, and waste-water treatment compliance.',
+    image: '/images/certifications/通过ISO14001环境管理体系认证.webp',
+    alt: 'ISO 14001 Certificate',
+  },
+  {
+    name: 'ISO 45001',
+    category: 'Health & Safety',
+    description: 'Occupational health and safety management system protecting workers across all manufacturing operations.',
+    image: '/images/certifications/通过ISO45001职业健康安全管理体系认证.webp',
+    alt: 'ISO 45001 Certificate',
+  },
+  {
+    name: 'CCS Type Approval',
+    category: 'Marine',
+    description: 'China Classification Society type approval for marine battery applications, meeting maritime safety standards.',
+    image: '/images/certifications/通过CCS中国船级社型式认证.webp',
+    alt: 'CCS Marine Type Approval',
+  },
+  {
+    name: 'CNAS Lab Accreditation',
+    category: 'Testing',
+    description: 'CNAS-accredited in-house laboratory for vibration, temperature cycling, capacity verification, and deep-discharge endurance testing.',
+    image: '/images/certifications/通过CNAS实验室认证.webp',
+    alt: 'CNAS Lab Accreditation Certificate',
+  },
+];
+
+const productionLines = [
+  { icon: 'foundry', title: 'Lead Powder & Alloy', desc: '28-ton lead powder production line. OBLF Germany alloy spectrometer for incoming material analysis.', image: '/images/equipment/28吨铅粉生产设备.webp' },
+  { icon: 'precision_manufacturing', title: 'Plate Manufacturing', desc: 'Automated grid expansion and pasting lines. SOVEMA Italy continuous casting and pasting equipment.', image: '/images/equipment/自动化扩网涂板线.webp' },
+  { icon: 'thermostat', title: 'Curing & Drying', desc: 'High-temperature plate curing chambers with controlled humidity for consistent active material formation.', image: '/images/equipment/极板高温固化设备.webp' },
+  { icon: 'conveyor_belt', title: 'Assembly', desc: 'Automated assembly lines for cell stacking, inter-cell welding, and case sealing. Two-stage assembly verification.', image: '/images/equipment/自动装配线.webp' },
+  { icon: 'electric_bolt', title: 'Formation', desc: 'Container formation lines with ROCHE France formation control for capacity calibration and electrical conditioning.', image: '/images/equipment/电池化成生产线.webp' },
+  { icon: 'inventory_2', title: 'Final Test & Palletizing', desc: 'Automated final-test stations, automatic palletizing, and barcode-traceable warehouse outflow.', image: '/images/equipment/自动码垛机.webp' },
+];
+
+const labTests = [
+  { icon: 'vibration', title: 'Vibration Endurance', body: 'Three-axis vibration testing per SAE J537 / IEC 60095-1. Heavy-duty truck batteries undergo extended vibration profiles simulating off-highway use.' },
+  { icon: 'thermostat', title: 'Temperature Cycling', body: 'Hot-cold cycling chambers from −40 °C to +75 °C. Validates case integrity, seal performance, and capacity retention across climates.' },
+  { icon: 'battery_alert', title: 'Deep-Discharge Endurance', body: 'Cycle life testing under PSOC (partial state of charge) for start-stop, and deep-cycle profiles for solar/marine series.' },
+  { icon: 'speed', title: 'Capacity & CCA Verification', body: 'C20 capacity, reserve capacity, and cold cranking amps (CCA at −18 °C) verified per BCI, DIN, and JIS standards.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.fullName,
+  url: `${siteConfig.url}/factory-and-certifications/`,
+  description: 'AltusVolt manufacturing partner Lingyun: IATF 16949 lead-acid battery factory in Baoji, China. 5M units/yr, European production equipment, CNAS-accredited lab.',
+  hasCredential: [
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'IATF 16949' },
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 9001' },
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 14001' },
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'ISO 45001' },
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'CCS Type Approval' },
+    { '@type': 'EducationalOccupationalCredential', credentialCategory: 'CNAS Lab' },
+  ],
+};
+---
+
+<BaseLayout
+  title="Factory & Certifications — AltusVolt Battery Manufacturing"
+  description="Tour AltusVolt's manufacturing partner Lingyun. IATF 16949 factory in Baoji, China. 5M units/yr capacity. CCS, ISO 9001/14001/45001, CNAS-accredited lab."
+  jsonLd={jsonLd}
+>
+
+  <!-- Breadcrumb -->
+  <div class="bg-cold-white border-b border-light-steel">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10 py-3">
+      <nav class="text-xs text-neutral-gray">
+        <a href="/" class="hover:text-brand-gold">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-brand-dark font-medium">Factory & Certifications</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ====================================================================== -->
+  <!-- 1. Hero -->
+  <!-- ====================================================================== -->
+  <section class="relative w-full min-h-[520px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img
+        src="/images/hero/hero-factory.webp"
+        alt="Lingyun battery factory campus"
+        class="w-full h-full object-cover opacity-55"
+        width="2000"
+        height="1333"
+        fetchpriority="high"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-4">Manufacturing Partner</p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-6">
+          Where AltusVolt batteries are made
+        </h1>
+        <p class="text-lg md:text-xl text-[#bbc7df] font-light leading-relaxed">
+          Inside Lingyun — our IATF 16949 manufacturing partner in Baoji, Shaanxi. 30+ years of precision battery engineering, 5 million units annual capacity, and a CNAS-accredited test laboratory.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 2. Manufacturing Partner -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div class="lg:col-span-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Manufacturing Partner</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">
+            Lingyun — 30+ years building lead-acid batteries
+          </h2>
+          <p class="text-neutral-gray leading-relaxed mb-5">
+            Shaanxi Lingyun Storage Battery Co., Ltd. (Lingyun) is the manufacturing entity behind AltusVolt. Founded in 1993 in Baoji, Shaanxi Province, the company is a first-fit battery supplier to major Chinese commercial vehicle OEMs including Shaanxi Auto, Beiben, Foton, and Sany.
+          </p>
+          <p class="text-neutral-gray leading-relaxed mb-5">
+            AltusVolt is the global export operator that brings Lingyun's manufacturing depth to international markets. We handle distributor and OEM relationships, English-speaking technical sales, hazmat-compliant logistics, and after-sales support outside of China.
+          </p>
+
+          <dl class="grid grid-cols-2 gap-6 mt-8 pt-8 border-t border-light-steel">
+            <div>
+              <dt class="text-xs font-bold uppercase tracking-widest text-steel mb-1">Founded</dt>
+              <dd class="text-2xl font-mono font-medium text-brand-dark">1993</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-bold uppercase tracking-widest text-steel mb-1">Annual Capacity</dt>
+              <dd class="text-2xl font-mono font-medium text-brand-dark">5M units</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-bold uppercase tracking-widest text-steel mb-1">Location</dt>
+              <dd class="text-2xl font-mono font-medium text-brand-dark">Baoji, China</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-bold uppercase tracking-widest text-steel mb-1">Export Reach</dt>
+              <dd class="text-2xl font-mono font-medium text-brand-dark">60+ countries</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div class="aspect-square rounded-sm overflow-hidden col-span-2">
+            <img src="/images/factory/01.webp" alt="Lingyun factory aerial view" class="w-full h-full object-cover" loading="lazy" width="1000" height="1000" />
+          </div>
+          <div class="aspect-square rounded-sm overflow-hidden">
+            <img src="/images/factory/02.webp" alt="Battery production hall" class="w-full h-full object-cover" loading="lazy" width="600" height="600" />
+          </div>
+          <div class="aspect-square rounded-sm overflow-hidden">
+            <img src="/images/factory/03.webp" alt="Quality inspection area" class="w-full h-full object-cover" loading="lazy" width="600" height="600" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 3. Production Lines -->
+  <!-- ====================================================================== -->
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Production</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight mb-4">Production lines</h2>
+        <p class="text-neutral-gray leading-relaxed">
+          End-to-end vertical integration from lead alloy to palletized finished battery. European production equipment from SOVEMA (Italy), OBLF (Germany), and ROCHE (France) with quality gates between every stage.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {productionLines.map((line) => (
+          <div class="bg-white border border-light-steel rounded-sm overflow-hidden">
+            <div class="aspect-[4/3] overflow-hidden bg-cold-white">
+              <img src={line.image} alt={line.title} class="w-full h-full object-cover" loading="lazy" width="600" height="450" />
+            </div>
+            <div class="p-6">
+              <span class="material-symbols-outlined text-brand-gold mb-3 block" style="font-size:32px">
+                {line.icon}
+              </span>
+              <h3 class="text-lg font-bold text-brand-dark mb-2">{line.title}</h3>
+              <p class="text-sm text-neutral-gray leading-relaxed">{line.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 4. Certifications Wall -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Certifications</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight mb-4">Certifications wall</h2>
+        <p class="text-neutral-gray leading-relaxed">
+          Factory-level and product-level certifications. Original certificate copies available on request for distributor due diligence and tender packages.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {certs.map((cert) => (
+          <div class="bg-cold-white border border-light-steel rounded-sm overflow-hidden">
+            <div class="aspect-[3/4] bg-white p-4 flex items-center justify-center">
+              <img src={cert.image} alt={cert.alt} class="object-contain w-full h-full" loading="lazy" width="400" height="533" />
+            </div>
+            <div class="p-6 border-t border-light-steel">
+              <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-2">{cert.category}</p>
+              <h3 class="text-lg font-bold text-brand-dark mb-2">{cert.name}</h3>
+              <p class="text-sm text-neutral-gray leading-relaxed">{cert.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 5. Lab & Testing -->
+  <!-- ====================================================================== -->
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Lab & Testing</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight mb-4">CNAS-accredited validation</h2>
+        <p class="text-neutral-gray leading-relaxed">
+          Every series ships with lab-validated performance. Our CNAS-accredited test laboratory runs vibration, climate, cycle-life, and electrical verification protocols aligned with BCI, DIN, JIS, and CCS standards.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {labTests.map((test) => (
+          <div class="bg-white border border-light-steel rounded-sm p-7 flex gap-5 items-start">
+            <span class="material-symbols-outlined text-brand-gold shrink-0" style="font-size:36px">
+              {test.icon}
+            </span>
+            <div>
+              <h3 class="text-lg font-bold text-brand-dark mb-2">{test.title}</h3>
+              <p class="text-sm text-neutral-gray leading-relaxed">{test.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 6. CTA -->
+  <!-- ====================================================================== -->
+  <section class="bg-brand-dark py-20 relative overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10">
+      <img src="/images/hero/hero-equipment.webp" alt="" class="w-full h-full object-cover" loading="lazy" width="2000" height="1000" />
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-white text-4xl md:text-5xl font-bold mb-6 tracking-tight">Audit the Lingyun factory yourself</h2>
+      <p class="text-[#bbc7df] text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+        Request the full Lingyun factory audit report (PDF) — covering production lines, equipment serial numbers, certifications, and quality KPIs. Or schedule a virtual tour coordinated by AltusVolt's application engineers.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/distributor-program/?ref=factory-audit" class="bg-brand-gold text-brand-dark px-8 py-4 font-bold text-sm uppercase tracking-widest rounded hover:brightness-110 transition">
+          Request Audit Report
+        </a>
+        <a href={`mailto:${siteConfig.contact.email}?subject=Schedule%20a%20virtual%20factory%20tour`} class="bg-transparent border border-white/30 text-white px-8 py-4 font-medium text-sm uppercase tracking-widest rounded hover:bg-white/5 transition">
+          Schedule Virtual Tour
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

@@ -29,18 +29,39 @@ const ogImageUrl = new URL(ogImage, siteConfig.url).href;
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: siteConfig.name,
+  name: siteConfig.fullName,
+  alternateName: 'AltusVolt',
   url: siteConfig.url,
-  logo: `${siteConfig.url}/images/logo.png`,
+  logo: `${siteConfig.url}/images/brand/logo-light.png`,
+  description:
+    "AltusVolt is the Global Export Partner for Lingyun Battery — the overseas sales and operating brand handling international distributor and OEM relationships for Lingyun's IATF 16949-certified lead-acid battery manufacturing.",
+  parentOrganization: {
+    '@type': 'Organization',
+    name: 'Shaanxi Lingyun Storage Battery Co., Ltd.',
+    alternateName: 'Lingyun Battery',
+    foundingDate: '1993',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Baoji',
+      addressRegion: 'Shaanxi',
+      addressCountry: 'CN',
+    },
+  },
+  brand: {
+    '@type': 'Brand',
+    name: 'Lingyun Battery',
+  },
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
+    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
     contactType: 'sales',
-    availableLanguage: ['English', 'Chinese', 'Spanish'],
+    availableLanguage: ['English', 'Chinese'],
   },
   address: {
     '@type': 'PostalAddress',
     streetAddress: siteConfig.contact.address,
+    addressCountry: 'CN',
   },
 };
 ---
@@ -59,7 +80,23 @@ const organizationJsonLd = {
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/brand/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/brand/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/brand/apple-touch-icon.png" />
+
+    <!-- Google Fonts: Inter (body) + Manrope (headlines) + Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -76,14 +113,8 @@ const organizationJsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <!-- i18n alternates -->
-    {siteConfig.locales.map((loc) => (
-      <link
-        rel="alternate"
-        hreflang={loc}
-        href={`${siteConfig.url}${loc === 'en' ? '' : `/${loc}`}${Astro.url.pathname}`}
-      />
-    ))}
+    <!-- hreflang (English only — multi-locale to be re-enabled when translations ship) -->
+    <link rel="alternate" hreflang="en" href={`${siteConfig.url}${Astro.url.pathname}`} />
     <link rel="alternate" hreflang="x-default" href={`${siteConfig.url}${Astro.url.pathname}`} />
 
     <!-- Theme color -->
@@ -93,11 +124,11 @@ const organizationJsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd ?? organizationJsonLd)} />
 
     <!-- Global Styles -->
-    <style>
+    <style is:global>
       @import '../styles/global.css';
     </style>
   </head>
-  <body class="min-h-screen flex flex-col bg-white text-neutral-800 antialiased">
+  <body class="min-h-screen flex flex-col bg-surface text-on-surface antialiased">
     <Header locale={locale} />
     <main class="flex-1">
       <slot />

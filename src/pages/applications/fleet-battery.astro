@@ -1,0 +1,244 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const faqs = [
+  {
+    q: 'What is the minimum order quantity for fleet battery procurement?',
+    a: 'Standard MOQ is one 40HQ container — approximately 480 units of N150 / 6-QW-150 heavy-duty, or 720 units of mid-size SLI. Mixed-SKU containers available for fleets running varied vehicle classes. Below container quantities can be consolidated through our distributor network.',
+  },
+  {
+    q: 'How do I calculate TCO for fleet batteries?',
+    a: 'Total Cost of Ownership = (unit price + freight + duty + warehousing) ÷ expected service months × fleet size, plus downtime cost per failure event. Premium AGM at 1.7× cost but 2× life beats budget flooded for most fleets — a single roadside failure costs USD 500-2,000 in towing and lost revenue.',
+  },
+  {
+    q: 'What warranty do you offer on fleet orders?',
+    a: 'Standard 24-month limited warranty against manufacturing defect. Fleet orders over 10 containers/year qualify for 36-month extended warranty with on-site failure analysis support. All warranty claims processed via our regional distributor — no factory paperwork on the fleet manager.',
+  },
+  {
+    q: 'How long is the lead time for a fleet container order?',
+    a: 'Stock SKUs: 25-30 days from PO to FOB Shanghai. Custom OEM/private-label SKUs: 45-60 days for first run, 30 days for repeat. Air freight available for emergency replacement (premium pricing).',
+  },
+  {
+    q: 'Do you support staged replacement programs?',
+    a: 'Yes. We can structure quarterly shipments matched to your fleet rotation schedule — for example, 25% of annual volume each quarter against a yearly pricing lock. Reduces warehousing cost and aligns cash flow with replacement cadence.',
+  },
+  {
+    q: 'Can you private-label batteries for our fleet brand?',
+    a: 'Yes. Custom case color, top label, terminal cover, and packaging from 2,000 units MOQ. Private-label takes 45-60 days first run including artwork proof and pre-production sample. See our OEM/ODM program for full scope.',
+  },
+  {
+    q: 'What payment terms are available?',
+    a: 'First-time buyers: 30% T/T deposit, 70% against B/L copy. Established accounts: 30/70 or L/C at sight. Fleet customers with 12+ month track record can qualify for 60-day open account with credit insurance.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Fleet Battery Procurement Guide — TCO, MOQ, Warranty for Commercial Fleets',
+  description: 'Fleet battery procurement: TCO calculation, MOQ tiers, warranty terms, lead times, and bulk replacement strategy for fleet managers and commercial procurement officers.',
+  url: `${siteConfig.url}/applications/fleet-battery/`,
+  mainEntity: {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Fleet Battery Procurement — Bulk Buying for Commercial Fleets"
+  description="Fleet battery procurement guide. TCO modeling, volume pricing tiers, warranty terms, MOQ from one 40HQ, lead times 25-30 days. Built for fleet managers and procurement officers."
+  jsonLd={jsonLd}
+>
+
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/solutions/" class="hover:text-steel">Applications</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Fleet Battery</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[560px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-factory.webp" alt="Fleet battery procurement" class="w-full h-full object-cover opacity-55" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Fleet & procurement
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Fleet batteries: <span class="text-brand-gold">priced for volume, built for downtime cost.</span>
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          A 500-truck fleet replaces 200+ batteries a year. The unit price matters less than the failure rate, the warranty paperwork, and the lead time when a roadside no-start strands a load. Here is how AltusVolt structures procurement, MOQ tiers, and TCO support for fleet managers.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Volume pricing tiers</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Container-level economics.</h2>
+        <p class="text-neutral-600 mt-3 text-sm max-w-2xl mx-auto">Indicative tier structure — final pricing depends on SKU mix, terminal type, OEM/private-label requirements, and target market. Contact us for a quote against your specific RFQ.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Tier 1 · Entry</p>
+          <h3 class="text-2xl font-bold text-brand-dark mb-2">1× 40HQ</h3>
+          <p class="text-sm text-neutral-700 mb-4">~480-720 units depending on SKU. Standard pricing. Ideal for first-order test, regional distributor stocking, or small fleet (50-200 vehicles).</p>
+          <p class="text-xs font-mono text-steel">Lead time: 25-30 days FOB</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Tier 2 · Volume</p>
+          <h3 class="text-2xl font-bold text-brand-dark mb-2">5× 40HQ</h3>
+          <p class="text-sm text-neutral-700 mb-4">~2,400-3,600 units annual. Volume discount tier. Mixed-SKU containers permitted. Quarterly delivery scheduling. Mid-size fleet (300-1,000 vehicles).</p>
+          <p class="text-xs font-mono text-steel">Lead time: 30 days, scheduled releases</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Tier 3 · Strategic</p>
+          <h3 class="text-2xl font-bold text-brand-dark mb-2">10×+ 40HQ</h3>
+          <p class="text-sm text-neutral-700 mb-4">5,000+ units annual. Strategic partnership tier. Annual price lock, dedicated production line slots, extended warranty, on-site technical support. Large fleet (2,000+ vehicles).</p>
+          <p class="text-xs font-mono text-steel">Lead time: production-scheduled</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">TCO calculation</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">Why unit price isn't the answer.</h2>
+          <p class="text-neutral-700 leading-relaxed mb-4">
+            A USD 80 battery that lasts 18 months costs <strong>USD 4.44/month</strong>. A USD 130 battery that lasts 48 months costs <strong>USD 2.71/month</strong> — 39% cheaper on the lifecycle, even before factoring downtime cost.
+          </p>
+          <p class="text-neutral-700 leading-relaxed mb-4">
+            For a Class 8 truck, a single roadside no-start event runs USD 500-2,000 in towing, jump-start service, driver hours, and lost revenue per delayed load. Avoiding even one premature failure across the fleet pays for the chemistry upgrade.
+          </p>
+          <p class="text-neutral-700 leading-relaxed">
+            We can build a TCO model against your fleet duty cycle, climate, and replacement cadence — request it as part of your quote.
+          </p>
+        </div>
+        <div class="bg-white border-l-4 border-brand-gold p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">TCO formula</p>
+          <pre class="bg-brand-dark text-brand-gold p-4 font-mono text-xs overflow-x-auto">
+{`TCO/vehicle/month =
+  (unit_price + freight + duty + warehousing)
+   / expected_service_months
++ failure_rate × downtime_cost_per_event
++ disposal_cost / service_life`}
+          </pre>
+          <p class="text-xs text-neutral-500 mt-4">Compare across chemistry options. The lowest unit-price option is rarely the lowest TCO option.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">What fleet buyers care about</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Beyond unit price.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[
+          { icon: 'verified', title: 'OEM-grade quality', body: 'IATF 16949 certified production, full traceability from raw lead to finished battery. The same product Shaanxi Auto and Beiben install at the factory.' },
+          { icon: 'shield', title: '24-month warranty', body: 'Standard limited warranty on manufacturing defect. Fleet customers (10+ containers/yr) qualify for 36-month extended terms with on-site failure analysis.' },
+          { icon: 'inventory_2', title: 'Mixed-SKU containers', body: 'Run a varied fleet? One 40HQ can carry 4-6 SKUs in matched proportions. Reduces warehousing complexity for distributors covering broad vehicle ranges.' },
+          { icon: 'schedule', title: 'Scheduled releases', body: 'Quarterly drops aligned to your replacement cadence. Locks pricing for the full year while spreading inventory cost across quarters.' },
+          { icon: 'description', title: 'Hazmat documentation', body: 'UN 2794 (flooded) / UN 2800 (AGM) certificates pre-prepared. CARB labels, MSDS, country-of-origin certs ready at shipment.' },
+          { icon: 'support_agent', title: 'English technical sales', body: 'No translation chain. Direct contact with engineering team for spec questions, failure analysis, and OEM/ODM development.' },
+        ].map((p) => (
+          <div class="bg-cold-white border border-light-steel p-6 hover:border-steel transition">
+            <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">{p.icon}</span>
+            <h3 class="text-lg font-bold text-brand-dark mb-2">{p.title}</h3>
+            <p class="text-sm text-neutral-700 leading-relaxed">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">Case reference</p>
+          <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6">Major SE Asia fleet operator.</h2>
+          <p class="text-[#bbc7df] leading-relaxed mb-4">
+            A regional logistics operator running 12,000 trucks across multiple ASEAN markets standardised on the Lingyun 6-QW heavy-duty calcium platform after a 12-month duty-cycle trial. Field life under 18-hour daily operation in 35-45°C ambient temperatures has shown <strong>2× longer service vs. passenger-grade carryover</strong> products previously stocked.
+          </p>
+          <p class="text-[#bbc7df] leading-relaxed">
+            Annual procurement now runs at scheduled quarterly releases against an annual price lock — simplifying warehouse management while protecting against lead alloy commodity volatility.
+          </p>
+        </div>
+        <div class="bg-white/5 border border-white/10 p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">Outcome metrics</p>
+          <dl class="space-y-4">
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <dt class="text-[#bbc7df] text-sm">Field life vs. previous</dt>
+              <dd class="text-3xl font-mono font-bold text-brand-gold">2×</dd>
+            </div>
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <dt class="text-[#bbc7df] text-sm">Annual volume</dt>
+              <dd class="text-3xl font-mono font-bold text-brand-gold">12K</dd>
+            </div>
+            <div class="flex justify-between items-baseline border-b border-white/10 pb-3">
+              <dt class="text-[#bbc7df] text-sm">Roadside failures (YoY)</dt>
+              <dd class="text-3xl font-mono font-bold text-brand-gold">-58%</dd>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <dt class="text-[#bbc7df] text-sm">Markets served</dt>
+              <dd class="text-3xl font-mono font-bold text-brand-gold">5</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-10">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="group bg-cold-white border border-light-steel p-6 hover:border-steel transition">
+            <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+              <span>{f.q}</span>
+              <span class="material-symbols-outlined text-steel group-open:rotate-180 transition" style="font-size:24px">expand_more</span>
+            </summary>
+            <p class="mt-4 text-neutral-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">Build a fleet battery program with us.</h2>
+      <p class="text-neutral-700 mb-8">
+        Send your annual volume, vehicle mix, and target markets — we'll respond with a tier-matched quote, TCO model, and warranty terms within 24 hours.
+      </p>
+      <a href="/distributor-program/" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition">
+        Request fleet quote
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const faqs = [
+  {
+    q: 'What is the main difference between AGM and EFB?',
+    a: 'AGM uses absorbent glass-mat separators and compressed plates — sealed, spill-proof, with 1,000-1,200 cycles at 50% DoD. EFB is enhanced flooded — same liquid electrolyte as conventional, but with carbon-doped negative plates yielding 600-800 cycles. AGM costs roughly 30-40% more than EFB but lasts 50%+ longer in start-stop service.',
+  },
+  {
+    q: 'Can I replace EFB with AGM?',
+    a: 'Yes. AGM is a direct upgrade — start-stop ECUs designed for EFB will accept AGM. Reset the BMS battery code where required. Do not replace AGM with EFB downward — most regen-brake systems will overcharge an EFB and shorten its life dramatically.',
+  },
+  {
+    q: 'Which lasts longer in hot climates?',
+    a: 'EFB tolerates sustained heat slightly better. AGM grid corrosion accelerates above 45°C, so in tropical or desert markets EFB is often the more economical choice for entry-level start-stop. For premium AGM in hot climates, ensure proper ventilation and avoid engine-bay placement.',
+  },
+  {
+    q: 'Is AGM worth the extra cost?',
+    a: 'Yes if your vehicle has regenerative braking, runs heavy electrical loads (premium audio, refrigeration, accessories), or operates in vibration-heavy environments (off-road, marine). For city cars with basic stop-start and modest accessories, EFB delivers 80% of the benefit at 70% of the cost.',
+  },
+  {
+    q: 'Do AGM and EFB charge differently?',
+    a: 'Yes. AGM accepts higher charge currents and benefits from temperature compensation. EFB charges similarly to conventional flooded but tolerates partial-state-of-charge cycling better. Modern smart alternators handle both, but aftermarket chargers should be set to the correct profile.',
+  },
+  {
+    q: 'Which Lingyun models cover AGM and EFB?',
+    a: "Lingyun's AGM start-stop range (available via AltusVolt) includes 6-QTF-60, 6-QTF-70, and 6-QTF-105 (heavy-duty AGM dual-purpose). EFB start-stop platforms include 6-QTPE-70 and 6-QTPE-80. Both ranges are produced in JIS, DIN, and BCI footprints for global export.",
+  },
+  {
+    q: 'Can I mix AGM and EFB in a dual-battery system?',
+    a: 'Not recommended. Different charge acceptance and internal resistance — the lower-resistance battery takes the brunt of charge bursts and degrades first. Use matched pairs from the same chemistry and ideally the same production batch.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'AGM vs EFB Battery: Which Start-Stop Battery is Right?',
+  description: "AGM vs EFB battery comparison for start-stop vehicles. Cycle life, cost, climate tolerance, and a clear decision tree backed by Lingyun's OEM-grade product range exported worldwide by AltusVolt.",
+  url: `${siteConfig.url}/support/agm-vs-efb/`,
+  mainEntity: {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="AGM vs EFB Battery — Start-Stop Comparison & Buyer's Guide"
+  description="AGM vs EFB battery comparison. Cycle life, cost, application fit, climate tolerance, charging differences. Decision tree for start-stop vehicles plus AltusVolt's recommended Lingyun models."
+  jsonLd={jsonLd}
+>
+
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/support/agm-vs-efb/" class="hover:text-steel">Support</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">AGM vs EFB</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[520px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-agm.webp" alt="AGM and EFB start-stop battery comparison" class="w-full h-full object-cover opacity-50" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Buyer's guide
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          AGM vs EFB: <span class="text-brand-gold">which start-stop battery wins?</span>
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          AGM costs more and lasts longer. EFB costs less and tolerates heat. The right answer depends on whether the vehicle has regenerative braking, what the climate is, and how the buyer values upfront cost vs. lifecycle. Here is the side-by-side and a clear decision tree, drawn from Lingyun's OEM-validated start-stop platforms.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid lg:grid-cols-2 gap-10">
+        <div class="bg-cold-white border-l-4 border-brand-gold p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Premium chemistry</p>
+          <h2 class="text-3xl font-bold text-brand-dark mb-4">AGM</h2>
+          <p class="text-neutral-700 leading-relaxed mb-6">
+            <strong>Absorbent Glass Mat.</strong> Electrolyte is held in fiberglass mats compressed between plates. Sealed, spill-proof, vibration-resistant. Accepts the high charge currents of regenerative braking systems.
+          </p>
+          <ul class="space-y-2 text-sm text-neutral-700">
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> 1,000-1,200 cycles at 50% DoD</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Spill-proof, any orientation</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Accepts regen brake charge bursts</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Vibration-rated for off-road, marine</li>
+            <li class="flex gap-2 text-neutral-500"><span class="material-symbols-outlined text-amber-600" style="font-size:20px">warning</span> 30-40% cost premium over EFB</li>
+            <li class="flex gap-2 text-neutral-500"><span class="material-symbols-outlined text-amber-600" style="font-size:20px">warning</span> Heat-sensitive above 45°C ambient</li>
+          </ul>
+        </div>
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Entry-level start-stop</p>
+          <h2 class="text-3xl font-bold text-brand-dark mb-4">EFB</h2>
+          <p class="text-neutral-700 leading-relaxed mb-6">
+            <strong>Enhanced Flooded Battery.</strong> Carbon-doped negative active material with conventional flooded electrolyte. Doubles cycle life of standard flooded at modest cost premium. Tolerates heat better than AGM.
+          </p>
+          <ul class="space-y-2 text-sm text-neutral-700">
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> 600-800 cycles at 50% DoD</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Heat-tolerant for tropical markets</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Lower cost — 30% premium over flooded</li>
+            <li class="flex gap-2"><span class="material-symbols-outlined text-green-700" style="font-size:20px">check_circle</span> Field-serviceable (not fully sealed)</li>
+            <li class="flex gap-2 text-neutral-500"><span class="material-symbols-outlined text-amber-600" style="font-size:20px">warning</span> Not for regen-brake systems</li>
+            <li class="flex gap-2 text-neutral-500"><span class="material-symbols-outlined text-amber-600" style="font-size:20px">warning</span> Slower charge acceptance than AGM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Side by side</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">AGM vs EFB at a glance.</h2>
+      </div>
+      <div class="overflow-x-auto bg-white border border-light-steel">
+        <table class="w-full text-sm text-left border border-light-steel">
+          <thead class="bg-brand-dark text-white text-xs uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 border-b border-light-steel">Spec</th>
+              <th class="px-4 py-3 border-b border-light-steel bg-brand-gold/20">AGM</th>
+              <th class="px-4 py-3 border-b border-light-steel">EFB</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-light-steel">
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Cycle life (50% DoD)</td><td class="px-4 py-3 bg-cold-white">1,000-1,200 cycles</td><td class="px-4 py-3">600-800 cycles</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Cost index (vs flooded = 1.0)</td><td class="px-4 py-3 bg-cold-white">1.7×</td><td class="px-4 py-3">1.3×</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Best application</td><td class="px-4 py-3 bg-cold-white">Premium start-stop with regen brake</td><td class="px-4 py-3">Entry-level start-stop, hot climates</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Climate tolerance</td><td class="px-4 py-3 bg-cold-white">Avoid sustained &gt;45°C</td><td class="px-4 py-3">Better in hot climates</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Charge acceptance</td><td class="px-4 py-3 bg-cold-white">High — accepts regen bursts</td><td class="px-4 py-3">Moderate</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Spill-proof</td><td class="px-4 py-3 bg-cold-white">Yes (sealed VRLA)</td><td class="px-4 py-3">No (flooded with vents)</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Vibration resistance</td><td class="px-4 py-3 bg-cold-white">High</td><td class="px-4 py-3">Moderate</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Field serviceable</td><td class="px-4 py-3 bg-cold-white">No (sealed)</td><td class="px-4 py-3">Yes (vent caps)</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Charging requirement</td><td class="px-4 py-3 bg-cold-white">14.4-14.7V, temp-compensated</td><td class="px-4 py-3">14.2-14.4V standard</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Decision tree</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Which one for this vehicle?</h2>
+      </div>
+      <div class="max-w-3xl mx-auto space-y-4">
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <p class="font-bold text-brand-dark mb-2">1. Does the vehicle have regenerative braking?</p>
+          <p class="text-neutral-700 text-sm">→ <strong>YES</strong>: AGM. Regen brake voltage spikes destroy EFB plates within months.</p>
+          <p class="text-neutral-700 text-sm">→ <strong>NO</strong>: continue to question 2.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <p class="font-bold text-brand-dark mb-2">2. Does the vehicle have stop-start (without regen)?</p>
+          <p class="text-neutral-700 text-sm">→ <strong>YES, premium budget</strong>: AGM (longer life, ECU happier).</p>
+          <p class="text-neutral-700 text-sm">→ <strong>YES, value budget</strong>: EFB (proper start-stop battery, lower cost).</p>
+          <p class="text-neutral-700 text-sm">→ <strong>NO</strong>: conventional flooded or maintenance-free is sufficient.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <p class="font-bold text-brand-dark mb-2">3. Hot climate (Middle East, SE Asia, Australia Outback)?</p>
+          <p class="text-neutral-700 text-sm">→ <strong>EFB</strong> is often the better economic choice — AGM grid corrosion accelerates above 45°C.</p>
+          <p class="text-neutral-700 text-sm">→ <strong>AGM</strong> still works if engine-bay temps stay reasonable and you specify high-temp grid alloy.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <p class="font-bold text-brand-dark mb-2">4. Marine, RV, off-road, or vibration-heavy use?</p>
+          <p class="text-neutral-700 text-sm">→ <strong>AGM</strong>. Spill-proof, vibration-rated, deep-cycle capable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">AltusVolt's recommended Lingyun platforms</p>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">OEM-validated start-stop range.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white/5 border border-white/10 p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">AGM start-stop</p>
+          <h3 class="text-2xl font-bold mb-4">For regen-brake vehicles</h3>
+          <ul class="space-y-3 text-sm text-[#bbc7df] mb-6">
+            <li><a href="/products/agm-batteries/" class="text-brand-gold hover:underline font-mono">6-QTF-60</a> — 60Ah / 580 CCA AGM, compact start-stop (Lingyun, available via AltusVolt)</li>
+            <li><a href="/products/agm-batteries/" class="text-brand-gold hover:underline font-mono">6-QTF-70</a> — 70Ah / 720 CCA AGM, mid-size start-stop</li>
+            <li><a href="/products/agm-batteries/" class="text-brand-gold hover:underline font-mono">6-QTF-105</a> — 105Ah heavy-duty AGM, parking-AC dual-purpose</li>
+          </ul>
+          <a href="/products/agm-batteries/" class="inline-flex items-center gap-2 text-brand-gold font-bold text-sm uppercase tracking-widest hover:brightness-110">
+            Browse AGM lineup <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+          </a>
+        </div>
+        <div class="bg-white/5 border border-white/10 p-8">
+          <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">EFB start-stop</p>
+          <h3 class="text-2xl font-bold mb-4">For entry-level start-stop</h3>
+          <ul class="space-y-3 text-sm text-[#bbc7df] mb-6">
+            <li><a href="/products/efb-batteries/" class="text-brand-gold hover:underline font-mono">6-QTPE-70</a> — 70Ah / 680 CCA EFB, mid-size sedan</li>
+            <li><a href="/products/efb-batteries/" class="text-brand-gold hover:underline font-mono">6-QTPE-80</a> — 80Ah / 760 CCA EFB, SUV / commercial</li>
+          </ul>
+          <a href="/products/efb-batteries/" class="inline-flex items-center gap-2 text-brand-gold font-bold text-sm uppercase tracking-widest hover:brightness-110">
+            Browse EFB lineup <span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-10">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="group bg-cold-white border border-light-steel p-6 hover:border-steel transition">
+            <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+              <span>{f.q}</span>
+              <span class="material-symbols-outlined text-steel group-open:rotate-180 transition" style="font-size:24px">expand_more</span>
+            </summary>
+            <p class="mt-4 text-neutral-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">Ready to specify the right chemistry?</h2>
+      <p class="text-neutral-700 mb-8">
+        Tell our export team your target market, vehicle mix, and annual volume — AltusVolt will return a distributor pricing matrix covering both AGM and EFB Lingyun platforms.
+      </p>
+      <a href="/distributor-program/" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition">
+        Become a distributor
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>
