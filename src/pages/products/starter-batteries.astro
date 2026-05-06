@@ -1,0 +1,201 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const allProducts = await getCollection('products', ({ data }) => !data.draft);
+
+// MF entry-level passenger car recommendations
+const mfRecommendedSlugs = ['55d23-mf', '95d31-mf'];
+const mfPicks = allProducts
+  .filter((p) => mfRecommendedSlugs.includes(p.id))
+  .sort((a, b) => mfRecommendedSlugs.indexOf(a.id) - mfRecommendedSlugs.indexOf(b.id));
+
+const subCategories = [
+  {
+    title: 'AGM Batteries',
+    href: '/products/agm-batteries/',
+    eyebrow: 'Premium Start-Stop',
+    description:
+      'Absorbent Glass Mat technology for micro-hybrid vehicles with start-stop and regenerative braking. 3× cycle life of conventional flooded.',
+    icon: 'electric_car',
+    flagshipImage: '/images/products/agm-start-stop/6-QTF-70-720/main.webp',
+  },
+  {
+    title: 'EFB Batteries',
+    href: '/products/efb-batteries/',
+    eyebrow: 'Entry Start-Stop',
+    description:
+      'Enhanced Flooded Battery with carbon-additive plates. 2× cycle life of conventional, half the cost premium of AGM. Right for entry-level start-stop.',
+    icon: 'battery_charging_full',
+    flagshipImage: '/images/products/efb-start-stop/6-QTPE-70-700/main.webp',
+  },
+  {
+    title: 'Maintenance-Free Cars',
+    href: '#mf-cars',
+    eyebrow: 'Sealed Calcium-Calcium',
+    description:
+      'JIS D-class sealed maintenance-free batteries for Toyota, Honda, Nissan, Mazda, Hyundai, Kia and global aftermarket. Zero water top-up.',
+    icon: 'battery_full',
+    flagshipImage: '/images/products/maintenance-free/55D23-BST/main.webp',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Starter Batteries — AltusVolt',
+  description:
+    'Starter batteries for every powertrain — AGM, EFB, conventional flooded, and sealed maintenance-free. AltusVolt exports all four — produced by manufacturing partner Lingyun under IATF 16949 + GB national standards.',
+  url: `${siteConfig.url}/products/starter-batteries`,
+  isPartOf: { '@type': 'WebSite', name: siteConfig.name, url: siteConfig.url },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+    { '@type': 'ListItem', position: 2, name: 'Starter Batteries', item: `${siteConfig.url}/products/starter-batteries` },
+  ],
+};
+---
+
+<BaseLayout
+  title="Starter Batteries — AGM, EFB, MF for Every Powertrain"
+  description="Starter batteries for every powertrain — AGM, EFB, conventional flooded, and sealed maintenance-free. AltusVolt exports all four — produced by manufacturing partner Lingyun under IATF 16949 + GB national standards."
+  ogImage="/images/hero/hero-agm.webp"
+  jsonLd={jsonLd}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Starter Batteries</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="relative w-full h-[480px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-agm.webp" alt="AltusVolt starter batteries" class="w-full h-full object-cover opacity-85" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Automotive Aftermarket / Passenger Cars
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Starter batteries for every powertrain
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          AGM, EFB, conventional flooded, and sealed maintenance-free — AltusVolt exports all four chemistries, produced by manufacturing partner Lingyun under one IATF 16949 quality system. Pick by vehicle technology and target market.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sub-category cards -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="mb-12 max-w-3xl">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-2">Choose by Vehicle Technology</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-4">Three chemistries, one factory</h2>
+        <p class="text-neutral-700 text-lg leading-relaxed">
+          The right starter battery depends on whether the vehicle has start-stop, regenerative braking, or a conventional alternator — and on whether the workshop chain in the target market prefers sealed-for-life or refillable construction.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {subCategories.map((c) => (
+          <a href={c.href} class="group bg-white border border-light-steel rounded-sm overflow-hidden hover:shadow-lg hover:border-steel transition-all">
+            <div class="aspect-[16/10] bg-cold-white p-8 flex items-center justify-center overflow-hidden">
+              <img
+                src={c.flagshipImage}
+                alt={c.title}
+                class="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+                width="600"
+                height="400"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6 border-t border-light-steel">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-steel mb-2">{c.eyebrow}</p>
+              <h3 class="text-lg font-bold text-brand-dark mb-2 group-hover:text-steel transition-colors">{c.title}</h3>
+              <p class="text-sm text-neutral-gray leading-relaxed mb-4">{c.description}</p>
+              <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-dark transition-colors">
+                View Series
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Maintenance-Free Cars: direct product picks -->
+  <section id="mf-cars" class="bg-cold-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="mb-12 flex items-end justify-between flex-wrap gap-6">
+        <div class="max-w-2xl">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-2">Recommended for Cars · JIS Standard</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-4">Maintenance-Free Passenger Cars</h2>
+          <p class="text-neutral-700 text-base leading-relaxed">
+            Sealed calcium-calcium MF batteries — zero water top-up for the full warranty period. The two SKUs below cover the highest-volume Asian aftermarket fitments globally (Toyota, Honda, Nissan, Hyundai, Kia, Mazda).
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        {mfPicks.map((p) => (
+          <a href={`/products/${p.id}`} class="group bg-white border border-light-steel rounded-sm overflow-hidden hover:shadow-lg hover:border-steel transition-all">
+            <div class="aspect-[16/10] bg-cold-white p-8 flex items-center justify-center overflow-hidden">
+              <img
+                src={p.data.images[0]}
+                alt={`${p.data.altusvoltSku} ${p.data.title}`}
+                class="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+                width="600"
+                height="400"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6 border-t border-light-steel">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-steel mb-2">{p.data.altusvoltSku}</p>
+              <h3 class="text-lg font-bold text-brand-dark mb-2 group-hover:text-steel transition-colors">{p.data.title}</h3>
+              <p class="text-xs text-neutral-gray font-mono mb-4">Lingyun: {p.data.model}</p>
+              <div class="flex flex-wrap gap-3 text-xs">
+                <span class="bg-cold-white px-2 py-1 rounded font-mono"><strong>{p.data.capacityAh}Ah</strong></span>
+                {p.data.ccaA && <span class="bg-cold-white px-2 py-1 rounded font-mono"><strong>{p.data.ccaA}A</strong> CCA</span>}
+                <span class="bg-cold-white px-2 py-1 rounded font-mono">{p.data.voltage}</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <p class="text-center text-neutral-gray mt-12 text-sm italic">
+        Full Bestar MF series includes 38B20, 46B24, 55B24, 55D23, 55D26, 65B24, 75D23, 80D26, 95D31, 110/120/130E41 and more — <a href="/contact" class="text-steel font-bold hover:underline">contact sales</a> for the complete fitment guide.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-brand-dark py-16">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <h2 class="text-white text-3xl font-bold mb-2">Mixed-chemistry container?</h2>
+        <p class="text-[#bbc7df]">We ship AGM, EFB, and MF on the same purchase order. One container, one invoice, one set of test certificates.</p>
+      </div>
+      <a href="/distributor-program" class="bg-brand-gold text-brand-dark px-8 py-4 font-bold text-sm tracking-widest uppercase rounded-sm hover:brightness-110 transition shrink-0">
+        Request Quote
+      </a>
+    </div>
+  </section>
+</BaseLayout>

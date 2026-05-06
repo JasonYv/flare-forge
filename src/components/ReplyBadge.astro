@@ -1,0 +1,36 @@
+---
+/**
+ * ReplyBadge — small visual reassurance badge to drop near forms / CTAs.
+ *
+ * Visual: pulsing green dot + "Reply within 24 hours".
+ * Optional subtext for additional context.
+ *
+ * Variants:
+ *   - "light" (default) — for use on light/white backgrounds
+ *   - "dark"            — for use on brand-dark backgrounds (header, dark hero)
+ */
+
+interface Props {
+  subtext?: string;
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+
+const { subtext, variant = 'light', class: className = '' } = Astro.props;
+
+const wrapperClass =
+  variant === 'dark'
+    ? 'bg-brand-dark/40 border-brand-gold/30 text-cold-white'
+    : 'bg-cold-white border-light-steel text-brand-dark';
+---
+
+<div
+  class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-sm border text-xs font-medium ${wrapperClass} ${className}`}
+>
+  <span class="relative flex h-2.5 w-2.5 shrink-0">
+    <span class="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping"></span>
+    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+  </span>
+  <span class="font-bold uppercase tracking-wider">Reply within 24 hours</span>
+  {subtext && <span class="opacity-80 normal-case tracking-normal">· {subtext}</span>}
+</div>

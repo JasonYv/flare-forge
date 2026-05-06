@@ -1,0 +1,170 @@
+---
+/**
+ * Shipping Compliance — International battery shipping regulations, MSDS, UN classifications, and packaging standards.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Battery Shipping Compliance Guide — AltusVolt',
+  description: 'International battery shipping regulations, MSDS documentation, UN2800/UN2794 compliance, IATA/IMDG requirements, and packaging standards for lead-acid battery export.',
+  url: 'https://altusvolt.com/resources/shipping',
+};
+---
+
+<BaseLayout
+  title="Battery Shipping Compliance Guide"
+  description="International battery shipping regulations, MSDS documentation, UN2800/UN2794 compliance, IATA/IMDG requirements, and packaging standards for lead-acid battery export."
+  jsonLd={jsonLd}
+>
+  <div class="w-full bg-[#f2f4f7] min-h-screen text-[#191c1e] antialiased">
+
+    <!-- Hero Section -->
+    <section class="bg-white pt-24 pb-16 px-6 md:px-12 relative overflow-hidden">
+      <div class="max-w-[1440px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+        <div class="lg:col-span-7">
+          <div class="w-1 bg-[#436086] h-8 mb-6"></div>
+          <h1 class="text-5xl md:text-[3.5rem] leading-[1.1] font-bold text-[#101c2e] tracking-tight mb-6">
+            Shipping & Compliance Documentation
+          </h1>
+          <p class="text-[#45474c] text-xl max-w-2xl font-medium mb-10 leading-relaxed">
+            Navigate international battery shipping regulations with confidence. UN classifications, dangerous goods protocols, and packaging standards for safe lead-acid battery export worldwide.
+          </p>
+
+          <a href="/distributor-program" class="inline-flex items-center gap-3 bg-[#c7a850] text-[#4f3d00] font-mono font-bold text-sm uppercase px-8 py-4 rounded-sm hover:bg-[#b59848] transition-colors shadow-sm tracking-wider">
+            Request Shipping Documentation Package
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Feature Callout Image Box -->
+        <div class="lg:col-span-5 relative hidden lg:block h-full min-h-[450px] rounded-sm overflow-hidden shadow-lg">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#101c2e] to-[#436086] opacity-90 z-10"></div>
+
+          <!-- Overlay Content -->
+          <div class="absolute inset-0 z-20 flex items-center justify-center p-8">
+            <div class="border border-white/20 p-8 w-full max-w-sm bg-[#101c2e]/70 backdrop-blur-md rounded-sm">
+              <h3 class="text-[#e4c368] font-mono text-[10px] uppercase tracking-widest font-bold mb-4">Compliance Ready</h3>
+              <p class="text-white text-2xl font-bold mb-2">Full MSDS Package</p>
+              <p class="text-[#bbc7df] font-mono text-xs mb-8">UN2800 / UN2794 Certified</p>
+              <a href="/distributor-program" class="inline-flex items-center gap-2 text-[#c7a850] text-sm font-bold uppercase tracking-wider hover:text-[#e4c368] transition-colors">
+                REQUEST DOCS <span class="material-symbols-outlined text-base">description</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Background Image -->
+          <img
+            src="/images/hero/hero-oem.webp"
+            alt="Shipping Container Port"
+            class="absolute inset-0 w-full h-full object-cover grayscale"
+            width="1200"
+            height="800"
+            fetchpriority="high"
+          />
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Topic Categories Grid -->
+    <section class="bg-[#f2f4f7] py-20 px-6 md:px-12">
+      <div class="max-w-[1440px] mx-auto">
+        <h2 class="text-sm font-bold text-[#436086] uppercase tracking-widest mb-12 flex items-center gap-4">
+          <span class="w-8 h-px bg-[#c5c6cd]"></span>
+          Shipping & Compliance Topics
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- UN Classification -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">label</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">UN Classification</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">UN2800 classification for wet (non-spillable) lead-acid batteries and UN2794 for regulated electrolyte variants. Proper labeling and declaration requirements.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- IATA Dangerous Goods -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">flight</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">IATA Dangerous Goods</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">Air freight regulations for battery shipments including packing instructions, quantity limits, shipper declarations, and carrier-specific requirements for Class 8 goods.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- IMDG Code -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">sailing</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">IMDG Code</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">International Maritime Dangerous Goods code compliance for sea freight. Stowage categories, segregation rules, and container loading protocols for ocean transport.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- Packaging Standards -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">inventory_2</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">Packaging Standards</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">Approved packaging configurations including wooden crate specifications, palletization patterns, shock-absorbing materials, and terminal protection for export shipments.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- MSDS Documents -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">science</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">MSDS Documents</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">Material Safety Data Sheets covering chemical composition, hazard identification, first-aid measures, fire-fighting procedures, and environmental precautions for all battery types.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+          <!-- Country-Specific Requirements -->
+          <a href="/resources/shipping" class="group block bg-white p-8 hover:bg-[#f7f9fc] transition-colors duration-300 relative border border-[#e0e3e6] shadow-sm hover:shadow-md rounded-sm overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-0 bg-[#436086] group-hover:h-full transition-all duration-300"></div>
+            <span class="material-symbols-outlined w-8 h-8 text-[#436086] mb-6 text-3xl">public</span>
+            <h3 class="text-[#101c2e] font-bold text-xl mb-3 group-hover:text-[#436086] transition-colors">Country-Specific Requirements</h3>
+            <p class="text-[#45474c] text-sm mb-8 leading-relaxed font-medium">Regional import regulations for EU (REACH/RoHS), US (DOT 49 CFR), Middle East, and ASEAN markets. Customs documentation, duty classifications, and local certification needs.</p>
+            <span class="text-[#436086] text-[10px] font-mono font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-[#c7a850] transition-colors">
+              VIEW DETAILS <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-[#3c597f] to-[#436086] py-16 px-6 md:px-12 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
+
+      <div class="max-w-[1440px] mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="text-white w-full lg:max-w-2xl text-center lg:text-left">
+          <h2 class="font-bold text-2xl mb-2">Request Shipping Documentation Package</h2>
+          <p class="text-[#bbc7df] text-sm font-medium">Get complete MSDS, UN classification certificates, and packaging guidelines for your specific battery models and destination markets.</p>
+        </div>
+
+        <a href="/distributor-program" class="inline-flex items-center gap-3 bg-[#c7a850] text-[#4f3d00] font-mono font-bold text-sm uppercase px-10 py-4 rounded-sm hover:bg-[#b59848] transition-colors whitespace-nowrap shadow-sm tracking-wider">
+          Request Documentation
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>

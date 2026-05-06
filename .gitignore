@@ -37,6 +37,9 @@ pnpm-debug.log*
 *.tmp
 /tmp/
 
+# internal design docs / brochures / source materials (not for public repo)
+doc/
+
 # test images under content/news — keep .md committed but not binary assets
 # (if you DO want to track images in git, remove this line)
 content/news/*.jpg

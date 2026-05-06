@@ -1,202 +1,415 @@
 ---
-import { env } from 'cloudflare:workers';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import InquiryForm from '../components/InquiryForm.astro';
-import CoverImage from '../components/CoverImage.astro';
 import { siteConfig } from '../config';
-import { t, getLocaleFromUrl } from '../i18n';
-import { getDb } from '../db';
-import { articles } from '../db/schema';
-import { desc } from 'drizzle-orm';
-import type { Article } from '../db/schema';
 
-const locale = getLocaleFromUrl(Astro.url);
+// FAQ list (also used for FAQPage JSON-LD)
+const faqs = [
+  {
+    q: "What is AltusVolt's relationship with Lingyun Battery?",
+    a: "AltusVolt is Lingyun's overseas sales partner — the Global Export Partner for Lingyun Battery. Lingyun manufactures in Baoji, China; AltusVolt operates the international distributor and OEM relationships, export coordination, and overseas marketing.",
+  },
+  {
+    q: 'Is AltusVolt a factory or a trading company?',
+    a: "Neither in the traditional sense. AltusVolt is the overseas operating brand for Lingyun's export business — a dedicated international sales and program-management team backed by Lingyun's manufacturing. We coordinate sales, distribution, and exports; Lingyun handles production and quality.",
+  },
+  {
+    q: 'What battery types are available through AltusVolt?',
+    a: 'AGM Start-Stop, EFB Start-Stop, Heavy-Duty Truck, Maintenance-Free, Conventional Flooded SLI, Marine (CCS-certified), Parking AC / Auxiliary, and Solar Off-Grid Gel. The full Lingyun catalog is accessible through AltusVolt — IATF 16949 certified, 5 million units annual capacity.',
+  },
+  {
+    q: "What's the minimum order quantity?",
+    a: 'Standard MOQ is one 40HQ container per SKU (approximately 600–900 units depending on size). Mixed containers across SKUs and tiered OEM/private-label programs are available for established distributors.',
+  },
+  {
+    q: 'How does the distributor program work?',
+    a: 'Submit an application via the distributor program page. AltusVolt reviews market fit, sends a sample-container quotation, and signs a distributor agreement with defined territory. Onboarding includes marketing assets, technical training, and dedicated overseas account management.',
+  },
+  {
+    q: 'Do you ship globally with full export documentation?',
+    a: 'Yes. AltusVolt coordinates UN2794 (lead-acid wet) and UN2800 (non-spillable) hazmat documentation, IMDG packing certificates, MSDS, Form A, and Certificate of Origin on every shipment. FOB Shanghai/Ningbo/Qingdao is standard; CIF and DAP terms are available.',
+  },
+  {
+    q: 'What certifications do Lingyun batteries carry?',
+    a: 'Factory-level: IATF 16949, ISO 9001, ISO 14001, ISO 45001. Product-level: CCS Type Approval (marine), CE marking, GB/T national standards compliance. Lingyun operates a CNAS-accredited lab for vibration, temperature cycling, and capacity verification.',
+  },
+  {
+    q: 'How fast do you reply to inquiries?',
+    a: 'Within 24 hours by application engineers, not generic auto-responses. AltusVolt is staffed for English-language, time-zone aware response across EU, Americas, ANZ, and MEA markets.',
+  },
+];
 
-// Fetch top 3 latest articles at build time (static prerender)
-let latestArticles: Article[] = [];
-try {
-  const db = getDb(env.DB);
-  latestArticles = await db
-    .select()
-    .from(articles)
-    .orderBy(desc(articles.createdAt))
-    .limit(3);
-} catch {
-  // D1 not available during local build — use empty list
-}
-
+// Combined Organization + FAQPage @graph
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description: siteConfig.seo.defaultDescription,
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${siteConfig.url}/products?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteConfig.url}/#organization`,
+      name: siteConfig.fullName,
+      alternateName: 'AltusVolt',
+      url: siteConfig.url,
+      logo: `${siteConfig.url}/images/brand/logo-light.png`,
+      description:
+        "AltusVolt is the Global Export Partner for Lingyun Battery — the overseas sales and operating brand handling international distributor and OEM relationships for Lingyun's IATF 16949-certified lead-acid battery manufacturing.",
+      parentOrganization: {
+        '@type': 'Organization',
+        name: 'Shaanxi Lingyun Storage Battery Co., Ltd.',
+        alternateName: 'Lingyun Battery',
+        url: 'https://altusvolt.com/brand/lingyun-battery/',
+        foundingDate: '1993',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Baoji',
+          addressRegion: 'Shaanxi',
+          addressCountry: 'CN',
+        },
+      },
+      brand: {
+        '@type': 'Brand',
+        name: 'Lingyun Battery',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: siteConfig.contact.email,
+        contactType: 'sales',
+        availableLanguage: ['English', 'Chinese'],
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
 };
+
+const productCategories = [
+  { icon: 'battery_charging_full', title: 'AGM Batteries', desc: 'Absorbent Glass Mat for micro-hybrid start-stop. High CCA, deep cycling.', href: '/products/agm-batteries/' },
+  { icon: 'bolt', title: 'EFB Batteries', desc: 'Enhanced Flooded for entry-level start-stop. Cost-optimized cycling.', href: '/products/efb-batteries/' },
+  { icon: 'local_shipping', title: 'Heavy-Duty Batteries', desc: 'Truck, bus, vocational. Vibration-hardened, OEM-validated.', href: '/products/heavy-duty-batteries/' },
+  { icon: 'directions_boat', title: 'Marine Batteries', desc: 'CCS Type Approved. Commercial fishing, yachts, workboats.', href: '/products/marine-batteries/' },
+  { icon: 'ac_unit', title: 'Parking AC Batteries', desc: 'Sleeper-cab HVAC and auxiliary deep-cycle for trucking.', href: '/products/parking-ac-batteries/' },
+  { icon: 'wb_sunny', title: 'Solar Batteries', desc: 'Tropical-climate VRLA gel for off-grid and rural electrification.', href: '/products/solar-batteries/' },
+];
+
+const whyAltusvolt = [
+  { icon: 'support_agent', title: 'Single overseas point of contact', body: "English-language response, time-zone aware. No language friction, no ambiguity in specifications, no waiting on factory translators." },
+  { icon: 'fact_check', title: 'Pre-vetted product matching', body: 'We know which Lingyun lines fit BCI, DIN, and JIS markets — and which case sizes, terminals, and capacities your aftermarket actually moves.' },
+  { icon: 'handshake', title: 'Distributor-focused support', body: 'Territory programs, onboarding kits, marketing assets, technical training, and ongoing account management for serious distributors.' },
+  { icon: 'inventory_2', title: 'Export coordination', body: 'UN2794/UN2800 hazmat docs, IMDG packing, full document packs, FOB/CIF/DAP terms. Lead times of 25–30 days on standard SKUs.' },
+];
+
+const whyLingyun = [
+  { icon: 'history_edu', title: '30+ years', body: 'Established 1993 in Baoji, Shaanxi. Three decades of precision lead-acid battery engineering.' },
+  { icon: 'verified', title: 'IATF 16949', body: 'Automotive-grade quality system. Same audited platform that supplies OEM fitment contracts.' },
+  { icon: 'precision_manufacturing', title: '5M units / year', body: 'Annual production capacity sized for distributor containers and large project orders.' },
+  { icon: 'science', title: 'CNAS-accredited lab', body: 'Vibration, temperature cycling, capacity, and deep-discharge endurance verified in-house.' },
+];
+
+const techResources = [
+  { icon: 'compare_arrows', title: 'AGM vs EFB', desc: 'Cycle life, cost, application fit, and when to pick each chemistry.', href: '/support/agm-vs-efb/' },
+  { icon: 'rule', title: 'Battery Standards (BCI / DIN / JIS)', desc: 'Case dimensions, terminals, capacity ranges across the three regional systems.', href: '/support/battery-standards/' },
+  { icon: 'verified_user', title: 'Factory & Certifications', desc: 'IATF 16949, ISO, CCS — verification of the manufacturing platform behind every shipment.', href: '/factory-and-certifications/' },
+];
 ---
 
-<BaseLayout title="Home" jsonLd={jsonLd}>
-  <!-- Hero Section -->
-  <section class="relative bg-gradient-to-br from-primary-dark to-primary text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-      <div class="max-w-3xl">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-          {t('hero.title', locale)}
+<BaseLayout
+  title="Battery Export Partner — AGM, EFB, Heavy-Duty, Marine"
+  description="AltusVolt is the Global Export Partner for Lingyun Battery — overseas distributor and OEM sales for AGM, EFB, heavy-duty truck, marine, and parking AC batteries. Backed by IATF 16949 manufacturing, 5M units/yr, 60+ countries."
+  jsonLd={jsonLd}
+>
+
+  <!-- ====================================================================== -->
+  <!-- 1. Hero -->
+  <!-- ====================================================================== -->
+  <section class="relative w-full min-h-[680px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img
+        src="/images/hero/hero-equipment.webp"
+        alt="Lingyun battery manufacturing facility — exported worldwide through AltusVolt"
+        class="w-full h-full object-cover opacity-85"
+        width="2000"
+        height="1333"
+        fetchpriority="high"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/30 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 mb-8 rounded backdrop-blur-sm">
+          <span class="w-2 h-2 bg-brand-gold rounded-sm"></span>
+          <span class="text-xs uppercase tracking-widest text-[#bbc7df] font-medium">
+            Global Export Partner for Lingyun Battery
+          </span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-6">
+          Reliable battery solutions for distributors, importers and<br />
+          <span class="text-brand-gold">OEM buyers.</span>
         </h1>
-        <p class="text-lg sm:text-xl text-blue-100 mb-8">
-          {t('hero.subtitle', locale)}
+
+        <p class="text-lg md:text-xl text-[#bbc7df] font-light mb-10 max-w-3xl leading-relaxed">
+          AltusVolt is the overseas sales partner for Lingyun Battery — a Chinese OEM with 30+ years of precision manufacturing, IATF 16949 certified, 5M units/yr capacity. We coordinate global distributor sales, OEM projects, and export logistics.
         </p>
-        <div class="flex flex-wrap gap-4">
-          <a
-            href="/contact"
-            class="inline-flex items-center px-6 py-3 bg-secondary text-neutral-900 font-semibold rounded-lg hover:bg-secondary-light transition-colors"
-          >
-            {t('hero.cta', locale)}
+
+        <div class="flex flex-wrap gap-4 mb-12">
+          <a href="/distributor-program/" class="bg-brand-gold text-brand-dark px-8 py-4 font-bold text-sm uppercase tracking-wider rounded hover:brightness-110 transition inline-flex items-center gap-2">
+            Request a Quote
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7 7 7-7 7"/></svg>
           </a>
-          <a
-            href="/products"
-            class="inline-flex items-center px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
-          >
-            {t('hero.cta_secondary', locale)}
+          <a href="/distributor-program/" class="bg-transparent border border-white/30 text-white px-8 py-4 font-medium text-sm uppercase tracking-wider rounded hover:bg-white/5 transition">
+            Become a Distributor
           </a>
+        </div>
+
+        <!-- Trust strip -->
+        <div class="pt-8 border-t border-white/10">
+          <div class="flex flex-wrap gap-x-6 gap-y-3 text-xs font-medium uppercase tracking-widest text-[#bbc7df]/80">
+            <span class="inline-flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-gold rounded-sm"></span>IATF 16949</span>
+            <span class="inline-flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-gold rounded-sm"></span>ISO 9001 / 14001 / 45001</span>
+            <span class="inline-flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-gold rounded-sm"></span>CCS Marine</span>
+            <span class="inline-flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-gold rounded-sm"></span>60+ countries</span>
+            <span class="inline-flex items-center gap-2"><span class="w-1.5 h-1.5 bg-brand-gold rounded-sm"></span>5M units/yr (Lingyun capacity)</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features / Why Choose Us -->
-  <section class="py-16 lg:py-24 bg-neutral-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-center mb-12 text-neutral-900">Why Choose Us</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
-          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2">ISO 9001 Certified</h3>
-          <p class="text-neutral-600 text-sm">Rigorous quality management system ensuring consistent product excellence across every production batch.</p>
-        </div>
-        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
-          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2">Global Export</h3>
-          <p class="text-neutral-600 text-sm">Products exported to 50+ countries. Experienced in international logistics, customs documentation, and compliance.</p>
-        </div>
-        <div class="bg-white p-8 rounded-xl shadow-sm border border-neutral-100 text-center">
-          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-semibold mb-2">Custom OEM/ODM</h3>
-          <p class="text-neutral-600 text-sm">Full customization capabilities from design to delivery. Flexible MOQ and rapid prototyping services.</p>
-        </div>
+  <!-- ====================================================================== -->
+  <!-- 2. Product Categories -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Product Categories</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight">Battery systems we export</h2>
       </div>
-    </div>
-  </section>
 
-  <!-- Products Preview -->
-  <section class="py-16 lg:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between mb-12">
-        <h2 class="text-3xl font-bold text-neutral-900">{t('products.title', locale)}</h2>
-        <a href="/products" class="text-primary font-medium hover:underline">
-          {t('products.view_all', locale)} &rarr;
-        </a>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[1, 2, 3].map((i) => (
-          <article class="group bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden hover:shadow-md transition-shadow">
-            <div class="aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400">
-              <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
-            <div class="p-6">
-              <h3 class="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                Product Category {i}
-              </h3>
-              <p class="text-sm text-neutral-600 mb-4">
-                High-quality industrial component with precision engineering and durable materials.
-              </p>
-              <a href="/products" class="text-sm text-primary font-medium hover:underline">
-                Learn More &rarr;
-              </a>
-            </div>
-          </article>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {productCategories.map((p) => (
+          <a href={p.href} class="group bg-cold-white border border-light-steel rounded-sm p-8 hover:border-brand-gold hover:shadow-md transition-all">
+            <span class="material-symbols-outlined text-steel mb-5 block group-hover:text-brand-gold transition-colors" style="font-size:40px">
+              {p.icon}
+            </span>
+            <h3 class="text-xl font-bold text-brand-dark mb-2">{p.title}</h3>
+            <p class="text-sm text-neutral-gray leading-relaxed mb-5">{p.desc}</p>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:gap-2.5 transition-all">
+              View Category
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+          </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Latest News -->
-  {latestArticles.length > 0 && (
-    <section class="py-16 lg:py-24 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-12">
-          <h2 class="text-3xl font-bold text-neutral-900">{t('news.title', locale)}</h2>
-          <a href="/news" class="text-primary font-medium hover:underline">
-            {t('news.read_more', locale)} &rarr;
-          </a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {latestArticles.map((post) => (
-            <article class="group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow">
-              {post.coverImage ? (
-                <CoverImage
-                  src={post.coverImage}
-                  alt={post.title}
-                  width={400}
-                  height={225}
-                  widths={[400, 800]}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-                  class="w-full aspect-[16/9] object-cover"
-                />
-              ) : (
-                <div class="w-full aspect-[16/9] bg-neutral-100 flex items-center justify-center text-neutral-300">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                  </svg>
-                </div>
-              )}
-              <div class="p-6">
-                <time class="text-xs text-neutral-500" datetime={post.publishedAt ?? post.createdAt}>
-                  {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </time>
-                <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-primary transition-colors">
-                  <a href={`/news/${post.slug}`}>{post.title}</a>
-                </h3>
-                <p class="text-sm text-neutral-600 line-clamp-2">{post.summary}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+  <!-- ====================================================================== -->
+  <!-- 3. Why AltusVolt -->
+  <!-- ====================================================================== -->
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Why AltusVolt</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight">Why source through AltusVolt</h2>
       </div>
-    </section>
-  )}
 
-  <!-- CTA / Inquiry Section -->
-  <section class="py-16 lg:py-24 bg-neutral-50" id="inquiry">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-center mb-4 text-neutral-900">{t('contact.title', locale)}</h2>
-      <p class="text-center text-neutral-600 mb-8">
-        Ready to discuss your project? Send us an inquiry and our team will get back to you within 24 hours.
-      </p>
-      <InquiryForm locale={locale} />
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {whyAltusvolt.map((w) => (
+          <div class="bg-white border border-light-steel rounded-sm p-7">
+            <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:36px">
+              {w.icon}
+            </span>
+            <h3 class="text-lg font-bold text-brand-dark mb-3">{w.title}</h3>
+            <p class="text-sm text-neutral-gray leading-relaxed">{w.body}</p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
+
+  <!-- ====================================================================== -->
+  <!-- 4. Why Lingyun -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">The Manufacturing Partner</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight">Why Lingyun manufacturing</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        {whyLingyun.map((w) => (
+          <div class="bg-cold-white border border-light-steel rounded-sm p-7">
+            <span class="material-symbols-outlined text-brand-gold mb-4 block" style="font-size:36px">
+              {w.icon}
+            </span>
+            <h3 class="text-lg font-bold text-brand-dark mb-3">{w.title}</h3>
+            <p class="text-sm text-neutral-gray leading-relaxed">{w.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="flex flex-wrap gap-x-8 gap-y-3">
+        <a href="/brand/lingyun-battery/" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-dark hover:text-brand-gold transition-colors">
+          Read the full Lingyun brand story
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="/factory-and-certifications/" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-dark hover:text-brand-gold transition-colors">
+          Factory & Certifications
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 5. Factory & Certifications Preview -->
+  <!-- ====================================================================== -->
+  <section class="bg-cold-white py-16">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="bg-white border border-light-steel rounded-sm p-10 md:p-12">
+        <div class="grid md:grid-cols-3 gap-8 items-center">
+          <div class="md:col-span-2">
+            <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Verification</p>
+            <h2 class="text-2xl md:text-3xl font-semibold text-brand-dark tracking-tight mb-4">Verified by IATF 16949 · ISO 9001 · CCS</h2>
+            <p class="text-neutral-gray leading-relaxed mb-6">
+              Every Lingyun battery shipped through AltusVolt is produced under an audited automotive-grade quality system. Marine SKUs carry CCS Type Approval. Full certification dossiers are available on request.
+            </p>
+            <a href="/factory-and-certifications/" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-gold hover:text-brand-dark transition-colors">
+              View certifications
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+          <div class="flex flex-wrap gap-3 justify-start md:justify-end">
+            <div class="bg-cold-white border border-light-steel rounded-sm px-4 py-3 text-center min-w-[88px]">
+              <span class="material-symbols-outlined text-brand-gold block" style="font-size:28px">verified</span>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-brand-dark mt-1">IATF 16949</p>
+            </div>
+            <div class="bg-cold-white border border-light-steel rounded-sm px-4 py-3 text-center min-w-[88px]">
+              <span class="material-symbols-outlined text-brand-gold block" style="font-size:28px">workspace_premium</span>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-brand-dark mt-1">ISO 9001</p>
+            </div>
+            <div class="bg-cold-white border border-light-steel rounded-sm px-4 py-3 text-center min-w-[88px]">
+              <span class="material-symbols-outlined text-brand-gold block" style="font-size:28px">anchor</span>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-brand-dark mt-1">CCS Marine</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 6. Australia Market Entry -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="grid md:grid-cols-5 gap-10 items-center">
+        <div class="md:col-span-3">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Market Spotlight</p>
+          <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-5">Now expanding in Australia</h2>
+          <p class="text-neutral-gray leading-relaxed mb-7 max-w-2xl">
+            AltusVolt is actively recruiting Australian distributors for AGM, EFB, and heavy-duty lines. BCI- and DIN-compatible inventory, Sydney/Melbourne/Brisbane shipping, 25–30 day lead times.
+          </p>
+          <a href="/markets/australia/" class="inline-flex items-center gap-2 bg-brand-dark text-white px-6 py-3 font-bold text-sm uppercase tracking-widest rounded hover:bg-steel transition">
+            Australia program details
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+        <div class="md:col-span-2">
+          <div class="bg-cold-white border border-light-steel rounded-sm p-6">
+            <ul class="space-y-3 text-sm text-brand-dark">
+              <li class="flex gap-2"><span class="material-symbols-outlined text-brand-gold" style="font-size:20px">check_circle</span> BCI + DIN dual stocking</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-brand-gold" style="font-size:20px">check_circle</span> Heat-tolerant calcium grids</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-brand-gold" style="font-size:20px">check_circle</span> Marine CCS-certified options</li>
+              <li class="flex gap-2"><span class="material-symbols-outlined text-brand-gold" style="font-size:20px">check_circle</span> 25–30 day shipping to AU</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 7. Technical Support Entry -->
+  <!-- ====================================================================== -->
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="max-w-3xl mb-14">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Technical Support</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight">Technical resources for distributors</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {techResources.map((r) => (
+          <a href={r.href} class="group bg-white border border-light-steel rounded-sm p-8 hover:border-brand-gold hover:shadow-md transition-all">
+            <span class="material-symbols-outlined text-steel mb-5 block group-hover:text-brand-gold transition-colors" style="font-size:36px">
+              {r.icon}
+            </span>
+            <h3 class="text-lg font-bold text-brand-dark mb-3">{r.title}</h3>
+            <p class="text-sm text-neutral-gray leading-relaxed mb-5">{r.desc}</p>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:gap-2.5 transition-all">
+              Read
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 8. FAQ -->
+  <!-- ====================================================================== -->
+  <section class="bg-white py-20">
+    <div class="max-w-4xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Frequently Asked</p>
+        <h2 class="text-3xl md:text-5xl font-semibold text-brand-dark tracking-tight">Common questions from buyers</h2>
+      </div>
+
+      <div class="space-y-3">
+        {faqs.map((faq, i) => (
+          <details class="group bg-cold-white border border-light-steel rounded-sm overflow-hidden" open={i === 0}>
+            <summary class="cursor-pointer list-none p-6 flex justify-between items-start gap-6 hover:bg-white transition-colors">
+              <h3 class="text-base md:text-lg font-bold text-brand-dark">{faq.q}</h3>
+              <svg class="w-5 h-5 text-steel shrink-0 mt-0.5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-6 pb-6 text-neutral-gray leading-relaxed">
+              {faq.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- 9. Final CTA -->
+  <!-- ====================================================================== -->
+  <section class="bg-brand-dark py-20 relative overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10">
+      <img src="/images/hero/hero-factory.webp" alt="" class="w-full h-full object-cover" loading="lazy" width="2000" height="1000" />
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-white text-4xl md:text-6xl font-bold mb-6 tracking-tight">Ready to source Lingyun batteries?</h2>
+      <p class="text-[#bbc7df] text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+        Reply within 24 hours by application engineers, not generic sales reps.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/distributor-program/" class="bg-brand-gold text-brand-dark px-8 py-4 font-bold text-sm uppercase tracking-widest rounded hover:brightness-110 transition">
+          Request a Distributor Quote
+        </a>
+        <a href="/oem-private-label/" class="bg-transparent border border-white/30 text-white px-8 py-4 font-medium text-sm uppercase tracking-widest rounded hover:bg-white/5 transition">
+          Submit OEM Project
+        </a>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
