@@ -1,98 +1,199 @@
 ---
 import { siteConfig } from '../config';
-import { t, type Locale } from '../i18n';
 
-interface Props {
-  locale: string;
-}
-
-const { locale } = Astro.props as { locale: Locale };
+const megaMenu = [
+  {
+    label: 'Products',
+    href: '/products',
+    groups: [
+      {
+        title: 'Battery Lines',
+        items: [
+          { label: 'AGM Batteries', href: '/products/agm-batteries/' },
+          { label: 'EFB Batteries', href: '/products/efb-batteries/' },
+          { label: 'Heavy-Duty Batteries', href: '/products/heavy-duty-batteries/' },
+          { label: 'Marine Batteries', href: '/products/marine-batteries/' },
+          { label: 'View All Products', href: '/products/' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Solutions',
+    href: '/distributor-program',
+    groups: [
+      {
+        title: 'Partner With Us',
+        items: [
+          { label: 'Distributor Program', href: '/distributor-program/' },
+          { label: 'OEM / Private Label', href: '/oem-private-label/' },
+          { label: 'Australia Market', href: '/markets/australia/' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Support',
+    href: '/support/battery-standards',
+    groups: [
+      {
+        title: 'Buyer Guides',
+        items: [
+          { label: 'AGM vs EFB', href: '/support/agm-vs-efb/' },
+          { label: 'Battery Standards (BCI · DIN · JIS)', href: '/support/battery-standards/' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'About',
+    href: '/about-altusvolt',
+    groups: [
+      {
+        title: 'Company',
+        items: [
+          { label: 'About AltusVolt', href: '/about-altusvolt/' },
+          { label: 'The Lingyun Brand', href: '/brand/lingyun-battery/' },
+          { label: 'Factory & Certifications', href: '/factory-and-certifications/' },
+        ],
+      },
+    ],
+  },
+];
 ---
 
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-neutral-200">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 font-bold text-xl text-primary">
-        <span>{siteConfig.name}</span>
-      </a>
+<nav class="bg-brand-dark sticky top-0 w-full z-50" aria-label="Main navigation">
+  <div class="flex justify-between items-center px-6 md:px-10 py-4 w-full max-w-screen-2xl mx-auto">
+    <!-- Logo -->
+    <a href="/" class="shrink-0 inline-flex items-center" aria-label={siteConfig.name}>
+      <img src="/images/brand/logo-dark.webp" alt={siteConfig.name} class="h-5 md:h-6 w-auto" width="240" height="60" />
+    </a>
 
-      <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
-        {siteConfig.nav.map((item) => (
+    <!-- Desktop Nav -->
+    <div class="hidden lg:flex items-center gap-1">
+      {megaMenu.map((item) => (
+        <div class="relative group" data-dropdown>
           <a
             href={item.href}
-            class="text-sm font-medium text-neutral-700 hover:text-primary transition-colors"
+            class="flex items-center gap-1 px-4 py-2 font-sans font-medium uppercase tracking-[0.05em] text-[0.75rem] text-slate-300 hover:text-white transition-colors duration-200"
           >
-            {t(`nav.${item.label.toLowerCase()}`, locale)}
+            {item.label}
+            <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </a>
-        ))}
-      </nav>
 
-      <!-- CTA + Language -->
-      <div class="flex items-center gap-4">
-        <!-- Language Switcher -->
-        <select
-          id="lang-switcher"
-          class="text-sm border border-neutral-200 rounded px-2 py-1 bg-white"
-          aria-label="Language"
-        >
-          <option value="en" selected={locale === 'en'}>EN</option>
-          <option value="zh" selected={locale === 'zh'}>中文</option>
-          <option value="es" selected={locale === 'es'}>ES</option>
-        </select>
+          <!-- Dropdown Panel -->
+          <div class="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50" data-dropdown-panel>
+            <div class="bg-white border border-[#e0e3e6] shadow-xl rounded-sm min-w-[280px] py-4 px-2">
+              {item.groups.map((group) => (
+                <div class="mb-3 last:mb-0">
+                  <div class="px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[#436086]">
+                    {group.title}
+                  </div>
+                  {group.items.map((sub) => (
+                    <a
+                      href={sub.href}
+                      class="block px-4 py-2 text-sm font-medium text-[#191c1e] hover:bg-[#f2f4f7] hover:text-[#436086] transition-colors rounded-sm"
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
+                </div>
+              ))}
+              <div class="border-t border-[#e0e3e6] mt-2 pt-2 px-4">
+                <a href={item.href} class="text-[10px] font-bold uppercase tracking-widest text-[#c7a850] hover:text-[#b59848] transition-colors flex items-center gap-1">
+                  View All {item.label}
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
 
-        <!-- Quote CTA -->
-        <a
-          href="/contact"
-          class="hidden sm:inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark transition-colors"
-        >
-          {t('hero.cta', locale)}
-        </a>
-
-        <!-- Mobile menu button -->
-        <button
-          id="mobile-menu-btn"
-          type="button"
-          class="md:hidden p-2 text-neutral-700"
-          aria-label="Toggle menu"
-          aria-expanded="false"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
+      <a href="/contact" class="px-4 py-2 font-sans font-medium uppercase tracking-[0.05em] text-[0.75rem] text-slate-300 hover:text-white transition-colors duration-200">
+        Contact
+      </a>
     </div>
 
-    <!-- Mobile Nav -->
-    <nav id="mobile-menu" class="hidden md:hidden pb-4" aria-label="Mobile navigation">
-      {siteConfig.nav.map((item) => (
-        <a
-          href={item.href}
-          class="block py-2 text-sm font-medium text-neutral-700 hover:text-primary"
-        >
-          {t(`nav.${item.label.toLowerCase()}`, locale)}
-        </a>
-      ))}
-    </nav>
+    <!-- CTA + Mobile Toggle -->
+    <div class="flex items-center gap-4">
+      <a href="/distributor-program/" class="hidden sm:inline-block bg-brand-gold text-[#4f3d00] px-6 py-2.5 font-medium text-sm tracking-wide rounded hover:bg-[#ffe08d] transition-colors">
+        Get a Quote
+      </a>
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="lg:hidden text-white"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
   </div>
-</header>
+
+  <!-- Mobile Nav -->
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 max-h-[80vh] overflow-y-auto">
+    <div class="px-6 py-4 space-y-1">
+      {megaMenu.map((item) => (
+        <div class="border-b border-white/5 last:border-0" data-mobile-accordion>
+          <button
+            class="w-full flex justify-between items-center py-3 text-sm font-medium text-slate-300 hover:text-white transition-colors cursor-pointer"
+            data-mobile-toggle
+          >
+            <span>{item.label}</span>
+            <svg class="w-4 h-4 transition-transform" data-mobile-chevron fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="hidden pb-3 pl-4 space-y-1" data-mobile-content>
+            {item.groups.map((group) => (
+              <div>
+                <div class="text-[10px] font-bold uppercase tracking-widest text-[#c7a850] py-2">{group.title}</div>
+                {group.items.map((sub) => (
+                  <a href={sub.href} class="block py-2 text-sm text-slate-400 hover:text-white transition-colors">{sub.label}</a>
+                ))}
+              </div>
+            ))}
+            <a href={item.href} class="block py-2 text-sm text-[#c7a850] font-medium">View All →</a>
+          </div>
+        </div>
+      ))}
+
+      <a href="/contact" class="block py-3 text-sm font-medium text-slate-300 hover:text-white">Contact</a>
+      <a href="/distributor-program" class="block sm:hidden mt-2 bg-brand-gold text-[#4f3d00] px-6 py-3 font-medium text-sm tracking-wide rounded text-center hover:bg-[#ffe08d] transition-colors">
+        Get a Quote
+      </a>
+    </div>
+  </div>
+</nav>
 
 <script>
+  // Mobile menu toggle
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
   btn?.addEventListener('click', () => {
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', String(!expanded));
     menu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
   });
 
-  const switcher = document.getElementById('lang-switcher') as HTMLSelectElement | null;
-  switcher?.addEventListener('change', () => {
-    const lang = switcher.value;
-    const path = window.location.pathname;
-    const cleanPath = path.replace(/^\/(zh|es)/, '');
-    window.location.href = lang === 'en' ? cleanPath || '/' : `/${lang}${cleanPath || '/'}`;
+  // Mobile accordion
+  document.querySelectorAll('[data-mobile-toggle]').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const accordion = toggle.closest('[data-mobile-accordion]');
+      const content = accordion?.querySelector('[data-mobile-content]');
+      const chevron = accordion?.querySelector('[data-mobile-chevron]');
+      content?.classList.toggle('hidden');
+      chevron?.classList.toggle('rotate-180');
+    });
   });
 </script>

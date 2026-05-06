@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReplyBadge from '../components/ReplyBadge.astro';
+
+export const prerender = true;
+
+const customizables = [
+  { icon: 'palette', title: 'Brand label & artwork', body: 'Full-color labels, embossed cases, hot-stamped logos, multi-language artwork. Editable label files supplied for approval.' },
+  { icon: 'straighten', title: 'Custom case dimensions', body: 'Tooling support for new case formats. Tooling lead time 60–90 days; existing case library covers BCI, DIN and JIS standards.' },
+  { icon: 'tune', title: 'Custom electrical specs', body: 'Capacity (Ah), CCA, RC and cycle-life targets engineered to your application — passenger SLI, deep cycle or dual-purpose.' },
+  { icon: 'cable', title: 'Terminal configuration', body: 'Top-post, side-post, dual-terminal, threaded post, marine knurled — terminal layout matched to your installation.' },
+  { icon: 'thermostat', title: 'Climate optimization', body: 'Tropical-spec separators, anti-corrosion grids, low-temperature CCA boost — engineered for the climate you ship into.' },
+  { icon: 'inventory_2', title: 'Packaging', body: 'Custom carton design, blister packaging, master pack count, multi-language compliance labels and barcoding.' },
+];
+
+const tiers = [
+  { tag: 'Standard', title: 'Catalog SKU + custom label', moq: '1×40HQ', lead: '25–30 days', body: 'Existing Lingyun catalog product, your label and packaging artwork. Lowest barrier to enter the market with your brand.' },
+  { tag: 'Custom Spec', title: 'Custom electrical specs (existing case)', moq: '3×40HQ / year', lead: '30–45 days', body: 'Tuned electrical performance — Ah, CCA, RC, cycle life — using existing tooling. Engineering review, sample, then production.' },
+  { tag: 'Custom Tooling', title: 'Custom case design (new tooling)', moq: '5×40HQ committed', lead: '60–90d tooling + 30d production', body: 'New case mold for fully exclusive form factor. Tooling investment shared per program; design IP terms set in OEM agreement.' },
+];
+
+const steps = [
+  { n: '01', title: 'Submit project brief', body: 'Application, target Ah/CCA, dimensions if known, volume forecast, target launch date.' },
+  { n: '02', title: 'Engineering review', body: 'AltusVolt + Lingyun engineering review (1 week). Feasibility, recommended approach, tooling cost if required.' },
+  { n: '03', title: 'Sample tooling + electrical sample', body: 'Tooling fabrication (if applicable) + electrical sample. 4–8 weeks depending on customization scope.' },
+  { n: '04', title: 'Approval & PO', body: 'Sample approval, mass-production PO issued, production scheduled, deposit invoiced.' },
+  { n: '05', title: 'Production & shipment', body: 'Mass production runs to specification, FOB / CIF / DAP shipment with full export documentation pack.' },
+];
+
+const customizationOptions = [
+  'Custom case dimensions',
+  'Private label / branding',
+  'Custom terminal layout',
+  'Tropical / extreme climate spec',
+  'Cycle life enhancement',
+  'Custom packaging',
+];
+
+const volumeBands = [
+  '< 1×40HQ / year',
+  '1–3×40HQ / year',
+  '3–10×40HQ / year',
+  '10–30×40HQ / year',
+  '30+ ×40HQ / year',
+];
+
+const faqs = [
+  { q: 'What is the minimum order quantity for OEM?', a: 'Catalog SKU with custom label starts at 1×40HQ. Custom electrical specs on existing tooling: 3×40HQ minimum annual commitment. Fully custom tooling: 5×40HQ committed across a defined program horizon.' },
+  { q: 'How is tooling cost handled?', a: 'For custom case designs, tooling cost is quoted per project after engineering review. Options include full upfront customer-funded tooling (with IP rights), shared tooling (amortized over volume) or Lingyun-funded tooling for high-volume programs.' },
+  { q: 'How is design IP protected?', a: 'NDA is signed before any spec exchange. Custom-tooled designs are exclusive to the customer for the contract horizon; case designs do not reappear under other brands while the agreement is active. Specifics are codified in the OEM agreement.' },
+  { q: 'What is the sample lead time?', a: 'Catalog SKU sample with custom label: 10–15 days. Custom electrical sample on existing case: 25–30 days from spec sign-off. Custom-tooled sample: 60–90 days from tooling kickoff.' },
+  { q: 'Can I have exclusive design rights for my market?', a: 'Yes — exclusivity for a custom-tooled design within a defined territory is standard in the OEM agreement. Exclusivity scope (territory, channel, time horizon) is negotiated per program.' },
+  { q: 'What are the payment milestones?', a: 'Tooling: 50% on PO, 50% on sample approval. Mass production: 30% T/T deposit on PO, 70% against B/L copy. L/C at sight is supported for established partners.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'OEM & Private Label Battery Manufacturing',
+  provider: {
+    '@type': 'Organization',
+    name: 'AltusVolt',
+    url: 'https://altusvolt.com',
+  },
+  areaServed: 'Global',
+  description:
+    'OEM and private-label battery projects managed through AltusVolt with Lingyun manufacturing — custom case dimensions, custom labels, custom electrical specs and tooling support for new case designs.',
+};
+---
+
+<BaseLayout
+  title="OEM & Private Label Batteries — Managed by AltusVolt, Made by Lingyun"
+  description="OEM and private-label battery projects with custom case dimensions, custom labels, custom electrical specs. Project management by AltusVolt; manufacturing by Lingyun (IATF 16949)."
+  jsonLd={jsonLd}
+>
+  <main class="bg-white text-brand-dark">
+    <!-- Breadcrumb -->
+    <nav class="max-w-screen-xl mx-auto px-6 md:px-10 pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-gray" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2">
+        <li><a href="/" class="hover:text-brand-dark transition-colors">Home</a></li>
+        <li><span class="mx-2 text-light-steel">/</span></li>
+        <li class="text-brand-dark">OEM & Private Label</li>
+      </ol>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative bg-brand-dark text-cold-white overflow-hidden">
+      <img src="/images/hero/hero-equipment.webp" alt="OEM battery production" class="absolute inset-0 w-full h-full object-cover opacity-85" loading="eager" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/60 to-brand-dark/30"></div>
+      <div class="relative max-w-screen-xl mx-auto px-6 md:px-10 py-24 md:py-32">
+        <p class="text-xs font-bold uppercase tracking-[0.3em] text-brand-gold mb-4">OEM & Private Label</p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight max-w-4xl">Your brand on Lingyun-quality batteries</h1>
+        <p class="mt-6 text-lg md:text-xl text-cold-white/85 max-w-3xl leading-relaxed">
+          AltusVolt manages OEM and private-label projects with Lingyun manufacturing — custom case dimensions, custom labels, custom electrical specs. Tooling support available for new case designs.
+        </p>
+        <div class="mt-6"><ReplyBadge variant="dark" subtext="from engineering desk" /></div>
+      </div>
+    </section>
+
+    <!-- What's customizable -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">What's customizable</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Six axes of customization, available through Lingyun manufacturing capabilities.</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {customizables.map((c) => (
+            <div class="bg-cold-white border border-light-steel p-6 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">{c.icon}</span>
+              <h3 class="mt-3 text-lg font-bold">{c.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- MOQ & lead time tiers -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">MOQ & lead time tiers</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Three tiers from quick-launch to fully-exclusive design.</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {tiers.map((t) => (
+            <div class="bg-white border border-light-steel p-6 rounded-sm flex flex-col">
+              <span class="text-xs font-bold uppercase tracking-widest text-brand-gold">{t.tag}</span>
+              <h3 class="mt-2 text-lg font-bold">{t.title}</h3>
+              <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p class="text-xs uppercase tracking-wider text-steel">MOQ</p>
+                  <p class="font-bold text-brand-dark">{t.moq}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-wider text-steel">Lead time</p>
+                  <p class="font-bold text-brand-dark">{t.lead}</p>
+                </div>
+              </div>
+              <p class="mt-4 text-sm text-neutral-gray leading-relaxed">{t.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Process flow -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">How the OEM project works</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Five stages, jointly managed by AltusVolt and Lingyun engineering.</h2>
+        </div>
+        <div class="grid md:grid-cols-5 gap-6">
+          {steps.map((s) => (
+            <div class="bg-cold-white border border-light-steel p-5 rounded-sm">
+              <p class="text-2xl font-bold text-brand-gold">{s.n}</p>
+              <h3 class="mt-2 text-base font-bold">{s.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Project inquiry form -->
+    <section class="bg-cold-white py-20" id="inquiry">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 grid lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-8">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">OEM project inquiry</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-6">Submit your OEM project brief</h2>
+          <form id="oem-pl-form" class="bg-white border border-light-steel p-6 lg:p-8 rounded-sm space-y-6" novalidate>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3">Company & Contact</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="op-name" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Name *</label>
+                <input id="op-name" name="name" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="op-company" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Company *</label>
+                <input id="op-company" name="company" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="op-email" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Business Email *</label>
+                <input id="op-email" name="email" type="email" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="op-country" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Country *</label>
+                <input id="op-country" name="country" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+            </div>
+
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3 pt-4">Project Brief</h3>
+            <div>
+              <label for="op-app" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Product Application *</label>
+              <input id="op-app" name="application" type="text" required placeholder="e.g. mid-size SUV aftermarket, marine starter, off-grid solar" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+            </div>
+            <div>
+              <label for="op-specs" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Required Specs *</label>
+              <textarea id="op-specs" name="requiredSpecs" rows="3" required placeholder="Capacity (Ah), CCA, RC, dimensions L×W×H if known, terminal layout, voltage…" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full resize-none"></textarea>
+            </div>
+            <div>
+              <label for="op-volume" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Annual Volume *</label>
+              <select id="op-volume" name="annualVolume" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full">
+                <option value="">Select volume band…</option>
+                {volumeBands.map((v) => <option value={v}>{v}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-steel mb-3">Customization Needed *</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {customizationOptions.map((c) => (
+                  <label class="flex items-center gap-3 p-3 bg-cold-white border border-light-steel rounded-sm cursor-pointer hover:border-steel transition-colors">
+                    <input type="checkbox" name="customization" value={c} class="w-4 h-4 accent-brand-gold" />
+                    <span class="text-sm font-medium text-brand-dark">{c}</span>
+                  </label>
+                ))}
+              </div>
+              <p id="op-cust-error" class="hidden text-xs text-red-600 mt-2">Please select at least one customization option.</p>
+            </div>
+
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3 pt-4">Optional Detail</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Tooling Investment Acceptable?</label>
+                <div class="flex items-center gap-6 pt-2">
+                  <label class="flex items-center gap-2 text-sm"><input type="radio" name="toolingOk" value="Yes" class="accent-brand-gold" /> Yes</label>
+                  <label class="flex items-center gap-2 text-sm"><input type="radio" name="toolingOk" value="No" class="accent-brand-gold" /> No</label>
+                  <label class="flex items-center gap-2 text-sm"><input type="radio" name="toolingOk" value="TBD" class="accent-brand-gold" /> TBD</label>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Need Sample?</label>
+                <div class="flex items-center gap-6 pt-2">
+                  <label class="flex items-center gap-2 text-sm"><input type="radio" name="needSample" value="Yes" class="accent-brand-gold" /> Yes</label>
+                  <label class="flex items-center gap-2 text-sm"><input type="radio" name="needSample" value="No" class="accent-brand-gold" /> No</label>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="op-price" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Target Price (USD/unit)</label>
+              <input id="op-price" name="targetPrice" type="text" placeholder="Optional" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+            </div>
+
+            <div id="op-status" class="hidden text-sm font-medium rounded-sm p-3"></div>
+
+            <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <ReplyBadge subtext="from engineering desk" />
+              <button id="op-submit" type="submit" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">
+                Submit OEM Project
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="lg:col-span-4 flex flex-col gap-6">
+          <div class="bg-brand-dark text-cold-white p-6 rounded-sm">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-gold mb-4">OEM project lead times</h3>
+            <ul class="space-y-3 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Engineering review: <strong>1 week</strong></li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Custom-spec sample: <strong>25–30 days</strong></li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Tooling for new case: <strong>60–90 days</strong></li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Mass production after PO: <strong>30–45 days</strong></li>
+            </ul>
+          </div>
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark mb-3">Just need catalog SKUs?</h3>
+            <p class="text-sm text-neutral-gray mb-4">If you don't need custom tooling and want catalog SKUs at distributor pricing, the distributor program is the faster route.</p>
+            <a href="/distributor-program/" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-steel hover:text-brand-dark transition-colors">Switch to Distributor Program →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Frequently asked</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">OEM & private label FAQ</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          {faqs.map((f) => (
+            <details class="bg-cold-white border border-light-steel p-5 rounded-sm group">
+              <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+                <span>{f.q}</span>
+                <span class="material-symbols-outlined text-steel group-open:rotate-45 transition-transform" style="font-size:20px">add</span>
+              </summary>
+              <p class="mt-3 text-sm text-neutral-gray leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-brand-dark text-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Have a complex OEM brief? Let's talk.</h2>
+        <p class="mt-4 text-cold-white/80 max-w-2xl mx-auto leading-relaxed">For programs involving multiple SKUs, multi-market launches, or new tooling, a kickoff call with our export team is the fastest path to a clean spec.</p>
+        <div class="mt-8">
+          <a href="/contact/" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">Talk to Our Export Team</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('oem-pl-form') as HTMLFormElement | null;
+    const status = document.getElementById('op-status') as HTMLDivElement | null;
+    const submit = document.getElementById('op-submit') as HTMLButtonElement | null;
+    const custError = document.getElementById('op-cust-error');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const customizations = fd.getAll('customization').join(', ');
+      custError?.classList.toggle('hidden', customizations.length > 0);
+      if (!customizations) return;
+
+      if (submit) submit.disabled = true;
+      if (status) status.className = 'hidden';
+
+      const payload = {
+        inquiryType: 'oem',
+        name: fd.get('name'),
+        company: fd.get('company'),
+        email: fd.get('email'),
+        country: fd.get('country'),
+        application: fd.get('application'),
+        requiredSpecs: fd.get('requiredSpecs'),
+        annualVolume: fd.get('annualVolume'),
+        customization: customizations,
+        toolingOk: fd.get('toolingOk'),
+        needSample: fd.get('needSample'),
+        targetPrice: fd.get('targetPrice'),
+        productInterest: customizations,
+        message: [
+          `Inquiry Type: OEM & Private Label`,
+          `Application: ${fd.get('application') || '-'}`,
+          `Required Specs: ${fd.get('requiredSpecs') || '-'}`,
+          `Annual Volume: ${fd.get('annualVolume') || '-'}`,
+          `Customization: ${customizations}`,
+          `Tooling Acceptable: ${fd.get('toolingOk') || '-'}`,
+          `Need Sample: ${fd.get('needSample') || '-'}`,
+          `Target Price (USD/unit): ${fd.get('targetPrice') || '-'}`,
+        ].join('\n'),
+      };
+
+      try {
+        const res = await fetch(`/api/inquiry?t=${Date.now()}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          if (status) {
+            status.textContent = 'Project brief received — engineering will reply within 24h.';
+            status.className = 'text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-sm p-3';
+          }
+          form.reset();
+        } else {
+          const err = await res.json().catch(() => ({}));
+          if (status) {
+            status.textContent = err.error || 'Submission failed. Please retry or email jason@altusvolt.com.';
+            status.className = 'text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-sm p-3';
+          }
+        }
+      } catch {
+        if (status) {
+          status.textContent = 'Network error — please retry.';
+          status.className = 'text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-sm p-3';
+        }
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,370 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReplyBadge from '../components/ReplyBadge.astro';
+
+export const prerender = true;
+
+const audience = [
+  {
+    icon: 'storefront',
+    title: 'Aftermarket retail chains',
+    body: 'Workshop networks, parts retailers, fast-fit chains and quick-lube operators who sell batteries off the shelf or fitted at point-of-service.',
+  },
+  {
+    icon: 'warehouse',
+    title: 'Wholesale importers',
+    body: 'Bonded warehouses, regional distributors and large-volume B2B operators who feed sub-distributors and independent workshops.',
+  },
+  {
+    icon: 'precision_manufacturing',
+    title: 'Vertical specialists',
+    body: 'Marine dealers, solar installers, fleet suppliers and telecom-backup integrators who need batteries matched to a specific application.',
+  },
+];
+
+const benefits = [
+  { icon: 'shield', title: 'Territory exclusivity', body: 'Negotiable per market, with annual volume commitments unlocking deeper exclusivity.' },
+  { icon: 'paid', title: 'Wholesale pricing tiers', body: 'Container-based price ladder, with annual rebates that accelerate as your volume grows.' },
+  { icon: 'palette', title: 'Marketing kit', body: 'Catalogs, datasheets, hi-res product photography, comparison tables and editable artwork.' },
+  { icon: 'support_agent', title: 'Engineering support', body: 'First-line technical support direct from the AltusVolt engineering desk — fitment, claims, application advice.' },
+  { icon: 'event_repeat', title: 'Quarterly market reviews', body: 'Standing call to align forecast, share roadmap and review competitive landscape in your market.' },
+  { icon: 'campaign', title: 'Co-funded brand activation', body: 'Selective co-marketing budget for trade shows, retail signage and digital launch campaigns in priority markets.' },
+];
+
+const steps = [
+  { n: '01', title: 'Submit application', body: 'Complete the form below — takes 5 minutes if your annual volume estimate is roughly known.' },
+  { n: '02', title: 'AltusVolt review', body: '2–3 business days. We evaluate territory fit, current Lingyun coverage and channel strategy alignment.' },
+  { n: '03', title: 'NDA + sample container', body: 'NDA signed, first-order quote issued, sample 1×40HQ container shipped to confirm fitment, packaging and quality on the ground.' },
+  { n: '04', title: 'Distributor agreement', body: 'Full distributor agreement signed. Territory assigned, annual plan agreed, marketing kit delivered.' },
+];
+
+const faqs = [
+  { q: 'How does territory exclusivity work?', a: 'Exclusivity is awarded per market based on annual volume commitment and channel coverage plan. Smaller markets can reach exclusivity faster; larger markets typically start as semi-exclusive with a path to full exclusivity once volume targets are hit.' },
+  { q: 'What is the MOQ to start?', a: 'For appointed distributors, MOQ is typically 1×40HQ container (approx. 600–800 units depending on size mix). Sample mixed containers are available during the qualification stage.' },
+  { q: 'Is there a minimum annual commitment?', a: 'Yes — minimum annual commitments are agreed in the distributor contract and are sized to the market. Commitments unlock pricing tiers, marketing co-funding and exclusivity.' },
+  { q: 'What payment terms are available?', a: 'Standard terms are 30% T/T deposit and 70% against B/L copy, FOB Shanghai or Tianjin. L/C at sight is supported for established partners. CIF and DAP terms are also available.' },
+  { q: 'What marketing support do distributors get?', a: 'Full marketing kit (catalog, datasheets, photos, label artwork in editable format), application engineering support, and selective co-funding for trade shows and digital launches in priority markets.' },
+  { q: 'What is the typical lead time?', a: 'Catalog SKUs ship in 25–30 days from PO confirmation. First container post-NDA typically ships within 35 days. Custom-label production adds 5–10 days for label artwork approval and printing.' },
+];
+
+const productCategories = [
+  { value: 'AGM Start-Stop', label: 'AGM Start-Stop' },
+  { value: 'EFB', label: 'EFB Start-Stop' },
+  { value: 'Heavy-Duty Truck', label: 'Heavy-Duty Truck' },
+  { value: 'Marine', label: 'Marine / Deep Cycle' },
+  { value: 'Parking AC', label: 'Parking AC' },
+  { value: 'Solar', label: 'Solar Storage' },
+];
+
+const channels = [
+  'Aftermarket retail chain',
+  'Wholesale importer',
+  'Marine dealer',
+  'Solar installer',
+  'Fleet / commercial supplier',
+  'Telecom / industrial integrator',
+  'Online B2C',
+  'Other',
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Battery Distributor Program',
+  provider: {
+    '@type': 'Organization',
+    name: 'AltusVolt',
+    url: 'https://altusvolt.com',
+  },
+  areaServed: 'Global',
+  description:
+    'Authorized distributor program for Lingyun Battery, managed by AltusVolt — territory exclusivity, wholesale pricing tiers, marketing kit and engineering support for established battery importers.',
+};
+---
+
+<BaseLayout
+  title="Distributor Program — Become an Authorized Lingyun Distributor"
+  description="Apply to become an authorized Lingyun Battery distributor in your territory. Wholesale pricing, territory exclusivity, marketing kit and engineering support — coordinated through AltusVolt, the export partner for Lingyun."
+  jsonLd={jsonLd}
+>
+  <main class="bg-white text-brand-dark">
+    <!-- Breadcrumb -->
+    <nav class="max-w-screen-xl mx-auto px-6 md:px-10 pt-8 text-[10px] font-bold uppercase tracking-widest text-neutral-gray" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2">
+        <li><a href="/" class="hover:text-brand-dark transition-colors">Home</a></li>
+        <li><span class="mx-2 text-light-steel">/</span></li>
+        <li class="text-brand-dark">Distributor Program</li>
+      </ol>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative bg-brand-dark text-cold-white overflow-hidden">
+      <img src="/images/hero/hero-mf.webp" alt="Battery distribution" class="absolute inset-0 w-full h-full object-cover opacity-85" loading="eager" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/60 to-brand-dark/30"></div>
+      <div class="relative max-w-screen-xl mx-auto px-6 md:px-10 py-24 md:py-32">
+        <p class="text-xs font-bold uppercase tracking-[0.3em] text-brand-gold mb-4">Distributor Program</p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight max-w-4xl">Become an authorized Lingyun distributor in your territory</h1>
+        <p class="mt-6 text-lg md:text-xl text-cold-white/85 max-w-3xl leading-relaxed">
+          We're partnering with established battery importers and aftermarket distributors in markets where Lingyun is not yet directly represented. AltusVolt provides the contract, support and inventory program — Lingyun manufactures.
+        </p>
+        <div class="mt-6"><ReplyBadge variant="dark" subtext="by export team" /></div>
+      </div>
+    </section>
+
+    <!-- Who we look for -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Who we're looking for</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Three distributor profiles fit our program best.</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {audience.map((a) => (
+            <div class="bg-cold-white border border-light-steel p-8 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">{a.icon}</span>
+              <h3 class="mt-4 text-xl font-bold">{a.title}</h3>
+              <p class="mt-3 text-neutral-gray leading-relaxed">{a.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="bg-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">What you get</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">A distributor program structured around long-term partnership.</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {benefits.map((b) => (
+            <div class="bg-white border border-light-steel p-6 rounded-sm">
+              <span class="material-symbols-outlined text-brand-gold" style="font-size:36px">{b.icon}</span>
+              <h3 class="mt-3 text-lg font-bold">{b.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{b.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- How partnership works -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-12">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">How partnership works</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Four steps from application to first container.</h2>
+        </div>
+        <div class="grid md:grid-cols-4 gap-6">
+          {steps.map((s) => (
+            <div class="bg-cold-white border border-light-steel p-6 rounded-sm">
+              <p class="text-3xl font-bold text-brand-gold">{s.n}</p>
+              <h3 class="mt-2 text-lg font-bold">{s.title}</h3>
+              <p class="mt-2 text-sm text-neutral-gray leading-relaxed">{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Application form -->
+    <section class="bg-cold-white py-20" id="apply">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 grid lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-8">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Distributor application</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-6">Apply for distributorship</h2>
+          <form id="dist-app-form" class="bg-white border border-light-steel p-6 lg:p-8 rounded-sm space-y-6" novalidate>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3">Company & Contact</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="da-name" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Name *</label>
+                <input id="da-name" name="name" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="da-company" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Company *</label>
+                <input id="da-company" name="company" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="da-email" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Business Email *</label>
+                <input id="da-email" name="email" type="email" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="da-country" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Country *</label>
+                <input id="da-country" name="country" type="text" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div class="md:col-span-2">
+                <label for="da-website" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Website *</label>
+                <input id="da-website" name="website" type="text" required placeholder="https://" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+            </div>
+
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3 pt-4">Volume & Channel</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="da-volume" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Annual Volume Estimate *</label>
+                <input id="da-volume" name="annualVolume" type="text" required placeholder="e.g. 20,000 units / year" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+              </div>
+              <div>
+                <label for="da-channel" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Distribution Channel *</label>
+                <select id="da-channel" name="channel" required class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full">
+                  <option value="">Select channel…</option>
+                  {channels.map((c) => <option value={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-steel mb-3">Product Categories Interested *</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {productCategories.map((p) => (
+                  <label class="flex items-center gap-3 p-3 bg-cold-white border border-light-steel rounded-sm cursor-pointer hover:border-steel transition-colors">
+                    <input type="checkbox" name="productCategories" value={p.value} class="w-4 h-4 accent-brand-gold" />
+                    <span class="text-sm font-medium text-brand-dark">{p.label}</span>
+                  </label>
+                ))}
+              </div>
+              <p id="da-cat-error" class="hidden text-xs text-red-600 mt-2">Please select at least one product category.</p>
+            </div>
+
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark border-b border-light-steel pb-3 pt-4">Optional Detail</h3>
+            <div>
+              <label for="da-brands" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Existing Brands Carried</label>
+              <input id="da-brands" name="existingBrands" type="text" placeholder="e.g. Varta, ACDelco, Yuasa" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full" />
+            </div>
+            <div>
+              <label for="da-notes" class="block text-xs font-bold uppercase tracking-wider text-steel mb-2">Notes</label>
+              <textarea id="da-notes" name="notes" rows="4" class="border border-light-steel bg-white px-4 py-3 focus:border-steel focus:outline-none w-full resize-none" placeholder="Tell us about your market, current battery program, target launch timeline…"></textarea>
+            </div>
+
+            <div id="da-status" class="hidden text-sm font-medium rounded-sm p-3"></div>
+
+            <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <ReplyBadge subtext="from the export team" />
+              <button id="da-submit" type="submit" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">
+                Apply for Distributorship
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <aside class="lg:col-span-4 flex flex-col gap-6">
+          <div class="bg-brand-dark text-cold-white p-6 rounded-sm">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-gold mb-4">What happens next</h3>
+            <ul class="space-y-3 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Reply within 24 hours from the AltusVolt export team</li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Initial review call (30 min) to align on territory & volume</li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> NDA + first-order quote within 5 business days of fit-confirmation</li>
+              <li class="flex gap-3"><span class="text-brand-gold">›</span> Sample container shipped, then full agreement signed</li>
+            </ul>
+          </div>
+          <div class="bg-white border border-light-steel p-6 rounded-sm">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-brand-dark mb-3">Need OEM / private label instead?</h3>
+            <p class="text-sm text-neutral-gray mb-4">If you need custom case dimensions, custom labels or full private-label tooling, the OEM route is structured differently.</p>
+            <a href="/oem-private-label/" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-steel hover:text-brand-dark transition-colors">Switch to OEM & Private Label →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+        <div class="max-w-2xl mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-steel mb-3">Frequently asked</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Distributor program FAQ</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          {faqs.map((f) => (
+            <details class="bg-cold-white border border-light-steel p-5 rounded-sm group">
+              <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+                <span>{f.q}</span>
+                <span class="material-symbols-outlined text-steel group-open:rotate-45 transition-transform" style="font-size:20px">add</span>
+              </summary>
+              <p class="mt-3 text-sm text-neutral-gray leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-brand-dark text-cold-white py-20">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Prefer to talk first?</h2>
+        <p class="mt-4 text-cold-white/80 max-w-2xl mx-auto leading-relaxed">If you'd rather discuss your market and goals before submitting an application, our export team is happy to set up a call.</p>
+        <div class="mt-8">
+          <a href="/contact/" class="bg-brand-gold text-brand-dark font-bold uppercase tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all">Talk to Our Export Team</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('dist-app-form') as HTMLFormElement | null;
+    const status = document.getElementById('da-status') as HTMLDivElement | null;
+    const submit = document.getElementById('da-submit') as HTMLButtonElement | null;
+    const catError = document.getElementById('da-cat-error');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const cats = fd.getAll('productCategories').join(', ');
+      catError?.classList.toggle('hidden', cats.length > 0);
+      if (!cats) return;
+
+      if (submit) submit.disabled = true;
+      if (status) status.className = 'hidden';
+
+      const payload = {
+        inquiryType: 'distributor',
+        name: fd.get('name'),
+        company: fd.get('company'),
+        email: fd.get('email'),
+        country: fd.get('country'),
+        website: fd.get('website'),
+        annualVolume: fd.get('annualVolume'),
+        channel: fd.get('channel'),
+        productInterest: cats,
+        existingBrands: fd.get('existingBrands'),
+        message: [
+          `Inquiry Type: Distributor Application`,
+          `Website: ${fd.get('website') || '-'}`,
+          `Annual Volume: ${fd.get('annualVolume') || '-'}`,
+          `Channel: ${fd.get('channel') || '-'}`,
+          `Product Categories: ${cats}`,
+          `Existing Brands: ${fd.get('existingBrands') || '-'}`,
+          `Notes: ${fd.get('notes') || '-'}`,
+        ].join('\n'),
+      };
+
+      try {
+        const res = await fetch(`/api/inquiry?t=${Date.now()}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          if (status) {
+            status.textContent = 'Application received — export team will reply within 24h.';
+            status.className = 'text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-sm p-3';
+          }
+          form.reset();
+        } else {
+          const err = await res.json().catch(() => ({}));
+          if (status) {
+            status.textContent = err.error || 'Submission failed. Please retry or email jason@altusvolt.com.';
+            status.className = 'text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-sm p-3';
+          }
+        }
+      } catch {
+        if (status) {
+          status.textContent = 'Network error — please retry.';
+          status.className = 'text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-sm p-3';
+        }
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+  </script>
+</BaseLayout>
