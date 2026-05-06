@@ -1,136 +1,148 @@
 ---
 /**
- * Single news article page — SSR, fetches content from D1 by slug.
+ * Single news article page.
+ *
+ * Strategy: Try Content Collection first (static seed articles), then fall back
+ * to D1 dynamic articles. This makes the page work in dev (no D1) and gracefully
+ * scale when D1 articles are added.
  */
 export const prerender = false;
 
-import { env } from 'cloudflare:workers';
+import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getDb } from '../../db';
-import { articles } from '../../db/schema';
-import { eq } from 'drizzle-orm';
 import { siteConfig } from '../../config';
-import { renderMarkdown } from '../../lib/markdown';
-import CoverImage from '../../components/CoverImage.astro';
 
 const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/news');
 
-if (!slug) {
-  return Astro.redirect('/news');
+// 1. Try static collection first
+const seedEntry = await getEntry('news', slug).catch(() => undefined);
+
+let title: string;
+let summary: string;
+let coverImage: string | undefined;
+let publishDate: string;
+let updatedDate: string | undefined;
+let author: string | undefined;
+let category: string;
+let ContentRenderer: any = null;
+let renderedHtml: string | null = null;
+
+if (seedEntry) {
+  title = seedEntry.data.title;
+  summary = seedEntry.data.summary;
+  coverImage = seedEntry.data.coverImage;
+  publishDate = seedEntry.data.publishedAt.toISOString();
+  updatedDate = seedEntry.data.updatedAt?.toISOString();
+  author = seedEntry.data.author;
+  category = seedEntry.data.category;
+  const rendered = await render(seedEntry);
+  ContentRenderer = rendered.Content;
+} else {
+  // 2. Fall back to D1
+  try {
+    // @ts-ignore — only available in CF runtime
+    const cfWorkers = await import('cloudflare:workers');
+    const env = cfWorkers.env;
+    if (!env?.DB) return new Response(null, { status: 404, statusText: 'Not Found' });
+
+    const { getDb } = await import('../../db');
+    const { articles } = await import('../../db/schema');
+    const { eq } = await import('drizzle-orm');
+    const { renderMarkdown } = await import('../../lib/markdown');
+
+    const db = getDb(env.DB);
+    const article = await db.select().from(articles).where(eq(articles.slug, slug)).get();
+    if (!article) return new Response(null, { status: 404, statusText: 'Not Found' });
+
+    title = article.title;
+    summary = article.summary;
+    coverImage = article.coverImage ?? undefined;
+    publishDate = article.publishedAt ?? article.createdAt;
+    updatedDate = article.updatedAt;
+    author = article.author ?? undefined;
+    category = article.category;
+    renderedHtml = renderMarkdown(article.content);
+  } catch {
+    return new Response(null, { status: 404, statusText: 'Not Found' });
+  }
 }
-
-const db = getDb(env.DB);
-const article = await db
-  .select()
-  .from(articles)
-  .where(eq(articles.slug, slug))
-  .get();
-
-if (!article) {
-  return new Response(null, { status: 404, statusText: 'Not Found' });
-}
-
-const publishDate = article.publishedAt ?? article.createdAt;
-const renderedContent = renderMarkdown(article.content);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: article.title,
-  description: article.summary,
-  image: article.coverImage ? `${siteConfig.url}${article.coverImage}` : undefined,
+  headline: title,
+  description: summary,
+  image: coverImage ? new URL(coverImage, siteConfig.url).href : undefined,
   datePublished: publishDate,
-  dateModified: article.updatedAt,
-  author: {
-    '@type': 'Organization',
-    name: siteConfig.name,
-  },
+  dateModified: updatedDate ?? publishDate,
+  author: { '@type': 'Organization', name: siteConfig.name },
   publisher: {
     '@type': 'Organization',
     name: siteConfig.name,
-    logo: {
-      '@type': 'ImageObject',
-      url: `${siteConfig.url}/images/logo.png`,
-    },
+    logo: { '@type': 'ImageObject', url: `${siteConfig.url}/images/brand/logo-light.png` },
   },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+    { '@type': 'ListItem', position: 2, name: 'News', item: `${siteConfig.url}/news` },
+    { '@type': 'ListItem', position: 3, name: title, item: `${siteConfig.url}/news/${slug}` },
+  ],
 };
 ---
 
-<BaseLayout
-  title={article.title}
-  description={article.summary}
-  ogImage={article.coverImage ?? undefined}
-  jsonLd={jsonLd}
->
-  <!-- Breadcrumb -->
+<BaseLayout title={title} description={summary} ogImage={coverImage} jsonLd={jsonLd}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
   <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/" itemprop="item" class="hover:text-primary"><span itemprop="name">Home</span></a>
-          <meta itemprop="position" content="1" />
-        </li>
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
         <li class="text-neutral-300">/</li>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/news" itemprop="item" class="hover:text-primary"><span itemprop="name">News</span></a>
-          <meta itemprop="position" content="2" />
-        </li>
+        <li><a href="/news" class="hover:text-steel">News</a></li>
         <li class="text-neutral-300">/</li>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span itemprop="name" class="text-neutral-800 font-medium">{article.title}</span>
-          <meta itemprop="position" content="3" />
-        </li>
+        <li class="text-neutral-800 font-medium truncate max-w-md">{title}</li>
       </ol>
     </div>
   </nav>
 
   <article class="py-12 lg:py-20">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Header -->
       <header class="mb-8">
         <div class="flex items-center gap-3 text-sm text-neutral-500 mb-4">
           <time datetime={publishDate}>
-            {new Date(publishDate).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+            {new Date(publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
-          {article.category && (
-            <>
-              <span class="text-neutral-300">|</span>
-              <span class="text-primary font-medium capitalize">{article.category}</span>
-            </>
-          )}
+          {category && <><span class="text-neutral-300">·</span><span class="text-steel font-medium capitalize">{category}</span></>}
+          {author && <><span class="text-neutral-300">·</span><span>{author}</span></>}
         </div>
-        <h1 class="text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight">
-          {article.title}
-        </h1>
-        {article.summary && (
-          <p class="mt-4 text-lg text-neutral-600">{article.summary}</p>
-        )}
+        <h1 class="text-3xl sm:text-4xl font-bold text-brand-dark leading-tight">{title}</h1>
+        {summary && <p class="mt-4 text-lg text-neutral-700">{summary}</p>}
       </header>
 
-      <!-- Cover Image (LCP candidate — eager load, high priority) -->
-      {article.coverImage && (
-        <CoverImage
-          src={article.coverImage}
-          alt={article.title}
-          width={1200}
-          height={675}
-          widths={[800, 1200, 1600]}
+      {coverImage && (
+        <img
+          src={coverImage}
+          alt={title}
+          class="w-full rounded-sm mb-8 aspect-[16/9] object-cover"
+          width="1200"
+          height="675"
           loading="eager"
           fetchpriority="high"
-          class="w-full rounded-xl mb-8 aspect-[16/9] object-cover"
         />
       )}
 
-      <!-- Content (Markdown → sanitized HTML) -->
-      <div class="prose prose-lg max-w-none prose-headings:text-neutral-900 prose-a:text-primary prose-img:rounded-lg" set:html={renderedContent} />
+      <div class="prose prose-lg max-w-none prose-headings:text-brand-dark prose-a:text-steel prose-img:rounded-sm">
+        {ContentRenderer && <ContentRenderer />}
+        {renderedHtml && <div set:html={renderedHtml} />}
+      </div>
 
-      <!-- Back link -->
       <div class="mt-12 pt-8 border-t border-neutral-200">
-        <a href="/news" class="text-primary font-medium hover:underline">&larr; Back to News</a>
+        <a href="/news" class="text-steel font-medium hover:underline">&larr; Back to News</a>
       </div>
     </div>
   </article>

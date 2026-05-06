@@ -1,0 +1,451 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config';
+
+const faqs = [
+  {
+    q: 'What does the JIS code 55D23R mean?',
+    a: '"55" is the performance class (roughly correlates to capacity), "D" is the case-size class (D = medium-large), "23" is the long-side length in centimeters (23 cm), and "R" is the polarity (R = positive terminal on right when viewed from the terminal end). "L" indicates positive on the left.',
+  },
+  {
+    q: 'Are DIN and EN battery standards the same?',
+    a: 'They are closely related. DIN 72311 was the original German standard; EN 50342 superseded it as the European-wide standard but kept compatible footprints. Industry still uses "DIN" colloquially — DIN LN1, LN2, LN3 are common naming for AGM start-stop sizes under EN 50342.',
+  },
+  {
+    q: 'Can I cross-reference a JIS battery to a DIN battery?',
+    a: 'Approximately, yes — but never assume drop-in fit. Case heights, hold-down geometry, and terminal positions differ. Use cross-reference tables as a starting point, then confirm physical dimensions and terminal layout against the vehicle.',
+  },
+  {
+    q: 'Which standard does the US use?',
+    a: 'BCI (Battery Council International) group sizes are the dominant standard in North America for both OEM and aftermarket. Common BCI groups include 24, 27, 31, 34, 35, 51, 65, 75, 78.',
+  },
+  {
+    q: 'Why does Australia use both JIS and DIN?',
+    a: 'Australian car parc is mixed: Japanese imports (Toyota, Mazda, Nissan, Subaru) use JIS sizes; European imports (BMW, Audi, VW, Mercedes) use DIN/EN. Australian aftermarket distributors stock both, with JIS dominant in 4WD and marine.',
+  },
+  {
+    q: 'What does NS40, NS70 mean?',
+    a: 'These are JIS "S" (Slim) variants common in Asian small cars. NS40 ≈ 36Ah class, NS70 ≈ 65Ah class. The "S" indicates a slimmer case than the standard JIS.',
+  },
+  {
+    q: 'What is a BCI Group 31 battery?',
+    a: 'BCI Group 31 is a North American battery group size defined by the Battery Council International. It specifies a case footprint of approximately 13" × 6 13/16" × 9 7/16" (330 × 173 × 240 mm) and is the dominant size class for Class 6–8 trucks, RVs, marine deep-cycle, and heavy industrial starting applications.',
+  },
+  {
+    q: 'How heavy is a Group 31 battery and what CCA can I expect?',
+    a: 'A flooded Group 31 SLI typically weighs 22–26 kg (49–58 lb). AGM Group 31 deep-cycle units are heavier at 28–32 kg. Heavy-duty starting units deliver 800–1,150 CCA at -18°C; deep-cycle AGM units typically rate 800–950 CCA with reserve capacity over 200 minutes.',
+  },
+  {
+    q: 'Is a Group 31 battery a deep-cycle battery?',
+    a: 'Group 31 refers only to physical size — not chemistry or duty cycle. Group 31 batteries are sold as starting (SLI), dual-purpose, and true deep-cycle (AGM, flooded, gel). Confirm cycle-life rating, not just the group size.',
+  },
+  {
+    q: 'Does Lingyun manufacture to all three standards?',
+    a: "Yes. Lingyun produces JIS, DIN/EN, and BCI footprints across the same plate platform — the range AltusVolt exports covers passenger, commercial, deep-cycle, and start-stop applications in every regional standard. Specify your target market in the inquiry and AltusVolt will recommend the matching part numbers and terminal types.",
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: "Battery standards: BCI, DIN, JIS — and what they mean for your market",
+      description: "Three regional standards govern the world's automotive battery market. AltusVolt exports the full Lingyun range in BCI, DIN/EN, and JIS formats. This guide decodes each standard, includes a Group 31 deep-dive, and a JIS↔DIN↔BCI cross-reference table.",
+      url: `${siteConfig.url}/support/battery-standards/`,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Battery Standards — BCI, DIN, JIS Buyer's Guide & Cross-Reference"
+  description="Definitive buyer's guide to BCI, DIN/EN, and JIS battery group sizes. Decode 55D23, LN1/LN2/LN3, BCI Group 24/27/31. Cross-reference table and market-by-market guidance for global sourcing."
+  jsonLd={jsonLd}
+>
+
+  <nav class="bg-neutral-50 border-b border-neutral-200" aria-label="Breadcrumb">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500">
+        <li><a href="/" class="hover:text-steel">Home</a></li>
+        <li class="text-neutral-300">/</li>
+        <li><a href="/support/battery-standards/" class="hover:text-steel">Support</a></li>
+        <li class="text-neutral-300">/</li>
+        <li class="text-neutral-800 font-medium">Battery Standards</li>
+      </ol>
+    </div>
+  </nav>
+
+  <header class="relative w-full min-h-[520px] flex items-center bg-brand-dark overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/hero/hero-equipment.webp" alt="Battery group size standards: BCI DIN JIS" class="w-full h-full object-cover opacity-50" width="2000" height="1000" fetchpriority="high" />
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/60 to-brand-dark/30"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-screen-xl mx-auto px-6 md:px-10 py-20">
+      <div class="max-w-3xl">
+        <p class="text-brand-gold font-mono text-xs tracking-[0.2em] uppercase mb-5 pl-3 border-l-2 border-brand-gold">
+          Buyer's guide
+        </p>
+        <h1 class="text-white text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+          Battery standards: <span class="text-brand-gold">BCI, DIN, JIS</span> — and what they mean for your market
+        </h1>
+        <p class="text-[#bbc7df] text-lg md:text-xl font-light leading-relaxed">
+          Three regional standards govern the world's automotive battery market. AltusVolt exports Lingyun batteries in all three formats — this guide helps you choose the right standard for your country and application.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3 text-xs font-mono uppercase tracking-widest">
+          <a href="#bci" class="px-4 py-2 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition">BCI →</a>
+          <a href="#group-31" class="px-4 py-2 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition">Group 31 deep-dive →</a>
+          <a href="#din" class="px-4 py-2 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition">DIN / EN →</a>
+          <a href="#jis" class="px-4 py-2 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition">JIS →</a>
+          <a href="#cross-reference" class="px-4 py-2 border border-brand-gold/40 text-brand-gold hover:bg-brand-gold/10 transition">Cross-reference →</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-white py-16">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Quick reference</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Three standards at a glance.</h2>
+      </div>
+      <div class="overflow-x-auto bg-white border border-light-steel">
+        <table class="w-full text-sm text-left border border-light-steel">
+          <thead class="bg-cold-white text-xs uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 border-b border-light-steel">Standard</th>
+              <th class="px-4 py-3 border-b border-light-steel">Region</th>
+              <th class="px-4 py-3 border-b border-light-steel">Naming format</th>
+              <th class="px-4 py-3 border-b border-light-steel">Typical models</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-light-steel">
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">BCI</td><td class="px-4 py-3">North America (US, Canada, Mexico)</td><td class="px-4 py-3 font-mono">Group 24, 27, 31, 34, 35, 65, 75, 78</td><td class="px-4 py-3">Group 31 heavy-duty, Group 35 passenger</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">DIN / EN</td><td class="px-4 py-3">Europe, UK, Russia, MENA premium</td><td class="px-4 py-3 font-mono">5-digit ETN (56038), LN1/LN2/LN3</td><td class="px-4 py-3">LN3 AGM start-stop, 56038 mid-size</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">JIS</td><td class="px-4 py-3">Japan, Korea, ASEAN, Australia 4WD, LATAM</td><td class="px-4 py-3 font-mono">[perf][class][length][polarity] — 55D23R</td><td class="px-4 py-3">55D23, 80D26, 95D31, NS40</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="bci" class="bg-cold-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Origin: USA</p>
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">BCI — the North American standard.</h2>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-4 text-neutral-700 leading-relaxed">
+          <p>
+            <strong>Battery Council International (BCI)</strong> publishes the group-size standard that dominates US, Canadian, and Mexican OEM and aftermarket. Codes are short — a 2- or 3-digit group number that identifies a fixed case footprint and terminal layout (e.g. <code class="bg-white px-1 font-mono">24</code>, <code class="bg-white px-1 font-mono">31</code>, <code class="bg-white px-1 font-mono">65</code>, <code class="bg-white px-1 font-mono">75</code>).
+          </p>
+          <p>
+            Most common passenger sizes: <strong>Group 24</strong> (light truck, RV starting), <strong>Group 35</strong> (Toyota, Honda), <strong>Group 65</strong> (Ford F-series), <strong>Group 75/78</strong> (GM side-terminal). Heavy-duty: <strong>Group 27, 31, 4D, 8D</strong>.
+          </p>
+          <p>
+            Terminal types: SAE automotive post (passenger), threaded stud 3/8"-16 UNC (heavy-duty truck), L-terminal flat tab (occasional commercial), and side-terminal (GM legacy).
+          </p>
+          <p>
+            <a href="#group-31" class="text-brand-dark font-bold underline hover:text-brand-gold transition">Group 31 deep-dive →</a> — the most-asked-about heavy-duty BCI size, with full dimensions, weight, CCA range, and Class 6-8 / RV / marine fitments.
+          </p>
+        </div>
+        <aside class="bg-white border-l-4 border-brand-gold p-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">BCI quick stats</p>
+          <dl class="space-y-3 text-sm">
+            <div><dt class="text-neutral-500">Standards body</dt><dd class="font-bold text-brand-dark">Battery Council International</dd></div>
+            <div><dt class="text-neutral-500">Region</dt><dd class="font-bold text-brand-dark">USA, Canada, Mexico</dd></div>
+            <div><dt class="text-neutral-500">Code style</dt><dd class="font-mono text-brand-dark font-bold">Group 24 / 31 / 65</dd></div>
+            <div><dt class="text-neutral-500">Common heavy-duty</dt><dd class="font-mono text-brand-dark font-bold">Group 31 / 4D / 8D</dd></div>
+            <div><dt class="text-neutral-500">Common passenger</dt><dd class="font-mono text-brand-dark font-bold">35 / 65 / 75 / 78</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="group-31" class="bg-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Sub-section</p>
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">Deep-dive: BCI Group 31.</h2>
+      <div class="grid lg:grid-cols-3 gap-10">
+        <div class="lg:col-span-2 space-y-4 text-neutral-700 leading-relaxed">
+          <p>
+            BCI defines Group 31 as a heavy-duty footprint with nominal external dimensions of <strong>13 inches long × 6 13/16 inches wide × 9 7/16 inches tall</strong> (approximately 330 × 173 × 240 mm). It is the most common heavy-duty SLI and dual-purpose group size in North America.
+          </p>
+          <p>
+            Group 31 sits one tier above Group 27 in capacity and is physically larger than the passenger-car Group 24/34. Its tall case allows for deeper plates, supporting both starting (high CCA) and deep-cycle (high reserve capacity) chemistries.
+          </p>
+          <h3 class="text-xl font-bold text-brand-dark mt-6">Terminal configurations</h3>
+          <ul class="list-disc pl-6 space-y-1">
+            <li><strong>SAE automotive post</strong> — passenger-car style tapered post, light-duty.</li>
+            <li><strong>Threaded stud (3/8"-16 UNC)</strong> — heavy-duty truck and industrial cable lugs.</li>
+            <li><strong>Dual-purpose (post + stud)</strong> — universal fit for marine and aftermarket.</li>
+            <li><strong>L-terminal</strong> — flat tab with bolt hole, commercial fitment.</li>
+          </ul>
+        </div>
+        <aside class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Group 31 quick stats</p>
+          <dl class="space-y-3 text-sm">
+            <div><dt class="text-neutral-500">Length</dt><dd class="font-mono text-brand-dark font-bold">13" (330 mm)</dd></div>
+            <div><dt class="text-neutral-500">Width</dt><dd class="font-mono text-brand-dark font-bold">6 13/16" (173 mm)</dd></div>
+            <div><dt class="text-neutral-500">Height</dt><dd class="font-mono text-brand-dark font-bold">9 7/16" (240 mm)</dd></div>
+            <div><dt class="text-neutral-500">Weight (flooded)</dt><dd class="font-mono text-brand-dark font-bold">22-26 kg</dd></div>
+            <div><dt class="text-neutral-500">Weight (AGM)</dt><dd class="font-mono text-brand-dark font-bold">28-32 kg</dd></div>
+            <div><dt class="text-neutral-500">CCA range</dt><dd class="font-mono text-brand-dark font-bold">800-1,150 A</dd></div>
+            <div><dt class="text-neutral-500">RC range</dt><dd class="font-mono text-brand-dark font-bold">180-220 min</dd></div>
+            <div><dt class="text-neutral-500">Capacity</dt><dd class="font-mono text-brand-dark font-bold">95-125 Ah (C20)</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <h3 class="text-2xl font-bold text-brand-dark mt-12 mb-6">BCI group-size comparison: Group 24 vs 27 vs 31 vs 34</h3>
+      <div class="overflow-x-auto bg-white border border-light-steel">
+        <table class="w-full text-sm text-left border border-light-steel">
+          <thead class="bg-cold-white text-xs uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 border-b border-light-steel">Spec</th>
+              <th class="px-4 py-3 border-b border-light-steel">Group 24</th>
+              <th class="px-4 py-3 border-b border-light-steel">Group 27</th>
+              <th class="px-4 py-3 border-b border-light-steel bg-brand-gold/20">Group 31</th>
+              <th class="px-4 py-3 border-b border-light-steel">Group 34</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-light-steel">
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Length</td><td class="px-4 py-3 font-mono">10 1/4"</td><td class="px-4 py-3 font-mono">12 1/16"</td><td class="px-4 py-3 font-mono bg-cold-white">13"</td><td class="px-4 py-3 font-mono">10 1/4"</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Width</td><td class="px-4 py-3 font-mono">6 13/16"</td><td class="px-4 py-3 font-mono">6 13/16"</td><td class="px-4 py-3 font-mono bg-cold-white">6 13/16"</td><td class="px-4 py-3 font-mono">6 13/16"</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Height</td><td class="px-4 py-3 font-mono">8 7/8"</td><td class="px-4 py-3 font-mono">8 7/8"</td><td class="px-4 py-3 font-mono bg-cold-white">9 7/16"</td><td class="px-4 py-3 font-mono">7 7/8"</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Weight</td><td class="px-4 py-3 font-mono">17-19 kg</td><td class="px-4 py-3 font-mono">19-23 kg</td><td class="px-4 py-3 font-mono bg-cold-white">22-32 kg</td><td class="px-4 py-3 font-mono">17-19 kg</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Typical CCA</td><td class="px-4 py-3 font-mono">600-800</td><td class="px-4 py-3 font-mono">700-900</td><td class="px-4 py-3 font-mono bg-cold-white">800-1,150</td><td class="px-4 py-3 font-mono">700-880</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Typical RC (min)</td><td class="px-4 py-3 font-mono">120-140</td><td class="px-4 py-3 font-mono">140-180</td><td class="px-4 py-3 font-mono bg-cold-white">180-220</td><td class="px-4 py-3 font-mono">100-120</td></tr>
+            <tr><td class="px-4 py-3 font-bold text-brand-dark">Primary use</td><td class="px-4 py-3">Light truck, RV start</td><td class="px-4 py-3">Marine, light commercial</td><td class="px-4 py-3 bg-cold-white">Class 6-8, RV deep-cycle</td><td class="px-4 py-3">US passenger SUV/truck</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-2xl font-bold text-brand-dark mt-12 mb-6">Three real-world Group 31 fits</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">local_shipping</span>
+          <h4 class="text-lg font-bold text-brand-dark mb-3">Class 6-8 heavy trucks</h4>
+          <p class="text-neutral-700 text-sm leading-relaxed">12L+ diesel engines pulling 700-900A at start. Group 31's 800-1,150 CCA range gives 30%+ headroom in cold weather. Stud terminals for cable lugs. Calcium-calcium grid for engine-bay heat resistance.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">rv_hookup</span>
+          <h4 class="text-lg font-bold text-brand-dark mb-3">RV house banks</h4>
+          <p class="text-neutral-700 text-sm leading-relaxed">Two or four Group 31 AGM units in parallel give 200-500Ah of usable deep-cycle storage. Spill-proof for tilted parking. Vibration-rated for road travel. Reserve capacity over 200 min covers overnight loads.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-steel p-8">
+          <span class="material-symbols-outlined text-steel mb-4 block" style="font-size:36px">sailing</span>
+          <h4 class="text-lg font-bold text-brand-dark mb-3">Marine dual-purpose</h4>
+          <p class="text-neutral-700 text-sm leading-relaxed">Single Group 31 covers engine starting and trolling/electronics on small fishing boats. Dual-terminal post+stud for accessory wiring. CCS-compliant marine versions available for commercial vessels.</p>
+        </div>
+      </div>
+
+      <div class="mt-10 bg-brand-dark text-white p-8 md:p-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-brand-gold mb-3">AltusVolt's recommended Lingyun Group 31 platforms</p>
+        <p class="text-[#bbc7df] leading-relaxed mb-6 max-w-3xl">
+          Lingyun's heavy-duty calcium-calcium platform was first-fit qualified by Shaanxi Auto, Beiben, and Foton. The same plate technology is produced in Group 31 footprint for North American aftermarket and OEM customers, exported worldwide by AltusVolt.
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <a href="/products/heavy-duty-batteries/" class="block bg-white/5 hover:bg-white/10 border border-white/10 p-5 transition">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-bold text-brand-gold">6-QW-105</h4>
+              <span class="text-xs font-mono text-[#bbc7df]">Group 31 fit</span>
+            </div>
+            <p class="text-sm text-[#bbc7df]">105Ah / 850 CCA / calcium-calcium / heavy-duty starting. OEM-grade for Class 7 trucks.</p>
+          </a>
+          <a href="/products/heavy-duty-batteries/" class="block bg-white/5 hover:bg-white/10 border border-white/10 p-5 transition">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-bold text-brand-gold">Heavy-duty range</h4>
+              <span class="text-xs font-mono text-[#bbc7df]">Full lineup</span>
+            </div>
+            <p class="text-sm text-[#bbc7df]">Browse the full Lingyun heavy-duty range — 105Ah through 200Ah.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="din" class="bg-cold-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Origin: Germany / EU</p>
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">DIN / EN — Europe & heavy-duty.</h2>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-4 text-neutral-700 leading-relaxed">
+          <p>
+            <strong>Deutsches Institut für Normung (DIN)</strong> originated the European battery group-size standard in DIN 72311. <strong>EN 50342</strong> superseded it as the European-wide standard but kept compatible footprints. Industry still uses "DIN" colloquially for the case sizes.
+          </p>
+          <h3 class="text-xl font-bold text-brand-dark mt-6">Passenger sizes (L1–L6)</h3>
+          <p>
+            EU passenger AGM start-stop is dominated by <strong>L1, L2, L3, L4, L5, L6</strong> — increasing in length while keeping the standard 175 mm width and 190 mm height. <strong>LN1/LN2/LN3/LN4/LN5</strong> are the AGM-coded variants with reinforced case and pressure relief.
+          </p>
+          <h3 class="text-xl font-bold text-brand-dark mt-6">Heavy-duty (A / B / C / D)</h3>
+          <p>
+            Commercial vehicles use <strong>Type A</strong> (135Ah class), <strong>Type B</strong> (180Ah), <strong>Type C</strong> (220Ah), and <strong>Type D</strong> (240Ah+). Common DIN ETN codes: 56038, 57539, 58514, 59518, 60044, 61044, 64020.
+          </p>
+        </div>
+        <aside class="bg-white border-l-4 border-brand-gold p-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Common DIN ↔ Lingyun fits</p>
+          <dl class="space-y-3 text-sm">
+            <div><dt class="font-mono font-bold text-steel">56038 (60Ah)</dt><dd class="text-neutral-700">L1 footprint — 6-QW-60 platform</dd></div>
+            <div><dt class="font-mono font-bold text-steel">57539 (75Ah)</dt><dd class="text-neutral-700">L2 — 6-QW-75 platform</dd></div>
+            <div><dt class="font-mono font-bold text-steel">58514 (85Ah)</dt><dd class="text-neutral-700">L3 — 6-QW-85 platform</dd></div>
+            <div><dt class="font-mono font-bold text-steel">LN3 AGM</dt><dd class="text-neutral-700">EU start-stop — 6-QTF-70 AGM</dd></div>
+            <div><dt class="font-mono font-bold text-steel">61044 (110Ah)</dt><dd class="text-neutral-700">Heavy commercial — 6-QW-105</dd></div>
+            <div><dt class="font-mono font-bold text-steel">64020 (140Ah)</dt><dd class="text-neutral-700">Heavy truck — 6-QW-150</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="jis" class="bg-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Origin: Japan</p>
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-6">JIS — Asia & global aftermarket.</h2>
+      <div class="space-y-4 text-neutral-700 leading-relaxed max-w-4xl">
+        <p>
+          <strong>Japanese Industrial Standard (JIS)</strong> covers Japan, Korea, ASEAN, Australia 4WD/marine, and large parts of Latin American passenger aftermarket. Code format combines performance class, case size, length, and polarity.
+        </p>
+        <p>
+          Common sizes by capacity tier: <strong>NS40</strong> (36Ah Asian sub-compact), <strong>NS70</strong> (60Ah Asian compact), <strong>55B24 / 55D23</strong> (60Ah mid-sedan, e.g. Toyota Camry), <strong>80D26</strong> (70Ah Hilux / mid-truck), <strong>95D31 / 105D31</strong> (80–90Ah SUV / light commercial diesel), <strong>N100 / N120 / N150 / N200</strong> (100–200Ah light truck / heavy commercial).
+        </p>
+      </div>
+
+      <h3 class="text-2xl font-bold text-brand-dark mt-12 mb-6">Decoding "55D23R"</h3>
+      <div class="max-w-3xl mx-auto bg-cold-white border-l-4 border-brand-gold p-8 md:p-12">
+        <div class="font-mono text-4xl md:text-6xl text-brand-dark text-center mb-8 tracking-tight">
+          <span class="text-steel">55</span><span class="text-brand-gold">D</span><span class="text-steel">23</span><span class="text-brand-dark">R</span>
+        </div>
+        <dl class="grid md:grid-cols-4 gap-4 text-sm">
+          <div class="bg-white p-4 border border-light-steel">
+            <dt class="font-mono font-bold text-steel mb-1">55</dt>
+            <dd class="text-neutral-700">Performance class — correlates roughly to Ah and CCA. Higher = more capacity.</dd>
+          </div>
+          <div class="bg-white p-4 border border-light-steel">
+            <dt class="font-mono font-bold text-brand-gold mb-1">D</dt>
+            <dd class="text-neutral-700">Case-size class. A=smallest, H=largest. D = medium-large width/height.</dd>
+          </div>
+          <div class="bg-white p-4 border border-light-steel">
+            <dt class="font-mono font-bold text-steel mb-1">23</dt>
+            <dd class="text-neutral-700">Long-side length in centimeters (23 cm = 230 mm).</dd>
+          </div>
+          <div class="bg-white p-4 border border-light-steel">
+            <dt class="font-mono font-bold text-brand-dark mb-1">R</dt>
+            <dd class="text-neutral-700">Polarity. R = positive on right (looking from terminal end). L = positive on left.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="cross-reference" class="bg-cold-white py-20 scroll-mt-24">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Cross-reference</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">JIS ↔ DIN/EN ↔ BCI</h2>
+        <p class="text-neutral-600 mt-3 text-sm max-w-2xl mx-auto">Approximate equivalents — always verify physical dimensions, terminal layout, and hold-down compatibility before substituting.</p>
+      </div>
+      <div class="overflow-x-auto bg-white border border-light-steel">
+        <table class="w-full text-sm text-left border border-light-steel">
+          <thead class="bg-cold-white text-xs uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 border-b border-light-steel">JIS code</th>
+              <th class="px-4 py-3 border-b border-light-steel">Capacity (Ah)</th>
+              <th class="px-4 py-3 border-b border-light-steel">DIN / EN</th>
+              <th class="px-4 py-3 border-b border-light-steel">BCI Group</th>
+              <th class="px-4 py-3 border-b border-light-steel">Typical fit</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-light-steel">
+            <tr><td class="px-4 py-3 font-mono font-bold">NS40 / NS40Z</td><td class="px-4 py-3">36-40</td><td class="px-4 py-3 font-mono">53520</td><td class="px-4 py-3 font-mono">121R</td><td class="px-4 py-3">Asian sub-compact</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">NS70 / N50Z</td><td class="px-4 py-3">60-65</td><td class="px-4 py-3 font-mono">56030</td><td class="px-4 py-3 font-mono">86</td><td class="px-4 py-3">Asian compact</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">55B24</td><td class="px-4 py-3">45-50</td><td class="px-4 py-3 font-mono">54519</td><td class="px-4 py-3 font-mono">151R</td><td class="px-4 py-3">Toyota Prius, hybrid auxiliary</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">55D23</td><td class="px-4 py-3">60</td><td class="px-4 py-3 font-mono">56038 / LN1</td><td class="px-4 py-3 font-mono">35 / 86</td><td class="px-4 py-3">Toyota Camry, mid-size sedan</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">75D23</td><td class="px-4 py-3">65</td><td class="px-4 py-3 font-mono">57539</td><td class="px-4 py-3 font-mono">35</td><td class="px-4 py-3">Mid-size with high accessory load</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">80D26</td><td class="px-4 py-3">70</td><td class="px-4 py-3 font-mono">57539 / LN2</td><td class="px-4 py-3 font-mono">24</td><td class="px-4 py-3">Toyota Hilux, mid-truck</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">95D31</td><td class="px-4 py-3">80-85</td><td class="px-4 py-3 font-mono">58514 / LN3</td><td class="px-4 py-3 font-mono">27 / 27F</td><td class="px-4 py-3">SUV, light commercial diesel</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">105D31</td><td class="px-4 py-3">85-90</td><td class="px-4 py-3 font-mono">58515 / LN4</td><td class="px-4 py-3 font-mono">27F</td><td class="px-4 py-3">Heavy SUV, 4WD diesel</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">115D31</td><td class="px-4 py-3">90</td><td class="px-4 py-3 font-mono">59518</td><td class="px-4 py-3 font-mono">27F</td><td class="px-4 py-3">4WD, marine starting</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">N100 / N120</td><td class="px-4 py-3">100-120</td><td class="px-4 py-3 font-mono">60044 / 61044</td><td class="px-4 py-3 font-mono">31</td><td class="px-4 py-3">Light truck, RV</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">N150</td><td class="px-4 py-3">150</td><td class="px-4 py-3 font-mono">64020</td><td class="px-4 py-3 font-mono">31 / 4D</td><td class="px-4 py-3">Heavy truck, agricultural</td></tr>
+            <tr><td class="px-4 py-3 font-mono font-bold">N200</td><td class="px-4 py-3">200</td><td class="px-4 py-3 font-mono">70027</td><td class="px-4 py-3 font-mono">8D</td><td class="px-4 py-3">Heavy-haul, marine, industrial</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <div class="text-center mb-12">
+        <p class="text-xs font-bold uppercase tracking-widest text-steel mb-3">Which standard for your market</p>
+        <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight">Decision guidance.</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <span class="material-symbols-outlined text-brand-gold mb-3 block" style="font-size:32px">public</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Aftermarket Asia → JIS</h3>
+          <p class="text-sm text-neutral-700">Japan, Korea, Thailand, Vietnam, Indonesia, Malaysia, Philippines. Japanese-brand car parc requires JIS sizing — 55D23, 80D26, 95D31 are core SKUs.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <span class="material-symbols-outlined text-brand-gold mb-3 block" style="font-size:32px">factory</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">EU heavy-duty → DIN</h3>
+          <p class="text-sm text-neutral-700">EU-27, UK, Russia, Turkey, North Africa premium aftermarket. DIN ETN codes and L1–L6 / LN1–LN5 are required for European-brand passenger and commercial.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <span class="material-symbols-outlined text-brand-gold mb-3 block" style="font-size:32px">flag</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Americas + Australia 4WD → BCI</h3>
+          <p class="text-sm text-neutral-700">USA, Canada, Mexico, Caribbean — BCI is mandatory. Australia 4WD/marine often specs BCI Group 31 alongside JIS for Japanese vehicles.</p>
+        </div>
+        <div class="bg-cold-white border-l-4 border-brand-gold p-6">
+          <span class="material-symbols-outlined text-brand-gold mb-3 block" style="font-size:32px">shuffle</span>
+          <h3 class="text-lg font-bold text-brand-dark mb-2">Australia city → mixed JIS / DIN</h3>
+          <p class="text-sm text-neutral-700">Mixed car parc — Japanese imports use JIS, European imports use DIN. Stocking distributors carry both ranges. <a href="/markets/australia/" class="text-brand-dark font-bold underline hover:text-brand-gold">See Australia market guide →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cold-white py-20">
+    <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+      <h2 class="text-3xl md:text-4xl font-semibold text-brand-dark tracking-tight mb-10">Frequently asked questions</h2>
+      <div class="space-y-4">
+        {faqs.map((f) => (
+          <details class="group bg-white border border-light-steel p-6 hover:border-steel transition">
+            <summary class="cursor-pointer font-bold text-brand-dark flex justify-between items-center">
+              <span>{f.q}</span>
+              <span class="material-symbols-outlined text-steel group-open:rotate-180 transition" style="font-size:24px">expand_more</span>
+            </summary>
+            <p class="mt-4 text-neutral-700 leading-relaxed">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand-dark text-white py-16">
+    <div class="max-w-3xl mx-auto px-6 md:px-10 text-center">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">Need a cross-reference for a specific model?</h2>
+      <p class="text-[#bbc7df] mb-8">
+        AltusVolt's export team can map any OE part number to a Lingyun equivalent across BCI, DIN/EN, and JIS — typical turnaround under 24 hours.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="/contact/" class="inline-flex items-center gap-2 bg-white text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase hover:bg-cold-white transition">
+          Talk to our export team
+        </a>
+        <a href="/distributor-program/" class="inline-flex items-center gap-2 bg-brand-gold text-brand-dark px-8 py-3 font-bold text-sm tracking-widest uppercase hover:brightness-110 transition">
+          Become a distributor →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
